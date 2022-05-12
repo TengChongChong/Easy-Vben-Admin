@@ -5,7 +5,7 @@ export const LOCALE: { [key: string]: LocaleType } = {
   ZH_CN: 'zh_CN',
   EN_US: 'en',
 };
-
+// ! 改动后需要清空浏览器缓存
 export const localeSetting: LocaleSetting = {
   // 是否显示语言选择器
   showPicker: false,
