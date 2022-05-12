@@ -13,9 +13,7 @@ export const useGlobSetting = (): Readonly<GlobConfig> => {
   } = getAppEnvConfig();
 
   if (!/[a-zA-Z\_]*/.test(VITE_GLOB_APP_SHORT_NAME)) {
-    warn(
-      `VITE_GLOB_APP_SHORT_NAME Variables can only be characters/underscores, please modify in the environment variables and re-running.`,
-    );
+    warn(`VITE_GLOB_APP_SHORT_NAME 只能是字符/下划线，请在环境变量中修改并重新运行。`);
   }
 
   // Take global configuration
