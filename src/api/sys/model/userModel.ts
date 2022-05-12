@@ -1,18 +1,21 @@
 /**
- * @description: Login interface parameters
+ * @description: 登录接口参数
  */
 export interface LoginParams {
   username: string;
   password: string;
 }
 
+/**
+ * @description 角色
+ */
 export interface RoleInfo {
   roleName: string;
   value: string;
 }
 
 /**
- * @description: Login interface return value
+ * @description: 登录接口返回信息
  */
 export interface LoginResultModel {
   userId: string | number;
@@ -21,10 +24,9 @@ export interface LoginResultModel {
 }
 
 /**
- * @description: Get user information return value
+ * @description: 获取用户信息接口返回信息
  */
 export interface GetUserInfoModel {
-  roles: RoleInfo[];
   // 用户id
   userId: string | number;
   // 用户名
@@ -35,4 +37,6 @@ export interface GetUserInfoModel {
   avatar: string;
   // 介绍
   desc?: string;
+  // 角色
+  roles: RoleInfo[];
 }
