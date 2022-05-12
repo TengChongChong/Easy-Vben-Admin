@@ -1,7 +1,11 @@
+// 错误提示类型
 export type ErrorMessageMode = 'none' | 'modal' | 'message' | undefined;
 
+/**
+ * @description 请求选项
+ */
 export interface RequestOptions {
-  // Splicing request parameters to url
+  // 将请求参数拼接到url
   joinParamsToUrl?: boolean;
   // Format request parameter time
   formatDate?: boolean;
@@ -16,7 +20,7 @@ export interface RequestOptions {
   apiUrl?: string;
   // 请求拼接路径
   urlPrefix?: string;
-  // Error message prompt type
+  // 错误提示类型
   errorMessageMode?: ErrorMessageMode;
   // Whether to add a timestamp
   joinTime?: boolean;
@@ -27,11 +31,17 @@ export interface RequestOptions {
   retryRequest?: RetryRequest;
 }
 
+/**
+ * @description 请求重试
+ */
 export interface RetryRequest {
   isOpenRetry: boolean;
   count: number;
   waitTime: number;
 }
+/**
+ * @description 服务端响应
+ */
 export interface Result<T = any> {
   code: number;
   type: 'success' | 'error' | 'warning';
@@ -39,11 +49,13 @@ export interface Result<T = any> {
   result: T;
 }
 
-// multipart/form-data: upload file
+/**
+ * @description 文件上传参数
+ */
 export interface UploadFileParams {
   // Other parameters
   data?: Recordable;
-  // File parameter interface field name
+  // 文件名
   name?: string;
   // file name
   file: File | Blob;
