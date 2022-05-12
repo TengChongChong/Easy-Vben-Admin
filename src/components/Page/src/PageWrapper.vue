@@ -1,18 +1,6 @@
 <template>
   <div :class="getClass" ref="wrapperRef">
-    <PageHeader
-      :ghost="ghost"
-      :title="title"
-      v-bind="omit($attrs, 'class')"
-      ref="headerRef"
-      v-if="getShowHeader"
-    >
-      <template #default>
-        <template v-if="content">
-          {{ content }}
-        </template>
-        <slot name="headerContent" v-else></slot>
-      </template>
+    <PageHeader :ghost="ghost" v-bind="omit($attrs, 'class')" ref="headerRef" v-if="getShowHeader">
       <template #[item]="data" v-for="item in getHeaderSlots">
         <slot :name="item" v-bind="data || {}"></slot>
       </template>
