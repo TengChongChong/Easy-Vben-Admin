@@ -28,7 +28,8 @@ const setting: ProjectConfig = {
 
   // 权限模式,默认前端角色权限模式
   // ROUTE_MAPPING: 前端模式（菜单由路由生成，默认）
-  // ROLE：前端模式（菜单路由分开）
+  // ROLE: 前端模式（菜单路由分开）
+  // BACK: 后台动态获取
   permissionMode: PermissionModeEnum.ROUTE_MAPPING,
 
   // 权限缓存存放位置。默认存放于localStorage

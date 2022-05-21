@@ -9,29 +9,30 @@ export default {
     // 支持 xxx.xxx.xxx格式
     fetchSetting: {
       // 传给后台的当前页字段
-      pageField: 'page',
+      pageField: 'current',
       // 传给后台的每页显示多少条的字段
       sizeField: 'pageSize',
       // 接口返回表格数据的字段
-      listField: 'items',
+      listField: 'records',
       // 接口返回表格总数的字段
       totalField: 'total',
     },
     // 可选的分页选项
-    pageSizeOptions: ['10', '50', '80', '100'],
+    pageSizeOptions: ['10', '20', '30', '40', '50', '80', '100'],
     //默认每页显示多少条
     defaultPageSize: 10,
     // 默认尺寸
     defaultSize: 'middle',
     // 默认排序方法
     defaultSortFn: (sortInfo: SorterResult) => {
-      const { field, order } = sortInfo;
+      const { field, order, column } = sortInfo;
       if (field && order) {
         return {
           // 排序字段
-          field,
+          // @ts-ignore
+          sortField: column.sortField || field,
           // 排序方式 asc/desc
-          order,
+          sortOrder: order,
         };
       } else {
         return {};

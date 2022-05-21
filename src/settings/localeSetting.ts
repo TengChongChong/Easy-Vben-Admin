@@ -8,7 +8,7 @@ export const LOCALE: { [key: string]: LocaleType } = {
 // ! 改动后需要清空浏览器缓存
 export const localeSetting: LocaleSetting = {
   // 是否显示语言选择器
-  showPicker: false,
+  showPicker: true,
   // 当前语言
   locale: LOCALE.ZH_CN,
   // 默认语言
