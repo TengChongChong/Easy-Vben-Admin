@@ -7,6 +7,7 @@ import type { ColumnProps } from 'ant-design-vue/lib/table';
 import { ComponentType } from './componentType';
 import { VueNode } from '/@/utils/propTypes';
 import { RoleEnum } from '/@/enums/roleEnum';
+import { VNode } from '@vue/runtime-core';
 
 export declare type SortOrder = 'ascend' | 'descend';
 
@@ -395,7 +396,7 @@ export interface BasicTableProps<T = any> {
    * @param expanded
    * @param record
    */
-  onExpand?: (expande: boolean, record: T) => void;
+  onExpand?: (expand: boolean, record: T) => void;
 
   /**
    * Callback executed when the expanded rows change
@@ -408,7 +409,7 @@ export interface BasicTableProps<T = any> {
 
 export type CellFormat =
   | string
-  | ((text: string, record: Recordable, index: number) => string | number)
+  | ((text: string, record: Recordable, index: number) => string | number | VNode)
   | Map<string | number, any>;
 
 // @ts-ignore
@@ -463,6 +464,9 @@ export interface BasicColumn extends ColumnProps<Recordable> {
     column: BasicColumn;
     index: number;
   }) => VNodeChild | JSX.Element;
+
+  // 后端接收的排序字段名，如未设置使用dataIndex
+  sortField?: string;
 }
 
 export type ColumnChangeParam = {
