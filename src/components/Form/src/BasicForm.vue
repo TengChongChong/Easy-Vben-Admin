@@ -89,6 +89,7 @@
 
       // Get the basic configuration of the form
       const getProps = computed((): FormProps => {
+        // @ts-ignore
         return { ...props, ...unref(propsRef) } as FormProps;
       });
 
