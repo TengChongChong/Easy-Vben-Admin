@@ -3,6 +3,8 @@ export default {
   closeText: 'Close',
   cancelText: 'Cancel',
   loadingText: 'Loading...',
+  addText: 'Add',
+  editText: 'Edit',
   saveText: 'Save',
   delText: 'Delete',
   resetText: 'Reset',

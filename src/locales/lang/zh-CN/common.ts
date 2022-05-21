@@ -3,6 +3,8 @@ export default {
   closeText: '关闭',
   cancelText: '取消',
   loadingText: '加载中...',
+  addText: '新增',
+  editText: '编辑',
   saveText: '保存',
   delText: '删除',
   resetText: '重置',

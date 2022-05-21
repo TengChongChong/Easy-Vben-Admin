@@ -7,7 +7,7 @@ export default {
     apiTimeoutMessage: '接口请求超时,请刷新页面重试!',
     apiRequestFailed: '请求出错，请稍候重试',
     networkException: '网络异常',
-    networkExceptionMsg: '网络异常，请检查您的网络连接是否正常!',
+    networkExceptionMsg: '网络异常，请检查你的网络连接是否正常!',
 
     errMsg401: '用户没有权限（令牌、用户名、密码错误）!',
     errMsg403: '用户得到授权，但是访问是被禁止的。!',
@@ -43,12 +43,12 @@ export default {
   exception: {
     backLogin: '返回登录',
     backHome: '返回首页',
-    subTitle403: '抱歉，您无权访问此页面。',
-    subTitle404: '抱歉，您访问的页面不存在。',
+    subTitle403: '抱歉，你无权访问此页面。',
+    subTitle404: '抱歉，你访问的页面不存在。',
     subTitle500: '抱歉，服务器报告错误。',
     noDataTitle: '当前页无数据',
     networkErrorTitle: '网络错误',
-    networkErrorSubTitle: '抱歉，您的网络连接已断开，请检查您的网络！',
+    networkErrorSubTitle: '抱歉，你的网络连接已断开，请检查你的网络！',
   },
   lock: {
     unlock: '点击解锁',
@@ -66,7 +66,7 @@ export default {
     forgetFormTitle: '重置密码',
 
     signInTitle: '开箱即用的中后台管理系统',
-    signInDesc: '输入您的个人详细信息开始使用！',
+    signInDesc: '输入你的个人详细信息开始使用！',
     policy: '我同意xxx隐私政策',
     scanSign: `扫码后点击"确认"，即可完成登录`,
 
