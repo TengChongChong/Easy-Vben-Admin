@@ -1,5 +1,7 @@
 <template>
   <Select
+    show-search
+    option-filter-prop="label"
     @dropdown-visible-change="handleFetch"
     v-bind="$attrs"
     @change="handleChange"
