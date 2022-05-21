@@ -1,7 +1,7 @@
 import type { BasicColumn, BasicTableProps, CellFormat, GetColumnsParams } from '../types/table';
 import type { PaginationProps } from '../types/pagination';
 import type { ComputedRef } from 'vue';
-import { computed, Ref, ref, toRaw, unref, watch } from 'vue';
+import { computed, createVNode, Ref, ref, toRaw, unref, watch } from 'vue';
 import { renderEditCell } from '../components/editable';
 import { usePermission } from '/@/hooks/web/usePermission';
 import { useI18n } from '/@/hooks/web/useI18n';
@@ -9,12 +9,14 @@ import { isArray, isBoolean, isFunction, isMap, isString } from '/@/utils/is';
 import { cloneDeep, isEqual } from 'lodash-es';
 import { formatToDate } from '/@/utils/dateUtil';
 import { ACTION_COLUMN_FLAG, DEFAULT_ALIGN, INDEX_COLUMN_FLAG, PAGE_SIZE } from '../const';
+import DictTag from '/@/components/Dict/DictTag.vue';
 
 function handleItem(item: BasicColumn, ellipsis: boolean) {
   const { key, dataIndex, children } = item;
   item.align = item.align || DEFAULT_ALIGN;
   if (ellipsis) {
     if (!key) {
+      // @ts-ignore
       item.key = dataIndex;
     }
     if (!isBoolean(item.ellipsis)) {
@@ -24,7 +26,7 @@ function handleItem(item: BasicColumn, ellipsis: boolean) {
     }
   }
   if (children && children.length) {
-    handleChildren(children, !!ellipsis);
+    handleChildren(children, ellipsis);
   }
 }
 
@@ -65,7 +67,7 @@ function handleIndexColumn(
 
   columns.unshift({
     flag: INDEX_COLUMN_FLAG,
-    width: 50,
+    width: 70,
     title: t('component.table.index'),
     align: 'center',
     customRender: ({ index }) => {
@@ -156,6 +158,7 @@ export function useColumns(
 
         if (!slots || !slots?.title) {
           // column.slots = { title: `header-${dataIndex}`, ...(slots || {}) };
+          // @ts-ignore
           column.customTitle = column.title;
           Reflect.deleteProperty(column, 'title');
         }
@@ -213,12 +216,12 @@ export function useColumns(
     if (!isString(firstColumn) && !isArray(firstColumn)) {
       columnsRef.value = columns as BasicColumn[];
     } else {
-      const columnKeys = (columns as (string | string[])[]).map(m => m.toString());
+      const columnKeys = (columns as (string | string[])[]).map((m) => m.toString());
       const newColumns: BasicColumn[] = [];
       cacheColumns.forEach((item) => {
         newColumns.push({
           ...item,
-          defaultHidden: !columnKeys.includes(item.dataIndex?.toString() || (item.key as string))
+          defaultHidden: !columnKeys.includes(item.dataIndex?.toString() || (item.key as string)),
         });
       });
       // Sort according to another array
@@ -284,7 +287,14 @@ function sortFixedColumn(columns: BasicColumn[]) {
   );
 }
 
-// format cell
+/**
+ * 格式化单元格
+ *
+ * @param text 单元格内容
+ * @param format 格式化
+ * @param record 行数据
+ * @param index index
+ */
 export function formatCell(text: string, format: CellFormat, record: Recordable, index: number) {
   if (!format) {
     return text;
@@ -296,15 +306,27 @@ export function formatCell(text: string, format: CellFormat, record: Recordable,
   }
 
   try {
-    // date type
-    const DATE_FORMAT_PREFIX = 'date|';
-    if (isString(format) && format.startsWith(DATE_FORMAT_PREFIX) && text) {
-      const dateFormat = format.replace(DATE_FORMAT_PREFIX, '');
+    // 字典
+    const DICT_FORMAT_PREFIX = 'dict|';
 
-      if (!dateFormat) {
-        return text;
+    // 日期类型
+    const DATE_FORMAT_PREFIX = 'date|';
+    if (isString(format) && text) {
+      if (format.startsWith(DATE_FORMAT_PREFIX)) {
+        const dateFormat = format.replace(DATE_FORMAT_PREFIX, '');
+
+        if (!dateFormat) {
+          return text;
+        }
+        return formatToDate(text, dateFormat);
+      } else if (format.startsWith(DICT_FORMAT_PREFIX)) {
+        const dictType = format.replace(DICT_FORMAT_PREFIX, '');
+
+        if (!dictType) {
+          return text;
+        }
+        return createVNode(DictTag, { dictType, value: text });
       }
-      return formatToDate(text, dateFormat);
     }
 
     // Map
