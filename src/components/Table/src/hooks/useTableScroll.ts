@@ -100,7 +100,7 @@ export function useTableScroll(
     if (!headEl) return;
 
     // Table height from bottom height-custom offset
-    let paddingHeight = 32;
+    let paddingHeight = 40;
     // Pager height
     let paginationHeight = 2;
     if (!isBoolean(pagination)) {
