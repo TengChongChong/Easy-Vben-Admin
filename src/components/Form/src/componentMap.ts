@@ -27,6 +27,8 @@ import ApiSelect from './components/ApiSelect.vue';
 import ApiTree from './components/ApiTree.vue';
 import ApiTreeSelect from './components/ApiTreeSelect.vue';
 import ApiCascader from './components/ApiCascader.vue';
+import DictSelect from './components/DictSelect.vue';
+import DictRadio from './components/DictRadio.vue';
 import { BasicUpload } from '/@/components/Upload';
 import { StrengthMeter } from '/@/components/StrengthMeter';
 import { IconPicker } from '/@/components/Icon';
@@ -69,6 +71,9 @@ componentMap.set('InputCountDown', CountdownInput);
 
 componentMap.set('Upload', BasicUpload);
 componentMap.set('Divider', Divider);
+
+componentMap.set('DictSelect', DictSelect);
+componentMap.set('DictRadio', DictRadio);
 
 export function add(compName: ComponentType, component: Component) {
   componentMap.set(compName, component);

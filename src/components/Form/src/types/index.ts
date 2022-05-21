@@ -113,4 +113,6 @@ export type ComponentType =
   | 'Render'
   | 'Slider'
   | 'Rate'
+  | 'DictSelect'
+  | 'DictRadio'
   | 'Divider';
