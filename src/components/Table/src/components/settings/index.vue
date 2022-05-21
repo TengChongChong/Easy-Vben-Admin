@@ -45,7 +45,7 @@
           redo: true,
           size: true,
           setting: true,
-          fullScreen: false,
+          fullScreen: true,
           ...props.setting,
         };
       });
@@ -65,7 +65,7 @@
 <style lang="less">
   .table-settings {
     & > * {
-      margin-right: 12px;
+      margin: 0 10px;
     }
 
     svg {
