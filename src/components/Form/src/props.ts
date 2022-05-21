@@ -14,7 +14,7 @@ export const basicProps = {
   // 标签宽度  固定宽度
   labelWidth: {
     type: [Number, String] as PropType<number | string>,
-    default: 0,
+    default: 100,
   },
   fieldMapToTime: {
     type: Array as PropType<FieldMapToTime>,
@@ -58,8 +58,8 @@ export const basicProps = {
     },
   },
   rulesMessageJoinLabel: propTypes.bool.def(true),
-  // 超过3行自动折叠
-  autoAdvancedLine: propTypes.number.def(3),
+  // 超过1行自动折叠
+  autoAdvancedLine: propTypes.number.def(1),
   // 不受折叠影响的行数
   alwaysShowLines: propTypes.number.def(1),
 
@@ -95,7 +95,7 @@ export const basicProps = {
 
   wrapperCol: Object as PropType<Partial<ColEx>>,
 
-  colon: propTypes.bool,
+  colon: propTypes.bool.def(true),
 
   labelAlign: propTypes.string,
 
