@@ -61,7 +61,7 @@ export class VAxios {
   }
 
   /**
-   * @description: Interceptor configuration
+   * @description: 拦截 configuration
    */
   private setupInterceptors() {
     const transform = this.getTransform();
@@ -94,12 +94,12 @@ export class VAxios {
       return config;
     }, undefined);
 
-    // Request interceptor error capture
+    // 请求之前的拦截器错误处理
     requestInterceptorsCatch &&
       isFunction(requestInterceptorsCatch) &&
       this.axiosInstance.interceptors.request.use(undefined, requestInterceptorsCatch);
 
-    // Response result interceptor processing
+    // 请求之后的拦截器
     this.axiosInstance.interceptors.response.use((res: AxiosResponse<any>) => {
       res && axiosCanceler.removePending(res.config);
       if (responseInterceptors && isFunction(responseInterceptors)) {
@@ -108,7 +108,7 @@ export class VAxios {
       return res;
     }, undefined);
 
-    // Response result interceptor error capture
+    // 请求之后的拦截器错误处理
     responseInterceptorsCatch &&
       isFunction(responseInterceptorsCatch) &&
       this.axiosInstance.interceptors.response.use(undefined, (error) => {

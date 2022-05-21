@@ -1,91 +1,36 @@
 // axios配置  可自行根据项目进行更改，只需更改该文件即可，其他文件可以不动
-// The axios configuration can be changed according to the project, just change the file, other files can be left unchanged
-
 import type { AxiosResponse } from 'axios';
 import { clone } from 'lodash-es';
-import type { RequestOptions, Result } from '/#/axios';
+import type { ErrorMessageMode, RequestOptions, Result } from '/#/axios';
 import type { AxiosTransform, CreateAxiosOptions } from './axiosTransform';
 import { VAxios } from './Axios';
-import { checkStatus } from './checkStatus';
+import { checkStatus, sessionInvalid } from './checkStatus';
 import { useGlobSetting } from '/@/hooks/setting';
-import { useMessage } from '/@/hooks/web/useMessage';
-import { RequestEnum, ResultEnum, ContentTypeEnum } from '/@/enums/httpEnum';
+import { useMessage, IconType } from '/@/hooks/web/useMessage';
+import { RequestEnum, ContentTypeEnum, ShowTypeEnum, ErrorCodeEnum } from '/@/enums/httpEnum';
 import { isString } from '/@/utils/is';
 import { getToken } from '/@/utils/auth';
 import { setObjToUrlParams, deepMerge } from '/@/utils';
 import { useErrorLogStoreWithOut } from '/@/store/modules/errorLog';
 import { useI18n } from '/@/hooks/web/useI18n';
 import { joinTimestamp, formatRequestDate } from './helper';
-import { useUserStoreWithOut } from '/@/store/modules/user';
 import { AxiosRetry } from '/@/utils/http/axios/axiosRetry';
 
 const globSetting = useGlobSetting();
 const urlPrefix = globSetting.urlPrefix;
-const { createMessage, createErrorModal } = useMessage();
+const { createMessage, createModal } = useMessage();
 
 /**
  * @description: 数据处理，方便区分多种处理方式
  */
 const transform: AxiosTransform = {
   /**
-   * @description: 处理请求数据。如果数据不是预期格式，可直接抛出错误
+   * 请求之前处理config
+   *
+   * @param config config
+   * @param options options
+   * @returns config
    */
-  transformRequestHook: (res: AxiosResponse<Result>, options: RequestOptions) => {
-    const { t } = useI18n();
-    const { isTransformResponse, isReturnNativeResponse } = options;
-    // 是否返回原生响应头 比如：需要获取响应头时使用该属性
-    if (isReturnNativeResponse) {
-      return res;
-    }
-    // 不进行任何处理，直接返回
-    // 用于页面代码可能需要直接获取code，data，message这些信息时开启
-    if (!isTransformResponse) {
-      return res.data;
-    }
-    // 错误的时候返回
-
-    const { data } = res;
-    if (!data) {
-      // return '[HTTP] Request has no return value';
-      throw new Error(t('sys.api.apiRequestFailed'));
-    }
-    //  这里 code，result，message为 后台统一的字段，需要在 types.ts内修改为项目自己的接口返回格式
-    const { code, result, message } = data;
-
-    // 这里逻辑可以根据项目进行修改
-    const hasSuccess = data && Reflect.has(data, 'code') && code === ResultEnum.SUCCESS;
-    if (hasSuccess) {
-      return result;
-    }
-
-    // 在此处根据自己项目的实际情况对不同的code执行不同的操作
-    // 如果不希望中断当前请求，请return数据，否则直接抛出异常即可
-    let timeoutMsg = '';
-    switch (code) {
-      case ResultEnum.TIMEOUT:
-        timeoutMsg = t('sys.api.timeoutMessage');
-        const userStore = useUserStoreWithOut();
-        userStore.setToken(undefined);
-        userStore.logout(true);
-        break;
-      default:
-        if (message) {
-          timeoutMsg = message;
-        }
-    }
-
-    // errorMessageMode=‘modal’的时候会显示modal错误弹窗，而不是消息提示，用于一些比较重要的错误
-    // errorMessageMode='none' 一般是调用时明确表示不希望自动弹出错误提示
-    if (options.errorMessageMode === 'modal') {
-      createErrorModal({ title: t('sys.api.errorTip'), content: timeoutMsg });
-    } else if (options.errorMessageMode === 'message') {
-      createMessage.error(timeoutMsg);
-    }
-
-    throw new Error(timeoutMsg || t('sys.api.apiRequestFailed'));
-  },
-
-  // 请求之前处理config
   beforeRequestHook: (config, options) => {
     const { apiUrl, joinPrefix, joinParamsToUrl, formatDate, joinTime = true, urlPrefix } = options;
 
@@ -135,7 +80,11 @@ const transform: AxiosTransform = {
   },
 
   /**
-   * @description: 请求拦截器处理
+   * 请求拦截器处理
+   *
+   * @param config config
+   * @param options options
+   * @returns config
    */
   requestInterceptors: (config, options) => {
     // 请求之前处理config
@@ -157,39 +106,124 @@ const transform: AxiosTransform = {
   },
 
   /**
-   * @description: 响应错误处理
+   * @description: 请求成功
+   */
+  transformRequestHook: (res: AxiosResponse<Result>, options: RequestOptions) => {
+    const { t } = useI18n();
+    const { isTransformResponse, isReturnNativeResponse } = options;
+    // 是否返回原生响应头 比如：需要获取响应头时使用该属性
+    if (isReturnNativeResponse) {
+      return res;
+    }
+    // 不进行任何处理，直接返回
+    // 用于页面代码可能需要直接获取success，data等信息时开启
+    if (!isTransformResponse) {
+      return res.data;
+    }
+
+    const responseData = res.data;
+    if (!responseData) {
+      throw new Error(t('sys.api.apiRequestFailed'));
+    }
+    // 后端响应信息
+    const { success, data, errorCode, errorMessage } = responseData;
+
+    // 是否有错误信息
+    if (!success || errorCode || errorMessage) {
+      throw new Error(
+        `Http状态码为成功时禁止返回错误信息success: ${success} / errorCode: ${errorCode} / errorMessage: ${errorMessage}，请调整Http状态码`,
+      );
+    }
+
+    // 请求成功，仅返回data
+    return data;
+  },
+
+  /**
+   * 响应错误处理
    */
   responseInterceptorsCatch: (axiosInstance: AxiosResponse, error: any) => {
     const { t } = useI18n();
+
+    // ! 默认使用 Ant Design Vue 的 Message 全局提示 组件进行错误提示，如需修改请调整`defaultErrorMessageMode`默认值
+    const defaultErrorMessageMode: ErrorMessageMode = 'message';
+
+    // 如果使用全局错误捕获，将错误信息缓存
     const errorLogStore = useErrorLogStoreWithOut();
     errorLogStore.addAjaxErrorInfo(error);
-    const { response, code, message, config } = error || {};
-    const errorMessageMode = config?.requestOptions?.errorMessageMode || 'none';
-    const msg: string = response?.data?.error?.message ?? '';
-    const err: string = error?.toString?.() ?? '';
-    let errMessage = '';
 
-    try {
+    const { response, code, message, config } = error || {};
+    let errorMessageMode = config?.requestOptions?.errorMessageMode || defaultErrorMessageMode;
+    const responseData: Result = response?.data;
+    let errMessage = '';
+    let errorShowType: IconType = 'error';
+
+    if (responseData && errorMessageMode === 'none') {
+      // 前端要求静默
+      return Promise.reject(error);
+    }
+
+    if (responseData) {
+      // 后端业务有响应数据
+      const { showType, errorMessage, errorCode } = responseData;
+      switch (showType) {
+        case ShowTypeEnum.SHOW_TYPE_INFO:
+          errorShowType = 'info';
+          break;
+        case ShowTypeEnum.SHOW_TYPE_WARNING:
+          errorShowType = 'warning';
+          break;
+        case ShowTypeEnum.SHOW_TYPE_ERROR:
+          errorShowType = 'error';
+          break;
+      }
+
+      // 错误提示内容
+      if (errorMessage) {
+        errMessage = errorMessage;
+      }
+
+      if (ErrorCodeEnum.SESSION_INVALID_CODE === errorCode) {
+        // 会话失效
+        sessionInvalid(errMessage);
+      }
+    }
+
+    if (!errMessage) {
+      // 后端业务未返回错误信息
+      const err: string = error?.toString?.() ?? '';
       if (code === 'ECONNABORTED' && message.indexOf('timeout') !== -1) {
         errMessage = t('sys.api.apiTimeoutMessage');
       }
+
       if (err?.includes('Network Error')) {
         errMessage = t('sys.api.networkExceptionMsg');
       }
-
-      if (errMessage) {
-        if (errorMessageMode === 'modal') {
-          createErrorModal({ title: t('sys.api.errorTip'), content: errMessage });
-        } else if (errorMessageMode === 'message') {
-          createMessage.error(errMessage);
-        }
-        return Promise.reject(error);
-      }
-    } catch (error) {
-      throw new Error(error as unknown as string);
     }
 
-    checkStatus(error?.response?.status, msg, errorMessageMode);
+    if (errMessage) {
+      if (!responseData && errorMessageMode === 'none') {
+        //  后端未响应，可能后端服务故障或客户端网络断开，使用默认提示
+        errorMessageMode = defaultErrorMessageMode;
+      }
+
+      // 提示错误
+      if (errorMessageMode === 'modal') {
+        createModal(
+          {
+            title: t('sys.api.errorTip'),
+            content: errMessage,
+          },
+          errorShowType,
+        );
+      } else if (errorMessageMode === 'message') {
+        createMessage[errorShowType](errMessage);
+      }
+      return Promise.reject(error);
+    }
+
+    // 如果上面的错误处理都没有命中，根据Http状态码提示错误信息
+    checkStatus(error?.response?.status, errMessage, config?.requestOptions);
 
     // 添加自动重试机制 保险起见 只针对GET请求
     const retryRequest = new AxiosRetry();
@@ -244,7 +278,7 @@ function createAxios(opt?: Partial<CreateAxiosOptions>) {
           // 是否携带token
           withToken: true,
           retryRequest: {
-            isOpenRetry: true,
+            isOpenRetry: false,
             count: 5,
             waitTime: 100,
           },
