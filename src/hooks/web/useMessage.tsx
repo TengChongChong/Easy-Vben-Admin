@@ -102,6 +102,10 @@ function createWarningModal(options: ModalOptionsPartial) {
   return Modal.warning(createModalOptions(options, 'warning'));
 }
 
+function createModal(options: ModalOptionsPartial, type: string) {
+  return Modal.warning(createModalOptions(options, type));
+}
+
 notification.config({
   placement: 'topRight',
   duration: 3,
@@ -115,6 +119,8 @@ export function useMessage() {
     createMessage: Message,
     notification: notification as NotifyApi,
     createConfirm: createConfirm,
+    createModalOptions,
+    createModal,
     createSuccessModal,
     createErrorModal,
     createInfoModal,
