@@ -10,6 +10,7 @@
           @click="resetAction"
           v-if="showResetButton"
         >
+          <Icon icon="ant-design:undo-outlined" />
           {{ getResetBtnOptions.text }}
         </Button>
         <slot name="submitBefore"></slot>
@@ -21,6 +22,7 @@
           @click="submitAction"
           v-if="showSubmitButton"
         >
+          <Icon icon="ant-design:search-outlined" />
           {{ getSubmitBtnOptions.text }}
         </Button>
 
@@ -49,12 +51,14 @@
   import { useFormContext } from '../hooks/useFormContext';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { propTypes } from '/@/utils/propTypes';
+  import Icon from '/@/components/Icon/src/Icon.vue';
 
   type ButtonOptions = Partial<ButtonProps> & { text: string };
 
   export default defineComponent({
     name: 'BasicFormAction',
     components: {
+      Icon,
       FormItem: Form.Item,
       Button,
       BasicArrow,
