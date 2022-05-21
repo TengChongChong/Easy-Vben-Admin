@@ -15,7 +15,7 @@ import { DEFAULT_FILTER_FN, DEFAULT_SORT_FN, FETCH_SETTING, DEFAULT_SIZE } from 
 import { propTypes } from '/@/utils/propTypes';
 
 export const basicProps = {
-  clickToRowSelect: { type: Boolean, default: true },
+  clickToRowSelect: { type: Boolean, default: false },
   isTreeTable: Boolean,
   tableSetting: propTypes.shape<TableSetting>({}),
   inset: Boolean,
@@ -27,7 +27,7 @@ export const basicProps = {
     type: Function as PropType<(data: Partial<Recordable<string[]>>) => any>,
     default: DEFAULT_FILTER_FN,
   },
-  showTableSetting: Boolean,
+  showTableSetting: propTypes.bool.def(true),
   autoCreateKey: { type: Boolean, default: true },
   striped: { type: Boolean, default: true },
   showSummary: Boolean,
@@ -98,8 +98,8 @@ export const basicProps = {
   },
   ellipsis: { type: Boolean, default: true },
   isCanResizeParent: { type: Boolean, default: false },
-  canResize: { type: Boolean, default: true },
-  clearSelectOnPageChange: propTypes.bool,
+  canResize: { type: Boolean, default: false },
+  clearSelectOnPageChange: propTypes.bool.def(true),
   resizeHeightOffset: propTypes.number.def(0),
   rowSelection: {
     type: Object as PropType<TableRowSelection | null>,
@@ -119,9 +119,9 @@ export const basicProps = {
   },
   rowKey: {
     type: [String, Function] as PropType<string | ((record: Recordable) => string)>,
-    default: '',
+    default: 'id',
   },
-  bordered: propTypes.bool,
+  bordered: propTypes.bool.def(true),
   pagination: {
     type: [Object, Boolean] as PropType<PaginationProps | boolean>,
     default: null,
