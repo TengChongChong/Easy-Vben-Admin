@@ -13,7 +13,6 @@ import { getRawRoute } from '/@/utils';
 import { MULTIPLE_TABS_KEY } from '/@/enums/cacheEnum';
 
 import projectSetting from '/@/settings/projectSetting';
-import { useUserStore } from '/@/store/modules/user';
 
 export interface MultipleTabState {
   cacheTabList: Set<string>;
@@ -154,7 +153,7 @@ export const useMultipleTabStore = defineStore({
         if (dynamicLevel > 0) {
           // 如果动态路由层级大于 0 了，那么就要限制该路由的打开数限制了
           // 首先获取到真实的路由，使用配置方式减少计算开销.
-          // const realName: string = path.match(/(\S*)\//)![1];
+          // const nickname: string = path.match(/(\S*)\//)![1];
           const realPath = meta?.realPath ?? '';
           // 获取到已经打开的动态路由数, 判断是否大于某一个值
           if (
@@ -199,8 +198,7 @@ export const useMultipleTabStore = defineStore({
       if (index === 0) {
         // There is only one tab, then jump to the homepage, otherwise jump to the right tab
         if (this.tabList.length === 1) {
-          const userStore = useUserStore();
-          toTarget = userStore.getUserInfo.homePath || PageEnum.BASE_HOME;
+          toTarget = PageEnum.BASE_HOME;
         } else {
           //  Jump to the right tab
           const page = this.tabList[index + 1];
