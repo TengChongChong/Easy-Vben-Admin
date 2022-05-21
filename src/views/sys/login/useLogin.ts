@@ -1,5 +1,4 @@
-import type { ValidationRule } from 'ant-design-vue/lib/form/Form';
-import type { RuleObject } from 'ant-design-vue/lib/form/interface';
+import type { Rule } from '/@/components/Form/src/types/form';
 import { ref, computed, unref, Ref } from 'vue';
 import { useI18n } from '/@/hooks/web/useI18n';
 
@@ -46,12 +45,12 @@ export function useFormRules(formData?: Recordable) {
   const getSmsFormRule = computed(() => createRule(t('sys.login.smsPlaceholder')));
   const getMobileFormRule = computed(() => createRule(t('sys.login.mobilePlaceholder')));
 
-  const validatePolicy = async (_: RuleObject, value: boolean) => {
+  const validatePolicy = async (_: Rule, value: boolean) => {
     return !value ? Promise.reject(t('sys.login.policyPlaceholder')) : Promise.resolve();
   };
 
   const validateConfirmPassword = (password: string) => {
-    return async (_: RuleObject, value: string) => {
+    return async (_: Rule, value: string) => {
       if (!value) {
         return Promise.reject(t('sys.login.passwordPlaceholder'));
       }
@@ -62,7 +61,12 @@ export function useFormRules(formData?: Recordable) {
     };
   };
 
-  const getFormRules = computed((): { [k: string]: ValidationRule | ValidationRule[] } => {
+  /**
+   * 获取表单验证
+   *
+   * todo: 这里使用Rule会报错，暂时修改为any
+   */
+  const getFormRules = computed((): { [k: string]: any } => {
     const accountFormRule = unref(getAccountFormRule);
     const passwordFormRule = unref(getPasswordFormRule);
     const smsFormRule = unref(getSmsFormRule);
@@ -73,7 +77,7 @@ export function useFormRules(formData?: Recordable) {
       mobile: mobileFormRule,
     };
     switch (unref(currentState)) {
-      // register form rules
+      // 注册
       case LoginStateEnum.REGISTER:
         return {
           account: accountFormRule,
@@ -85,18 +89,18 @@ export function useFormRules(formData?: Recordable) {
           ...mobileRule,
         };
 
-      // reset password form rules
+      // 重置密码
       case LoginStateEnum.RESET_PASSWORD:
         return {
           account: accountFormRule,
           ...mobileRule,
         };
 
-      // mobile form rules
+      // 手机号登录
       case LoginStateEnum.MOBILE:
         return mobileRule;
 
-      // login form rules
+      // 用户名密码登录
       default:
         return {
           account: accountFormRule,
@@ -106,8 +110,13 @@ export function useFormRules(formData?: Recordable) {
   });
   return { getFormRules };
 }
-
-function createRule(message: string) {
+/**
+ * 创建验证
+ *
+ * @param message 错误提示
+ * @returns
+ */
+function createRule(message: string): Rule[] {
   return [
     {
       required: true,

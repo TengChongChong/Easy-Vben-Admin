@@ -8,10 +8,12 @@
     v-show="getShow"
     @keypress.enter="handleLogin"
   >
-    <FormItem name="account" class="enter-x">
+    <Alert v-if="hasError" type="error" :message="errorMessage" :banner="true" />
+
+    <FormItem name="username" class="enter-x">
       <Input
         size="large"
-        v-model:value="formData.account"
+        v-model:value="formData.username"
         :placeholder="t('sys.login.userName')"
         class="fix-auto-fill"
       />
@@ -82,9 +84,11 @@
   </Form>
 </template>
 <script lang="ts" setup>
+  import md5 from 'md5';
+
   import { reactive, ref, unref, computed } from 'vue';
 
-  import { Checkbox, Form, Input, Row, Col, Button, Divider } from 'ant-design-vue';
+  import { Checkbox, Form, Input, Row, Col, Button, Divider, Alert } from 'ant-design-vue';
   import {
     GithubFilled,
     WechatFilled,
@@ -100,14 +104,13 @@
   import { useUserStore } from '/@/store/modules/user';
   import { LoginStateEnum, useLoginState, useFormRules, useFormValid } from './useLogin';
   import { useDesign } from '/@/hooks/web/useDesign';
-  //import { onKeyStroke } from '@vueuse/core';
 
   const ACol = Col;
   const ARow = Row;
   const FormItem = Form.Item;
   const InputPassword = Input.Password;
   const { t } = useI18n();
-  const { notification, createErrorModal } = useMessage();
+  const { notification } = useMessage();
   const { prefixCls } = useDesign('login');
   const userStore = useUserStore();
 
@@ -116,11 +119,13 @@
 
   const formRef = ref();
   const loading = ref(false);
+  const hasError = ref(false);
+  const errorMessage = ref();
   const rememberMe = ref(false);
 
   const formData = reactive({
-    account: 'vben',
-    password: '123456',
+    username: 'admin',
+    password: 'admin123',
   });
 
   const { validForm } = useFormValid(formRef);
@@ -135,25 +140,30 @@
     try {
       loading.value = true;
       const userInfo = await userStore.login({
-        password: data.password,
-        username: data.account,
-        mode: 'none', //不要默认的错误提示
+        password: md5(data.password),
+        username: data.username,
+        mode: 'none',
       });
       if (userInfo) {
+        hasError.value = false;
         notification.success({
           message: t('sys.login.loginSuccessTitle'),
-          description: `${t('sys.login.loginSuccessDesc')}: ${userInfo.realName}`,
+          description: `${t('sys.login.loginSuccessDesc')}: ${userInfo.nickname}`,
           duration: 3,
         });
       }
-    } catch (error) {
-      createErrorModal({
-        title: t('sys.api.errorTip'),
-        content: (error as unknown as Error).message || t('sys.api.networkExceptionMsg'),
-        getContainer: () => document.body.querySelector(`.${prefixCls}`) || document.body,
-      });
+    } catch (error: any) {
+      errorMessage.value = error.response?.data?.errorMessage;
+      if (errorMessage.value) {
+        hasError.value = true;
+      }
     } finally {
       loading.value = false;
     }
   }
 </script>
+<style>
+  .ant-alert {
+    margin-bottom: 10px;
+  }
+</style>
