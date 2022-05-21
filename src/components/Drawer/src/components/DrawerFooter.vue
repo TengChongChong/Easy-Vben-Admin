@@ -3,6 +3,7 @@
     <template v-if="!$slots.footer">
       <slot name="insertFooter"></slot>
       <a-button v-bind="cancelButtonProps" @click="handleClose" class="mr-2" v-if="showCancelBtn">
+        <Icon icon="ant-design:close-outlined" />
         {{ cancelText }}
       </a-button>
       <slot name="centerFooter"></slot>
@@ -14,6 +15,7 @@
         :loading="confirmLoading"
         v-if="showOkBtn"
       >
+        <Icon icon="ant-design:save-outlined" />
         {{ okText }}
       </a-button>
       <slot name="appendFooter"></slot>
@@ -30,8 +32,10 @@
   import { useDesign } from '/@/hooks/web/useDesign';
 
   import { footerProps } from '../props';
+  import Icon from '/@/components/Icon/src/Icon.vue';
   export default defineComponent({
     name: 'BasicDrawerFooter',
+    components: { Icon },
     props: {
       ...footerProps,
       height: {
