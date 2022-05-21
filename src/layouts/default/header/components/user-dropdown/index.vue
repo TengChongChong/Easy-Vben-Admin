@@ -4,7 +4,7 @@
       <img :class="`${prefixCls}__header`" :src="getUserInfo.avatar" />
       <span :class="`${prefixCls}__info hidden md:block`">
         <span :class="`${prefixCls}__name  `" class="truncate">
-          {{ getUserInfo.realName }}
+          {{ getUserInfo.nickname }}
         </span>
       </span>
     </span>
@@ -36,7 +36,7 @@
 </template>
 <script lang="ts">
   // components
-  import { Dropdown, Menu } from 'ant-design-vue';
+  import { Dropdown, Menu, MenuProps } from 'ant-design-vue';
 
   import { defineComponent, computed } from 'vue';
 
@@ -53,8 +53,6 @@
   import { openWindow } from '/@/utils';
 
   import { createAsyncComponent } from '/@/utils/factory/createAsyncComponent';
-
-  type MenuEvent = 'logout' | 'doc' | 'lock';
 
   export default defineComponent({
     name: 'UserDropdown',
@@ -75,8 +73,8 @@
       const userStore = useUserStore();
 
       const getUserInfo = computed(() => {
-        const { realName = '', avatar, desc } = userStore.getUserInfo || {};
-        return { realName, avatar: avatar || headerImg, desc };
+        const { nickname = '', avatar } = userStore.getUserInfo || {};
+        return { nickname, avatar: avatar || headerImg };
       });
 
       const [register, { openModal }] = useModal();
@@ -95,8 +93,8 @@
         openWindow(DOC_URL);
       }
 
-      function handleMenuClick(e: { key: MenuEvent }) {
-        switch (e.key) {
+      const handleMenuClick: MenuProps['onClick'] = ({ key }) => {
+        switch (key) {
           case 'logout':
             handleLoginOut();
             break;
@@ -107,7 +105,7 @@
             handleLock();
             break;
         }
-      }
+      };
 
       return {
         prefixCls,

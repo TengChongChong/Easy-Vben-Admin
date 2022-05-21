@@ -7,15 +7,40 @@ export enum ResultEnum {
   TIMEOUT = 401,
   TYPE = 'success',
 }
+/**
+ * 系统级错误码
+ */
+export enum ErrorCodeEnum {
+  // 会话失效
+  SESSION_INVALID_CODE = '00401-1',
+}
 
 /**
- * @description: request method
+ * @description: 请求方法
  */
 export enum RequestEnum {
   GET = 'GET',
   POST = 'POST',
   PUT = 'PUT',
   DELETE = 'DELETE',
+}
+
+/**
+ * 后端消息提示方式
+ */
+export enum ShowTypeEnum {
+  /**
+   * 通知提醒框 - info
+   */
+  SHOW_TYPE_INFO = 1,
+  /**
+   * 通知提醒框 - warning
+   */
+  SHOW_TYPE_WARNING = 2,
+  /**
+   * 通知提醒框 - error
+   */
+  SHOW_TYPE_ERROR = 3,
 }
 
 /**

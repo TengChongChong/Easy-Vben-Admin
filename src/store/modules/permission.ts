@@ -19,13 +19,13 @@ import { ERROR_LOG_ROUTE, PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic';
 import { filter } from '/@/utils/helper/treeHelper';
 
 import { getMenuList } from '/@/api/sys/menu';
-import { getPermCode } from '/@/api/sys/user';
+// import { getPermCode } from '/@/api/sys/sysUser';
 
 import { useMessage } from '/@/hooks/web/useMessage';
 import { PageEnum } from '/@/enums/pageEnum';
 
 interface PermissionState {
-  // Permission code list
+  // 权限标识
   permCodeList: string[] | number[];
   // Whether the route has been dynamically added
   isDynamicAddedRoute: boolean;
@@ -49,9 +49,9 @@ export const usePermissionStore = defineStore({
     frontMenuList: [],
   }),
   getters: {
-    getPermCodeList(): string[] | number[] {
-      return this.permCodeList;
-    },
+    // getPermCodeList(): string[] | number[] {
+    //   return this.permCodeList;
+    // },
     getBackMenuList(): Menu[] {
       return this.backMenuList;
     },
@@ -93,9 +93,12 @@ export const usePermissionStore = defineStore({
       this.lastBuildMenuTime = 0;
     },
     async changePermissionCode() {
-      const codeList = await getPermCode();
-      this.setPermCodeList(codeList);
+      // const codeList = await getPermCode();
+      // this.setPermCodeList(codeList);
     },
+    /**
+     * 构建路由
+     */
     async buildRoutesAction(): Promise<AppRouteRecordRaw[]> {
       const { t } = useI18n();
       const userStore = useUserStore();
@@ -123,7 +126,7 @@ export const usePermissionStore = defineStore({
        * */
       const patchHomeAffix = (routes: AppRouteRecordRaw[]) => {
         if (!routes || routes.length === 0) return;
-        let homePath: string = userStore.getUserInfo.homePath || PageEnum.BASE_HOME;
+        let homePath: string = PageEnum.BASE_HOME;
         function patcher(routes: AppRouteRecordRaw[], parentPath = '') {
           if (parentPath) parentPath = parentPath + '/';
           routes.forEach((route: AppRouteRecordRaw) => {
@@ -171,7 +174,7 @@ export const usePermissionStore = defineStore({
           routes = flatMultiLevelRoutes(routes);
           break;
 
-        //  If you are sure that you do not need to do background dynamic permissions, please comment the entire judgment below
+        //  后台动态获取
         case PermissionModeEnum.BACK:
           const { createMessage } = useMessage();
 

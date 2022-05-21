@@ -1,7 +1,7 @@
+/**
+ * 角色
+ */
 export enum RoleEnum {
-  // super admin
-  SUPER = 'super',
-
-  // tester
-  TEST = 'test',
+  // 系统管理员
+  SYS_ADMIN = 'sys:admin',
 }

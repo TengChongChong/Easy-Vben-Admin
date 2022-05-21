@@ -6,28 +6,30 @@ import { PageEnum } from '/@/enums/pageEnum';
 import { useUserStoreWithOut } from '/@/store/modules/user';
 
 import { PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic';
+import { useDictStoreWithOut } from '/@/store/modules/dict';
 
-import { RootRoute } from '/@/router/routes';
+// import { RootRoute } from '/@/router/routes';
 
 const LOGIN_PATH = PageEnum.BASE_LOGIN;
 
-const ROOT_PATH = RootRoute.path;
+// const ROOT_PATH = RootRoute.path;
 
 const whitePathList: PageEnum[] = [LOGIN_PATH];
 
 export function createPermissionGuard(router: Router) {
   const userStore = useUserStoreWithOut();
   const permissionStore = usePermissionStoreWithOut();
+  const dictStore = useDictStoreWithOut();
   router.beforeEach(async (to, from, next) => {
-    if (
-      from.path === ROOT_PATH &&
-      to.path === PageEnum.BASE_HOME &&
-      userStore.getUserInfo.homePath &&
-      userStore.getUserInfo.homePath !== PageEnum.BASE_HOME
-    ) {
-      next(userStore.getUserInfo.homePath);
-      return;
-    }
+    // if (
+    //   from.path === ROOT_PATH &&
+    //   to.path === PageEnum.BASE_HOME &&
+    //   userStore.getUserInfo.homePath &&
+    //   userStore.getUserInfo.homePath !== PageEnum.BASE_HOME
+    // ) {
+    //   next(userStore.getUserInfo.homePath);
+    //   return;
+    // }
 
     const token = userStore.getToken;
 
@@ -47,15 +49,15 @@ export function createPermissionGuard(router: Router) {
       return;
     }
 
-    // token does not exist
     if (!token) {
-      // You can access without permission. You need to set the routing meta.ignoreAuth to true
+      // 没有token
       if (to.meta.ignoreAuth) {
+        // 如果设置了ignoreAuth表示页面不需要登录
         next();
         return;
       }
 
-      // redirect login page
+      // 转到登录
       const redirectData: { path: string; replace: boolean; query?: Recordable<string> } = {
         path: LOGIN_PATH,
         replace: true,
@@ -74,14 +76,14 @@ export function createPermissionGuard(router: Router) {
     if (
       from.path === LOGIN_PATH &&
       to.name === PAGE_NOT_FOUND_ROUTE.name &&
-      to.fullPath !== (userStore.getUserInfo.homePath || PageEnum.BASE_HOME)
+      to.fullPath !== PageEnum.BASE_HOME
     ) {
-      next(userStore.getUserInfo.homePath || PageEnum.BASE_HOME);
+      next(PageEnum.BASE_HOME);
       return;
     }
 
-    // get userinfo while last fetch time is empty
     if (userStore.getLastUpdateTime === 0) {
+      // 如果上次更新时间为空，重新获取当前用户信息
       try {
         await userStore.getUserInfoAction();
       } catch (err) {
@@ -89,12 +91,14 @@ export function createPermissionGuard(router: Router) {
         return;
       }
     }
+    // 初始化字典数据
+    dictStore.initDict();
 
     if (permissionStore.getIsDynamicAddedRoute) {
       next();
       return;
     }
-
+    // 路由
     const routes = await permissionStore.buildRoutesAction();
 
     routes.forEach((route) => {

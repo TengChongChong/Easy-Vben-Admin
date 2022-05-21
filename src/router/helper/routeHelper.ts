@@ -93,6 +93,7 @@ export function transformObjToRoute<T = AppRouteModule>(routeList: AppRouteModul
 }
 
 /**
+ * 将多级路由转为二级路由
  * Convert multi-level routing to level 2 routing
  */
 export function flatMultiLevelRoutes(routeModules: AppRouteModule[]) {
