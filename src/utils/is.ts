@@ -32,6 +32,14 @@ export function isEmpty<T = unknown>(val: T): val is T {
   return false;
 }
 
+export function isBlank(str: string | null | undefined) {
+  return isNullOrUnDef(str) || isEmpty(str);
+}
+
+export function isNotBlank(str: string | null | undefined) {
+  return !isBlank(str);
+}
+
 export function isDate(val: unknown): val is Date {
   return is(val, 'Date');
 }
