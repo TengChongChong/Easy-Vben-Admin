@@ -18,7 +18,6 @@ const sys: AppRouteModule = {
       name: 'SysDeptTypeView',
       meta: {
         title: '部门类型管理',
-        ignoreKeepAlive: true,
       },
       component: () => import('/@/views/sys/dept/type/View.vue'),
     },
@@ -27,7 +26,6 @@ const sys: AppRouteModule = {
       name: 'SysDictTypeList',
       meta: {
         title: '字典类型管理',
-        ignoreKeepAlive: true,
       },
       component: () => import('/@/views/sys/dict/type/List.vue'),
     },
@@ -36,7 +34,6 @@ const sys: AppRouteModule = {
       name: 'SysDictList',
       meta: {
         title: '字典管理',
-        ignoreKeepAlive: true,
       },
       component: () => import('/@/views/sys/dict/List.vue'),
     },
