@@ -4,6 +4,7 @@ import {
   Button,
   Layout,
   Card,
+  Cascader,
   Divider,
   Dropdown,
   Tag,
@@ -21,6 +22,7 @@ export function registerGlobComp(app: App) {
     .use(Button)
     .use(Layout)
     .use(Card)
+    .use(Cascader)
     .use(Divider)
     .use(Dropdown)
     .use(Tag)

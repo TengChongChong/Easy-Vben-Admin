@@ -1,38 +1,125 @@
 import { defineStore } from 'pinia';
 import { store } from '/@/store';
 
-// import { SYS_DICT_KEY } from '/@/enums/cacheEnum';
-// import { createLocalStorage } from '/@/utils/cache';
-import { SysDict } from '/@/api/sys/model/sysDictModel';
+import { SysDict, SysDictTree } from '/@/api/sys/model/sysDictModel';
 import { selectAll } from '/@/api/sys/sysDict';
 import { Nullable } from '/@/utils/types';
-
-// const ls = createLocalStorage();
+import { listToTree } from '/@/utils/helper/treeHelper';
+import { isBlank, isNullOrUnDef } from '/@/utils/is';
+import { TempSelectModel, TreeSelectModel } from '/@/api/model/selectModel';
 
 interface DictState {
   isLoading: boolean;
-  dictArray: SysDict[];
+  dict: {
+    [key: string]: SysDict[];
+  };
 }
 
 export const useDictStore = defineStore({
   id: 'sys-dict',
   state: (): DictState => ({
     isLoading: false,
-    dictArray: [],
+    dict: {},
   }),
   getters: {
+    /**
+     * 根据字典类型获取字典数组
+     */
     selectDictArray() {
-      return (dictType: string) => {
-        return this.dictArray.filter((item) => {
-          return item.dictType === dictType;
-        }) as SysDict[];
+      return (dictType: string): SysDict[] => {
+        if (isBlank(dictType)) {
+          return [];
+        }
+        const dictArray = this.dict[dictType];
+        if (isNullOrUnDef(dictArray)) {
+          console.warn(`获取字典失败，字典类型不存在${dictArray}`);
+        }
+        return dictArray || [];
       };
     },
+    /**
+     * 根据字典类型获取字典树，用于级联
+     */
+    selectDictTree() {
+      return (dictType: string): SysDictTree[] => {
+        if (isBlank(dictType)) {
+          return [] as SysDictTree[];
+        }
+
+        const dict = this.selectDictArray(dictType);
+        return listToTree(dict, {
+          id: 'code',
+          children: 'children',
+          pid: 'parentCode',
+        }) as SysDictTree[];
+      };
+    },
+    /**
+     * 根据字典类型获取级联需要的数据
+     */
+    selectTree() {
+      return (dictType: string): TreeSelectModel[] => {
+        if (isBlank(dictType)) {
+          return [] as TreeSelectModel[];
+        }
+
+        const selectArray: TempSelectModel[] = [] as TempSelectModel[];
+
+        this.selectDictArray(dictType).map((item) => {
+          const { code, parentCode, name } = item;
+          selectArray.push({
+            value: code,
+            label: name,
+            // @ts-ignore
+            parentId: parentCode,
+          });
+        });
+
+        return listToTree(selectArray, {
+          id: 'value',
+          pid: 'parentId',
+          children: 'children',
+        }) as TreeSelectModel[];
+      };
+    },
+
+    getPath() {
+      return (dictType: string, code: string): string[] => {
+        const getParentPath = (array, path, code): string[] => {
+          for (let i = 0; i < array.length; i++) {
+            if (array[i].code === code) {
+              if (array[i].parentCode) {
+                path.push(array[i].parentCode);
+                return getParentPath(array, path, array[i].parentCode);
+              } else {
+                return path;
+              }
+            }
+          }
+          return path;
+        };
+
+        if (isBlank(dictType) || isBlank(code)) {
+          return [];
+        }
+        const dictArray = this.selectDictArray(dictType);
+
+        return getParentPath(dictArray, [code], code).reverse();
+      };
+    },
+
+    /**
+     * 根据字典类型&和编码获取字典对象
+     */
     getDict() {
-      return (dictType: string, value: string): Nullable<SysDict> => {
-        for (let i = 0; i < this.dictArray.length; i++) {
-          if (this.dictArray[i].dictType === dictType && this.dictArray[i].code === value) {
-            return this.dictArray[i];
+      return (dictType: string, code: string): Nullable<SysDict> => {
+        if (isBlank(dictType) || isBlank(code)) {
+          return null;
+        }
+        const dictArray = this.selectDictArray(dictType);
+        for (let i = 0; i < dictArray.length; i++) {
+          if (dictArray[i].code === code) {
+            return dictArray[i];
           }
         }
         return null;
@@ -40,9 +127,16 @@ export const useDictStore = defineStore({
     },
   },
   actions: {
-    setDict(dictArray: SysDict[]) {
-      this.dictArray = dictArray;
-      // ls.set(SYS_DICT_KEY, this.dictArray);
+    setDict(dict: SysDict[]) {
+      // 清空
+      this.dict = {};
+      dict.map((item) => {
+        if (this.dict[item.dictType]) {
+          this.dict[item.dictType].push(item);
+        } else {
+          this.dict[item.dictType] = [item];
+        }
+      });
     },
 
     /**
@@ -52,7 +146,7 @@ export const useDictStore = defineStore({
      * @param callback 回调
      */
     initDict(force = false, callback = () => {}) {
-      if (!force && (this.isLoading || this.dictArray.length)) {
+      if (!force && (this.isLoading || this.dict.length)) {
         // 已加载或加载中
         return;
       }

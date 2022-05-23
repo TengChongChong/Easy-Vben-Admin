@@ -10,7 +10,7 @@ export interface SysDict extends BasicModel {
   // 编码
   code: string;
   // 父编码
-  parentCode: string;
+  parentCode: string | string[];
   // 字典类型
   dictType: string;
   // 图标
@@ -21,4 +21,11 @@ export interface SysDict extends BasicModel {
   parentName: string;
   // 字典类型名称
   dictTypeName: string;
+}
+
+/**
+ * 字典树
+ */
+export interface SysDictTree extends SysDict {
+  children?: SysDict[];
 }

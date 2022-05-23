@@ -31,11 +31,12 @@ export function selectAll() {
 /**
  * 根据字典类型获取字典
  *
- * @param dictType 字典类型
+ * @param params params
  */
-export function selectByDictType(dictType: string) {
+export function selectByDictType(params) {
   return defHttp.get<SelectModel[]>({
-    url: `${BASE_URL}dict-type/${dictType}`,
+    url: `${BASE_URL}dict-type`,
+    params,
   });
 }
 
@@ -45,7 +46,7 @@ export function selectByDictType(dictType: string) {
  * @param id id
  */
 export function get(id: string) {
-  return defHttp.get<SysDict[]>({
+  return defHttp.get<SysDict>({
     url: `${BASE_URL}${id}`,
   });
 }
@@ -57,7 +58,7 @@ export function get(id: string) {
  * @param dictType 字典类型
  */
 export function add(id: string | undefined, dictType: string | undefined) {
-  return defHttp.get<SysDict[]>({
+  return defHttp.get<SysDict>({
     url: `${BASE_URL}add/${id || ''}`,
     params: {
       dictType,
@@ -71,7 +72,7 @@ export function add(id: string | undefined, dictType: string | undefined) {
  * @param ids ids
  */
 export function remove(ids: string) {
-  return defHttp.delete<SysDict[]>({
+  return defHttp.delete<boolean>({
     url: `${BASE_URL}${ids}`,
   });
 }
@@ -82,7 +83,7 @@ export function remove(ids: string) {
  * @param params 表单数据
  */
 export function save(params: SysDict) {
-  return defHttp.post<Page<SysDict>>({
+  return defHttp.post<SysDict>({
     url: BASE_URL,
     data: params,
   });

@@ -3,6 +3,7 @@ interface TreeHelperConfig {
   children: string;
   pid: string;
 }
+
 const DEFAULT_CONFIG: TreeHelperConfig = {
   id: 'id',
   children: 'children',
@@ -11,7 +12,12 @@ const DEFAULT_CONFIG: TreeHelperConfig = {
 
 const getConfig = (config: Partial<TreeHelperConfig>) => Object.assign({}, DEFAULT_CONFIG, config);
 
-// tree from list
+/**
+ * list转树形结构
+ *
+ * @param list list
+ * @param config 转换配置
+ */
 export function listToTree<T = any>(list: any[], config: Partial<TreeHelperConfig> = {}): T[] {
   const conf = getConfig(config) as TreeHelperConfig;
   const nodeMap = new Map();
@@ -127,6 +133,7 @@ export function filter<T = any>(
 ): T[] {
   config = getConfig(config);
   const children = config.children as string;
+
   function listFilter(list: T[]) {
     return list
       .map((node: any) => ({ ...node }))
@@ -135,6 +142,7 @@ export function filter<T = any>(
         return func(node) || (node[children] && node[children].length);
       });
   }
+
   return listFilter(tree);
 }
 

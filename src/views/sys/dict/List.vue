@@ -12,6 +12,11 @@
           @click="handleRemove"
           v-model:loading="removeBatchLoading"
         />
+        <a-button-link
+          path="/sys/dict/type/list"
+          text="字典类型管理"
+          icon="ant-design:menu-outlined"
+        />
         <a-button @click="reloadCache">
           <Icon icon="ant-design:reload-outlined" />
           刷新字典缓存
@@ -20,6 +25,16 @@
 
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'action'">
+          <a-tooltip>
+            <template #title>新增下级</template>
+            <a-button type="link" size="small" @click="handleCreate(record.id, record.dictType)">
+              <template #icon>
+                <Icon icon="ant-design:plus-outlined" />
+              </template>
+            </a-button>
+          </a-tooltip>
+
+          <a-divider type="vertical" />
           <a-button-edit :id="record.id" @click="handleEdit" />
           <a-divider type="vertical" />
           <a-button-remove :id="record.id" @click="handleRemove" />
@@ -44,10 +59,12 @@
   import SysDictInput from '/@/views/sys/dict/Input.vue';
   import Icon from '/@/components/Icon/src/Icon.vue';
   import { useMessage } from '/@/hooks/web/useMessage';
+  import AButtonLink from '/@/components/Button/src/ButtonLink.vue';
 
   export default defineComponent({
     name: 'SysDictList',
     components: {
+      AButtonLink,
       Icon,
       SysDictInput,
       AButtonRemoveBatch,
@@ -73,7 +90,7 @@
         api: select,
         columns,
         actionColumn: {
-          width: 100,
+          width: 140,
           title: '操作',
           key: 'action',
         },
@@ -89,10 +106,19 @@
         });
       });
 
-      const handleCreate = (id: string | undefined) => {
-        console.log('handleCreate');
-        const queryData = getForm().getFieldsValue();
-        add(id, queryData.dictType).then((data) => {
+      /**
+       * 新增
+       *
+       * @param id 上级id
+       * @param dictType 字典类型
+       */
+      const handleCreate = (id: string | undefined, dictType: string | undefined) => {
+        if (!dictType) {
+          const queryData = getForm().getFieldsValue();
+          dictType = queryData.dictType;
+        }
+
+        add(id, dictType).then((data) => {
           openDrawer(true, {
             data,
             isUpdate: true,

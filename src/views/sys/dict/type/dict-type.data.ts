@@ -64,13 +64,13 @@ export const columns: BasicColumn[] = [
     title: '编辑人',
     dataIndex: 'editUser',
     sorter: true,
-    width: 160,
+    width: 120,
   },
   {
     title: '编辑时间',
     dataIndex: 'editDate',
     sorter: true,
-    width: 160,
+    width: 140,
     format: 'date|YYYY-MM-DD HH:mm',
   },
 ];

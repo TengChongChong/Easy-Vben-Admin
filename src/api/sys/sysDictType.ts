@@ -34,7 +34,7 @@ export function selectAll() {
  * @param id id
  */
 export function get(id: string) {
-  return defHttp.get<SysDictType[]>({
+  return defHttp.get<SysDictType>({
     url: `${BASE_URL}${id}`,
   });
 }
@@ -43,7 +43,7 @@ export function get(id: string) {
  * 新增
  */
 export function add() {
-  return defHttp.get<SysDictType[]>({
+  return defHttp.get<SysDictType>({
     url: `${BASE_URL}add`,
   });
 }
@@ -54,7 +54,7 @@ export function add() {
  * @param ids ids
  */
 export function remove(ids: string) {
-  return defHttp.delete<SysDictType[]>({
+  return defHttp.delete<boolean>({
     url: `${BASE_URL}${ids}`,
   });
 }
@@ -65,7 +65,7 @@ export function remove(ids: string) {
  * @param params 表单数据
  */
 export function save(params: SysDictType) {
-  return defHttp.post<Page<SysDictType>>({
+  return defHttp.post<SysDictType>({
     url: BASE_URL,
     data: params,
   });

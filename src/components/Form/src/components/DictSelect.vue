@@ -53,13 +53,6 @@
         },
       );
 
-      // watch(
-      //   () => props.value,
-      //   () => {
-      //     handleChange(null, props.value);
-      //   },
-      // );
-
       function getDictArray() {
         dictArray.value = dictStore.selectDictArray(props.dictType);
       }
