@@ -6,7 +6,7 @@ import { selectAll } from '/@/api/sys/sysDict';
 import { Nullable } from '/@/utils/types';
 import { listToTree } from '/@/utils/helper/treeHelper';
 import { isBlank, isNullOrUnDef } from '/@/utils/is';
-import { TempSelectModel, TreeSelectModel } from '/@/api/model/selectModel';
+import { TableFilterModel, TempSelectModel, TreeSelectModel } from '/@/api/model/selectModel';
 
 interface DictState {
   isLoading: boolean;
@@ -35,6 +35,28 @@ export const useDictStore = defineStore({
           console.warn(`获取字典失败，字典类型不存在${dictArray}`);
         }
         return dictArray || [];
+      };
+    },
+    /**
+     * 根据字典类型获取字典数组
+     */
+    selectDictFilters() {
+      return (dictType: string): TableFilterModel[] => {
+        if (isBlank(dictType)) {
+          return [];
+        }
+        const dictArray = this.dict[dictType];
+        if (isNullOrUnDef(dictArray)) {
+          console.warn(`获取字典失败，字典类型不存在${dictArray}`);
+        }
+        const dictFilters: TableFilterModel[] = [] as TableFilterModel[];
+        dictArray.map((item) => {
+          dictFilters.push({
+            text: item.name,
+            value: item.code,
+          });
+        });
+        return dictFilters || [];
       };
     },
     /**

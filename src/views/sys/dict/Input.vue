@@ -18,7 +18,7 @@
   </BasicDrawer>
 </template>
 <script lang="ts">
-  import { defineComponent, nextTick, ref, unref } from 'vue';
+  import { defineComponent, nextTick, ref } from 'vue';
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
 
@@ -35,9 +35,6 @@
     emits: ['success', 'register'],
     setup(_, { emit }) {
       const dictStore = useDictStore();
-
-      // 数据是否更改
-      const isUpdate = ref(true);
       const id = ref();
       const version = ref();
 
@@ -65,18 +62,18 @@
             },
           },
           {
-            field: 'code',
-            label: '编码',
-            component: 'Input',
-            required: true,
-            rules: [{ max: 64, message: '编码不能超过64个字符', trigger: 'blur' }],
-          },
-          {
             field: 'name',
             label: '名称',
             component: 'Input',
             required: true,
             rules: [{ max: 64, message: '名称不能超过64个字符', trigger: 'blur' }],
+          },
+          {
+            field: 'code',
+            label: '编码',
+            component: 'Input',
+            required: true,
+            rules: [{ max: 64, message: '编码不能超过64个字符', trigger: 'blur' }],
           },
           {
             field: 'status',
@@ -121,25 +118,23 @@
         baseColProps: { md: 24 },
       });
 
-      const [registerDrawer, { setDrawerProps, closeDrawer }] = useDrawerInner(async (data) => {
+      const [registerDrawer, { changeLoading, closeDrawer }] = useDrawerInner(async (data) => {
+        changeLoading(true);
         // 重置表单
         await resetFields();
-        setDrawerProps({ confirmLoading: false });
-        isUpdate.value = !!data?.isUpdate;
-        id.value = data.data?.id || null;
-        version.value = data.data?.version || 0;
+        id.value = data?.id || null;
+        version.value = data?.version || 0;
 
-        if (unref(isUpdate)) {
-          changeDictType(data.data.dictType);
+        changeDictType(data.dictType);
 
-          if (isString(data.data.parentCode)) {
-            data.data.parentCode = dictStore.getPath(data.data.dictType, data.data.parentCode);
-          }
-
-          await setFieldsValue({
-            ...data.data,
-          });
+        if (isString(data.parentCode)) {
+          data.parentCode = dictStore.getPath(data.dictType, data.parentCode);
         }
+
+        await setFieldsValue({
+          ...data,
+        });
+        changeLoading(false);
       });
 
       /**
@@ -156,31 +151,33 @@
           },
         });
         // 清空值
-        // setFieldsValue({
-        //   parentCode: [],
-        // });
+        setFieldsValue({
+          parentCode: [],
+        });
       }
 
       async function handleSave(callback: (_: SysDict) => any) {
         try {
+          changeLoading(true);
           const values = await validate();
           if (values && isArray(values.parentCode)) {
             values.parentCode = values.parentCode[values.parentCode.length - 1];
           } else {
             values.parentCode = '';
           }
-          setDrawerProps({ confirmLoading: true });
-          save({ ...values, id: id.value, version: version.value }).then((res) => {
+          await save({ ...values, id: id.value, version: version.value }).then((res) => {
             emit('success');
             callback(res);
           });
-        } finally {
-          setDrawerProps({ confirmLoading: false });
+        } catch (e) {
+          console.error(e);
+          changeLoading(false);
         }
       }
 
       async function handleSubmit() {
         await handleSave((_) => {
+          changeLoading(false);
           closeDrawer();
         });
       }
@@ -200,6 +197,8 @@
               await setFieldsValue({
                 ...data,
               });
+
+              changeLoading(false);
             });
           });
         });

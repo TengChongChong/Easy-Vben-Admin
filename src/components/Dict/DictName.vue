@@ -1,5 +1,5 @@
 <template>
-  <span>{{ dict?.name || props.value }}</span>
+  <span>{{ dict?.name || `无效字典（${props.dictType}-${props.value}）` }}</span>
 </template>
 <script lang="ts" setup>
   import { useDictStore } from '/@/store/modules/dict';

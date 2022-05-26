@@ -60,6 +60,7 @@
   import Icon from '/@/components/Icon/src/Icon.vue';
   import { useMessage } from '/@/hooks/web/useMessage';
   import AButtonLink from '/@/components/Button/src/ButtonLink.vue';
+  import { useDictStore } from '/@/store/modules/dict';
 
   export default defineComponent({
     name: 'SysDictList',
@@ -76,7 +77,7 @@
     setup() {
       const { createMessage } = useMessage();
 
-      // 批量删除按钮状态
+      // 按钮状态
       const removeBatchLoading = ref(false);
       // 表格选中数据
       const checkedKeys = ref<Array<string>>([]);
@@ -119,18 +120,12 @@
         }
 
         add(id, dictType).then((data) => {
-          openDrawer(true, {
-            data,
-            isUpdate: true,
-          });
+          openDrawer(true, data);
         });
       };
       const handleEdit = (id: string) => {
         get(id).then((data) => {
-          openDrawer(true, {
-            data,
-            isUpdate: true,
-          });
+          openDrawer(true, data);
         });
       };
       const handleRemove = (id: string) => {
@@ -146,9 +141,16 @@
         });
       };
 
+      /**
+       * 刷新redis缓存和本地缓存
+       */
       const reloadCache = () => {
         refresh().then(() => {
-          createMessage.success('刷新成功');
+          const dictStore = useDictStore();
+          dictStore.initDict(true, () => {
+            createMessage.success('刷新成功');
+            reloadTable();
+          });
         });
       };
 

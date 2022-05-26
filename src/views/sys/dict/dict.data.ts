@@ -23,14 +23,14 @@ export function searchFormSchema(reloadTable: () => any): FormSchema[] {
       colProps: { span: 6 },
     },
     {
-      field: 'code',
-      label: '编码',
+      field: 'name',
+      label: '名称',
       component: 'Input',
       colProps: { span: 6 },
     },
     {
-      field: 'name',
-      label: '名称',
+      field: 'code',
+      label: '编码',
       component: 'Input',
       colProps: { span: 6 },
     },
@@ -40,19 +40,24 @@ export function searchFormSchema(reloadTable: () => any): FormSchema[] {
 // 表格列数据
 export const columns: BasicColumn[] = [
   {
+    title: '名称',
+    dataIndex: 'name',
+    sorter: true,
+    fixed: 'left',
+    width: 150,
+    format: (_, record) => {
+      return createVNode(DictTag, {
+        dictType: record.dictType,
+        value: record.code,
+        t: new Date().getTime(),
+      });
+    },
+  },
+  {
     title: '编码',
     dataIndex: 'code',
     sorter: true,
     width: 150,
-  },
-  {
-    title: '名称',
-    dataIndex: 'name',
-    sorter: true,
-    width: 150,
-    format: (_, record) => {
-      return createVNode(DictTag, { dictType: record.dictType, value: record.code });
-    },
   },
   {
     title: '字典类型',
@@ -76,6 +81,7 @@ export const columns: BasicColumn[] = [
     sorter: true,
     width: 80,
     format: 'dict|commonStatus',
+    filters: 'dict|commonStatus',
   },
   {
     title: '编辑人',
@@ -87,7 +93,7 @@ export const columns: BasicColumn[] = [
     title: '编辑时间',
     dataIndex: 'editDate',
     sorter: true,
-    width: 140,
+    width: 160,
     format: 'date|YYYY-MM-DD HH:mm',
   },
 ];

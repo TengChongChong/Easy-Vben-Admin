@@ -11,7 +11,7 @@
   </BasicDrawer>
 </template>
 <script lang="ts">
-  import { defineComponent, ref, unref } from 'vue';
+  import { defineComponent, ref } from 'vue';
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
 
@@ -23,8 +23,6 @@
     components: { BasicForm, BasicDrawer },
     emits: ['success', 'register'],
     setup(_, { emit }) {
-      // 数据是否更改
-      const isUpdate = ref(true);
       const id = ref();
       const version = ref();
 
@@ -35,31 +33,29 @@
         baseColProps: { md: 24 },
       });
 
-      const [registerDrawer, { setDrawerProps, closeDrawer }] = useDrawerInner(async (data) => {
+      const [registerDrawer, { changeLoading, closeDrawer }] = useDrawerInner(async (data) => {
+        changeLoading(true);
         // 重置表单
         await resetFields();
-        setDrawerProps({ confirmLoading: false });
-        isUpdate.value = !!data?.isUpdate;
-        id.value = data.data?.id || null;
-        version.value = data.data?.version || 0;
+        id.value = data?.id || null;
+        version.value = data?.version || 0;
 
-        if (unref(isUpdate)) {
-          await setFieldsValue({
-            ...data.data,
-          });
-        }
+        await setFieldsValue({
+          ...data,
+        });
+        changeLoading(false);
       });
 
       async function handleSubmit() {
         try {
+          changeLoading(true);
           const values = await validate();
-          setDrawerProps({ confirmLoading: true });
-          save({ ...values, id: id.value, version: version.value }).then(() => {
+          await save({ ...values, id: id.value, version: version.value }).then(() => {
             closeDrawer();
             emit('success');
           });
         } finally {
-          setDrawerProps({ confirmLoading: false });
+          changeLoading(false);
         }
       }
 

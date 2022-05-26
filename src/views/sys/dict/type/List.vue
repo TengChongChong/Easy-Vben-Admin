@@ -49,8 +49,9 @@
       BasicTable,
     },
     setup() {
-      // 批量删除按钮状态
+      // 按钮状态
       const removeBatchLoading = ref(false);
+
       // 表格选中数据
       const checkedKeys = ref<Array<string>>([]);
 
@@ -74,36 +75,24 @@
         setProps({
           useSearchForm: true,
           formConfig: {
-            schemas: searchFormSchema(reloadTable),
+            schemas: searchFormSchema(),
           },
         });
       });
 
       const handleCreate = () => {
         add().then((data) => {
-          openDrawer(true, {
-            data,
-            isUpdate: true,
-          });
+          openDrawer(true, data);
         });
       };
       const handleEdit = (id: string) => {
         get(id).then((data) => {
-          openDrawer(true, {
-            data,
-            isUpdate: true,
-          });
+          openDrawer(true, data);
         });
       };
       const handleRemove = (id: string) => {
         remove(id).then(() => {
           removeBatchLoading.value = false;
-          reload();
-        });
-      };
-
-      const reloadTable = () => {
-        nextTick(() => {
           reload();
         });
       };

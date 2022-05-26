@@ -3,16 +3,9 @@ import { BasicColumn, FormSchema } from '/@/components/Table';
 /**
  * 查询条件
  *
- * @param reloadTable 刷新表格
  */
-export function searchFormSchema(reloadTable: () => any): FormSchema[] {
+export function searchFormSchema(): FormSchema[] {
   return [
-    {
-      field: 'type',
-      label: '类型',
-      component: 'Input',
-      colProps: { span: 6 },
-    },
     {
       field: 'name',
       label: '名称',
@@ -20,15 +13,9 @@ export function searchFormSchema(reloadTable: () => any): FormSchema[] {
       colProps: { span: 6 },
     },
     {
-      field: 'sys',
-      label: '是否系统',
-      component: 'DictSelect',
-      componentProps: {
-        dictType: 'whether',
-        onChange: () => {
-          reloadTable();
-        },
-      },
+      field: 'type',
+      label: '类型',
+      component: 'Input',
       colProps: { span: 6 },
     },
   ];
@@ -37,13 +24,13 @@ export function searchFormSchema(reloadTable: () => any): FormSchema[] {
 // 表格列数据
 export const columns: BasicColumn[] = [
   {
-    title: '类型',
-    dataIndex: 'type',
+    title: '名称',
+    dataIndex: 'name',
     sorter: true,
   },
   {
-    title: '名称',
-    dataIndex: 'name',
+    title: '类型',
+    dataIndex: 'type',
     sorter: true,
   },
   {
@@ -52,6 +39,7 @@ export const columns: BasicColumn[] = [
     sorter: true,
     width: 100,
     format: 'dict|commonStatus',
+    filters: 'dict|commonStatus',
   },
   {
     title: '系统',
@@ -59,6 +47,7 @@ export const columns: BasicColumn[] = [
     sorter: true,
     width: 100,
     format: 'dict|whether',
+    filters: 'dict|whether',
   },
   {
     title: '编辑人',
@@ -70,7 +59,7 @@ export const columns: BasicColumn[] = [
     title: '编辑时间',
     dataIndex: 'editDate',
     sorter: true,
-    width: 140,
+    width: 160,
     format: 'date|YYYY-MM-DD HH:mm',
   },
 ];
@@ -78,18 +67,18 @@ export const columns: BasicColumn[] = [
 // 表单
 export const formSchema: FormSchema[] = [
   {
-    field: 'type',
-    label: '类型',
-    component: 'Input',
-    required: true,
-    rules: [{ max: 32, message: '类型不能超过32个字符', trigger: 'blur' }],
-  },
-  {
     field: 'name',
     label: '名称',
     component: 'Input',
     required: true,
     rules: [{ max: 32, message: '名称不能超过32个字符', trigger: 'blur' }],
+  },
+  {
+    field: 'type',
+    label: '类型',
+    component: 'Input',
+    required: true,
+    rules: [{ max: 32, message: '类型不能超过32个字符', trigger: 'blur' }],
   },
   {
     field: 'sys',
