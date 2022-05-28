@@ -1,6 +1,6 @@
 import type { ButtonProps } from 'ant-design-vue/lib/button/buttonTypes';
 import type { CSSProperties, VNodeChild, ComputedRef } from 'vue';
-import type { ScrollContainerOptions } from '/@/components/Container/index';
+import type { ScrollContainerOptions } from '/@/components/Container';
 
 export interface DrawerInstance {
   setDrawerProps: (props: Partial<DrawerProps> | boolean) => void;
@@ -60,7 +60,7 @@ export interface DrawerFooterProps {
    */
   cancelButtonProps: { props: ButtonProps; on: {} };
   /**
-   * Whether to apply loading visual effect for OK button or not
+   * 确定按钮是否为loading状态
    * @default false
    * @type boolean
    */

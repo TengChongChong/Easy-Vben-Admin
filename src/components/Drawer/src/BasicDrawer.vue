@@ -126,7 +126,8 @@
         const footerHeight = unref(getFooterHeight);
         return {
           position: 'relative',
-          height: `calc(100% - ${footerHeight})`,
+          height: `100%`,
+          paddingBottom: footerHeight,
         };
       });
 
