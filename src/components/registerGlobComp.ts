@@ -1,6 +1,7 @@
 import type { App } from 'vue';
 // import { Button } from './Button';
 import {
+  Alert,
   Button,
   Layout,
   Card,
@@ -8,6 +9,7 @@ import {
   Divider,
   Dropdown,
   Tag,
+  Tree,
   Tooltip,
   Popconfirm,
   Input,
@@ -19,6 +21,7 @@ import {
 
 export function registerGlobComp(app: App) {
   app
+    .use(Alert)
     .use(Button)
     .use(Layout)
     .use(Card)
@@ -26,6 +29,7 @@ export function registerGlobComp(app: App) {
     .use(Divider)
     .use(Dropdown)
     .use(Tag)
+    .use(Tree)
     .use(Tooltip)
     .use(Popconfirm)
     .use(Input)
