@@ -1,7 +1,7 @@
 <template>
   <a-tooltip>
     <template #title>{{ text }}</template>
-    <a-button type="link" size="small" @click="handleClick">
+    <a-button type="link" :loading="loading" size="small" @click="handleClick">
       <template #icon>
         <Icon icon="ant-design:plus-outlined" />
       </template>
@@ -20,6 +20,7 @@
     props: {
       id: propTypes.string,
       path: propTypes.string,
+      loading: propTypes.bool.def(false),
       text: propTypes.string.def('新增下级'),
     },
     emits: ['click'],

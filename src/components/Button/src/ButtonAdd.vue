@@ -1,5 +1,5 @@
 <template>
-  <a-button type="primary" @click="handleClick">
+  <a-button type="primary" :loading="loading" @click="handleClick">
     <template #icon>
       <Icon icon="ant-design:plus-outlined" />
     </template>
@@ -20,6 +20,7 @@
     components: { Icon },
     props: {
       path: propTypes.string,
+      loading: propTypes.bool.def(false),
       text: propTypes.string.def(t('common.addText')),
     },
     emits: ['click'],

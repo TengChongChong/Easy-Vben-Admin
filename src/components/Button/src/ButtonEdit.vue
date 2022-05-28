@@ -1,7 +1,7 @@
 <template>
   <a-tooltip>
     <template #title>{{ text }}</template>
-    <a-button type="link" size="small" @click="handleClick">
+    <a-button type="link" :loading="loading" size="small" @click="handleClick">
       <template #icon>
         <Icon icon="ant-design:edit-outlined" />
       </template>
@@ -22,6 +22,7 @@
     props: {
       id: propTypes.string,
       text: propTypes.string.def(t('common.editText')),
+      loading: propTypes.bool.def(false),
     },
     emits: ['click'],
     setup(props, { emit }) {
