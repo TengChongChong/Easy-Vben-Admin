@@ -1,16 +1,12 @@
 import type { RouteRecordRaw } from 'vue-router';
 
-import { useAppStore } from '/@/store/modules/app';
+// import { useAppStore } from '/@/store/modules/app';
 import { usePermissionStore } from '/@/store/modules/permission';
 import { useUserStore } from '/@/store/modules/user';
 
 import { useTabs } from './useTabs';
 
 import { router, resetRouter } from '/@/router';
-// import { RootRoute } from '/@/router/routes';
-
-import projectSetting from '/@/settings/projectSetting';
-import { PermissionModeEnum } from '/@/enums/appEnum';
 import { RoleEnum } from '/@/enums/roleEnum';
 
 import { intersection } from 'lodash-es';
@@ -20,7 +16,6 @@ import { useMultipleTabStore } from '/@/store/modules/multipleTab';
 // User permissions related operations
 export function usePermission() {
   const userStore = useUserStore();
-  const appStore = useAppStore();
   const permissionStore = usePermissionStore();
   const { closeAll } = useTabs(router);
 
@@ -28,12 +23,6 @@ export function usePermission() {
    * Change permission mode
    */
   async function togglePermissionMode() {
-    appStore.setProjectConfig({
-      permissionMode:
-        projectSetting.permissionMode === PermissionModeEnum.BACK
-          ? PermissionModeEnum.ROUTE_MAPPING
-          : PermissionModeEnum.BACK,
-    });
     location.reload();
   }
 
@@ -62,22 +51,12 @@ export function usePermission() {
       return def;
     }
 
-    const permMode = projectSetting.permissionMode;
-
-    if ([PermissionModeEnum.ROUTE_MAPPING, PermissionModeEnum.ROLE].includes(permMode)) {
-      if (!isArray(value)) {
-        return userStore.getRoleList?.includes(value as RoleEnum);
-      }
-      return (intersection(value, userStore.getRoleList) as RoleEnum[]).length > 0;
+    const allCodeList = permissionStore.getPermCodeList as string[];
+    if (!isArray(value)) {
+      return allCodeList.includes(value);
     }
-
-    if (PermissionModeEnum.BACK === permMode) {
-      const allCodeList = permissionStore.getPermCodeList as string[];
-      if (!isArray(value)) {
-        return allCodeList.includes(value);
-      }
-      return (intersection(value, allCodeList) as string[]).length > 0;
-    }
+    return (intersection(value, allCodeList) as string[]).length > 0;
+    // }
     return true;
   }
 
@@ -86,12 +65,6 @@ export function usePermission() {
    * @param roles
    */
   async function changeRole(roles: RoleEnum | RoleEnum[]): Promise<void> {
-    if (projectSetting.permissionMode !== PermissionModeEnum.ROUTE_MAPPING) {
-      throw new Error(
-        'Please switch PermissionModeEnum to ROUTE_MAPPING mode in the configuration to operate!',
-      );
-    }
-
     if (!isArray(roles)) {
       roles = [roles];
     }

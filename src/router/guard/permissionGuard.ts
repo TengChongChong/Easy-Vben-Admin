@@ -8,11 +8,7 @@ import { useUserStoreWithOut } from '/@/store/modules/user';
 import { PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic';
 import { useDictStoreWithOut } from '/@/store/modules/dict';
 
-// import { RootRoute } from '/@/router/routes';
-
 const LOGIN_PATH = PageEnum.BASE_LOGIN;
-
-// const ROOT_PATH = RootRoute.path;
 
 const whitePathList: PageEnum[] = [LOGIN_PATH];
 
@@ -21,19 +17,9 @@ export function createPermissionGuard(router: Router) {
   const permissionStore = usePermissionStoreWithOut();
   const dictStore = useDictStoreWithOut();
   router.beforeEach(async (to, from, next) => {
-    // if (
-    //   from.path === ROOT_PATH &&
-    //   to.path === PageEnum.BASE_HOME &&
-    //   userStore.getUserInfo.homePath &&
-    //   userStore.getUserInfo.homePath !== PageEnum.BASE_HOME
-    // ) {
-    //   next(userStore.getUserInfo.homePath);
-    //   return;
-    // }
-
     const token = userStore.getToken;
 
-    // Whitelist can be directly entered
+    // 白名单
     if (whitePathList.includes(to.path as PageEnum)) {
       if (to.path === LOGIN_PATH && token) {
         const isSessionTimeout = userStore.getSessionTimeout;

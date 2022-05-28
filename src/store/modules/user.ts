@@ -5,8 +5,8 @@ import { RoleEnum } from '/@/enums/roleEnum';
 import { PageEnum } from '/@/enums/pageEnum';
 import { ROLES_KEY, TOKEN_KEY, USER_INFO_KEY } from '/@/enums/cacheEnum';
 import { getAuthCache, setAuthCache } from '/@/utils/auth';
-import { SysUser, LoginParams } from '../../api/sys/model/sysUserModel';
-import { doLogout, getUserInfo, login } from '../../api/sys/sysUser';
+import { SysUser, LoginParams } from '../../api/auth/model/sysUserModel';
+import { doLogout, getUserInfo, login } from '../../api/auth/sysUser';
 import { useI18n } from '/@/hooks/web/useI18n';
 import { useMessage } from '/@/hooks/web/useMessage';
 import { router } from '/@/router';
@@ -27,7 +27,7 @@ interface UserState {
 export const useUserStore = defineStore({
   id: 'app-user',
   state: (): UserState => ({
-    // user info
+    // 当前登录用户信息
     userInfo: null,
     // token
     token: undefined,

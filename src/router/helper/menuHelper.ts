@@ -2,7 +2,7 @@ import { AppRouteModule } from '/@/router/types';
 import type { MenuModule, Menu, AppRouteRecordRaw } from '/@/router/types';
 import { findPath, treeMap } from '/@/utils/helper/treeHelper';
 import { cloneDeep } from 'lodash-es';
-import { isUrl } from '/@/utils/is';
+// import { isUrl } from '/@/utils/is';
 import { RouteParams } from 'vue-router';
 import { toRaw } from 'vue';
 
@@ -11,34 +11,41 @@ export function getAllParentPath<T = Recordable>(treeData: T[], path: string) {
   return (menuList || []).map((item) => item.path);
 }
 
-function joinParentPath(menus: Menu[], parentPath = '') {
-  for (let index = 0; index < menus.length; index++) {
-    const menu = menus[index];
-    // https://next.router.vuejs.org/guide/essentials/nested-routes.html
-    // Note that nested paths that start with / will be treated as a root path.
-    // This allows you to leverage the component nesting without having to use a nested URL.
-    if (!(menu.path.startsWith('/') || isUrl(menu.path))) {
-      // path doesn't start with /, nor is it a url, join parent path
-      menu.path = `${parentPath}/${menu.path}`;
-    }
-    if (menu?.children?.length) {
-      joinParentPath(menu.children, menu.meta?.hidePathForChildren ? parentPath : menu.path);
-    }
-  }
-}
-
 // Parsing the menu module
 export function transformMenuModule(menuModule: MenuModule): Menu {
   const { menu } = menuModule;
 
   const menuList = [menu];
 
-  joinParentPath(menuList);
   return menuList[0];
 }
 
+/**
+ * 清除隐藏的菜单项
+ *
+ * @param routeModList 路由
+ */
+function clearHideMenu(routeModList: AppRouteModule[]) {
+  routeModList.map((item, index) => {
+    if (item.meta.hideMenu) {
+      // 不显示的菜单
+      routeModList.splice(index, 1);
+    }
+    if (item.children) {
+      clearHideMenu(item.children);
+    }
+  });
+}
+
+/**
+ * 将路由转为菜单
+ *
+ * @param routeModList 路由
+ * @param routerMapping
+ */
 export function transformRouteToMenu(routeModList: AppRouteModule[], routerMapping = false) {
   const cloneRouteModList = cloneDeep(routeModList);
+  clearHideMenu(cloneRouteModList);
   const routeList: AppRouteRecordRaw[] = [];
 
   cloneRouteModList.forEach((item) => {
@@ -66,7 +73,7 @@ export function transformRouteToMenu(routeModList: AppRouteModule[], routerMappi
       };
     },
   });
-  joinParentPath(list);
+  console.log(list);
   return cloneDeep(list);
 }
 

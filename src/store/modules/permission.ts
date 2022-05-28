@@ -4,59 +4,50 @@ import { defineStore } from 'pinia';
 import { store } from '/@/store';
 import { useI18n } from '/@/hooks/web/useI18n';
 import { useUserStore } from './user';
-import { useAppStoreWithOut } from './app';
-import { toRaw } from 'vue';
 import { transformObjToRoute, flatMultiLevelRoutes } from '/@/router/helper/routeHelper';
 import { transformRouteToMenu } from '/@/router/helper/menuHelper';
 
-import projectSetting from '/@/settings/projectSetting';
-
-import { PermissionModeEnum } from '/@/enums/appEnum';
-
-import { asyncRoutes } from '/@/router/routes';
 import { ERROR_LOG_ROUTE, PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic';
 
-import { filter } from '/@/utils/helper/treeHelper';
-
-import { getMenuList } from '/@/api/sys/menu';
-// import { getPermCode } from '/@/api/sys/sysUser';
+import { filter, listToTree } from '/@/utils/helper/treeHelper';
 
 import { useMessage } from '/@/hooks/web/useMessage';
 import { PageEnum } from '/@/enums/pageEnum';
+import { isNotBlank } from '/@/utils/is';
+import { SysPermission } from '/@/api/auth/model/sysPermissionModel';
+import { MenuTypeEnum } from '/@/enums/menuEnum';
+import { SysRole } from '/@/api/auth/model/sysRoleModel';
 
 interface PermissionState {
+  // 角色标识
+  roleCodeList: string[];
   // 权限标识
-  permCodeList: string[] | number[];
-  // Whether the route has been dynamically added
+  permCodeList: string[];
+  // 是否已经动态添加菜单
   isDynamicAddedRoute: boolean;
   // To trigger a menu update
   lastBuildMenuTime: number;
-  // Backstage menu list
+  // 菜单
   backMenuList: Menu[];
-  frontMenuList: Menu[];
 }
 export const usePermissionStore = defineStore({
   id: 'app-permission',
   state: (): PermissionState => ({
     permCodeList: [],
-    // Whether the route has been dynamically added
+    roleCodeList: [],
     isDynamicAddedRoute: false,
-    // To trigger a menu update
     lastBuildMenuTime: 0,
-    // Backstage menu list
     backMenuList: [],
-    // menu List
-    frontMenuList: [],
   }),
   getters: {
-    // getPermCodeList(): string[] | number[] {
-    //   return this.permCodeList;
-    // },
+    getRoleCodeList(): string[] | number[] {
+      return this.roleCodeList;
+    },
+    getPermCodeList(): string[] | number[] {
+      return this.permCodeList;
+    },
     getBackMenuList(): Menu[] {
       return this.backMenuList;
-    },
-    getFrontMenuList(): Menu[] {
-      return this.frontMenuList;
     },
     getLastBuildMenuTime(): number {
       return this.lastBuildMenuTime;
@@ -66,54 +57,88 @@ export const usePermissionStore = defineStore({
     },
   },
   actions: {
+    /**
+     * 设置角色标识
+     * @param codeList
+     */
+    setRoleCodeList(codeList: string[]) {
+      this.roleCodeList = codeList;
+    },
+    /**
+     * 设置权限标识
+     * @param codeList
+     */
     setPermCodeList(codeList: string[]) {
       this.permCodeList = codeList;
     },
-
+    /**
+     * 设置菜单
+     * @param list
+     */
     setBackMenuList(list: Menu[]) {
       this.backMenuList = list;
       list?.length > 0 && this.setLastBuildMenuTime();
     },
-
-    setFrontMenuList(list: Menu[]) {
-      this.frontMenuList = list;
-    },
-
+    /**
+     * 菜单最后更新时间
+     */
     setLastBuildMenuTime() {
       this.lastBuildMenuTime = new Date().getTime();
     },
-
+    /**
+     * 是否已经动态更新菜单
+     * @param added
+     */
     setDynamicAddedRoute(added: boolean) {
       this.isDynamicAddedRoute = added;
     },
+    /**
+     * 重置
+     */
     resetState(): void {
       this.isDynamicAddedRoute = false;
       this.permCodeList = [];
+      this.roleCodeList = [];
       this.backMenuList = [];
       this.lastBuildMenuTime = 0;
     },
-    async changePermissionCode() {
-      // const codeList = await getPermCode();
-      // this.setPermCodeList(codeList);
+    /**
+     * 更改权限标识
+     *
+     * @param permissionList 权限
+     */
+    changePermissionCode(permissionList: SysPermission[]) {
+      const codeList: string[] = [];
+      permissionList.map(({ code }) => {
+        if (isNotBlank(code)) {
+          // @ts-ignore
+          codeList.push(code);
+        }
+      });
+      this.setPermCodeList(codeList);
+    },
+    /**
+     * 更改角色标识
+     *
+     * @param roleList 权限
+     */
+    changeRoleCode(roleList: SysRole[]) {
+      const codeList: string[] = [];
+      roleList.map(({ code }) => {
+        if (isNotBlank(code)) {
+          // @ts-ignore
+          codeList.push(code);
+        }
+      });
+      this.setRoleCodeList(codeList);
     },
     /**
      * 构建路由
      */
     async buildRoutesAction(): Promise<AppRouteRecordRaw[]> {
       const { t } = useI18n();
-      const userStore = useUserStore();
-      const appStore = useAppStoreWithOut();
 
       let routes: AppRouteRecordRaw[] = [];
-      const roleList = toRaw(userStore.getRoleList) || [];
-      const { permissionMode = projectSetting.permissionMode } = appStore.getProjectConfig;
-
-      const routeFilter = (route: AppRouteRecordRaw) => {
-        const { meta } = route;
-        const { roles } = meta || {};
-        if (!roles) return true;
-        return roleList.some((role) => roles.includes(role));
-      };
 
       const routeRemoveIgnoreFilter = (route: AppRouteRecordRaw) => {
         const { meta } = route;
@@ -122,7 +147,58 @@ export const usePermissionStore = defineStore({
       };
 
       /**
-       * @description 根据设置的首页path，修正routes中的affix标记（固定首页）
+       * 生成组件名称
+       *
+       * @param menu 菜单
+       */
+      function generatorName(menu: SysPermission): string {
+        if (menu.component) {
+          const paths = menu.component.split(/\/|-/);
+          let name = '';
+          paths.map((item) => {
+            name += item.replace(/^\S/, function (s) {
+              return s.toUpperCase();
+            });
+          });
+          return name;
+        } else {
+          return `${menu.name}-${menu.id}`;
+        }
+      }
+
+      /**
+       * 将后台返回的菜单转为路由对象
+       *
+       * @param permissionList 后台返回的菜单
+       */
+      const convertRoute = (permissionList: SysPermission[]): AppRouteRecordRaw[] => {
+        let route: AppRouteRecordRaw[] = [];
+        const permissionArray: AppRouteRecordRaw[] = [];
+        permissionList.map((item) => {
+          if (item.type != MenuTypeEnum.BUTTON) {
+            permissionArray.push({
+              // @ts-ignore
+              id: item.id,
+              parentId: item.parentId,
+              path: item.path || `/${item.id}`,
+              name: item.name || generatorName(item),
+              component: item.component || 'LAYOUT',
+              meta: {
+                title: item.title,
+                icon: item.icon,
+                hideMenu: item.display === '0',
+                ignoreKeepAlive: false,
+                frameSrc: item.external === '1' ? item.path : undefined,
+              },
+            });
+          }
+        });
+        route = listToTree(permissionArray) as AppRouteRecordRaw[];
+        return route;
+      };
+
+      /**
+       * 根据设置的首页path，修正routes中的affix标记（固定首页）
        * */
       const patchHomeAffix = (routes: AppRouteRecordRaw[]) => {
         if (!routes || routes.length === 0) return;
@@ -150,64 +226,39 @@ export const usePermissionStore = defineStore({
         }
         return;
       };
+      const { createMessage } = useMessage();
 
-      switch (permissionMode) {
-        case PermissionModeEnum.ROLE:
-          routes = filter(asyncRoutes, routeFilter);
-          routes = routes.filter(routeFilter);
-          // Convert multi-level routing to level 2 routing
-          routes = flatMultiLevelRoutes(routes);
-          break;
+      createMessage.loading({
+        content: t('sys.app.menuLoading'),
+        duration: 1,
+      });
 
-        case PermissionModeEnum.ROUTE_MAPPING:
-          routes = filter(asyncRoutes, routeFilter);
-          routes = routes.filter(routeFilter);
-          const menuList = transformRouteToMenu(routes, true);
-          routes = filter(routes, routeRemoveIgnoreFilter);
-          routes = routes.filter(routeRemoveIgnoreFilter);
-          menuList.sort((a, b) => {
-            return (a.meta?.orderNo || 0) - (b.meta?.orderNo || 0);
-          });
+      let routeList: AppRouteRecordRaw[] = [];
+      try {
+        const userStore = useUserStore();
+        const userInfo = userStore.getUserInfo;
 
-          this.setFrontMenuList(menuList);
-          // Convert multi-level routing to level 2 routing
-          routes = flatMultiLevelRoutes(routes);
-          break;
+        this.changePermissionCode(userInfo.permissionList);
+        this.changeRoleCode(userInfo.roleList);
 
-        //  后台动态获取
-        case PermissionModeEnum.BACK:
-          const { createMessage } = useMessage();
-
-          createMessage.loading({
-            content: t('sys.app.menuLoading'),
-            duration: 1,
-          });
-
-          // !Simulate to obtain permission codes from the background,
-          // this function may only need to be executed once, and the actual project can be put at the right time by itself
-          let routeList: AppRouteRecordRaw[] = [];
-          try {
-            this.changePermissionCode();
-            routeList = (await getMenuList()) as AppRouteRecordRaw[];
-          } catch (error) {
-            console.error(error);
-          }
-
-          // Dynamically introduce components
-          routeList = transformObjToRoute(routeList);
-
-          //  Background routing to menu structure
-          const backMenuList = transformRouteToMenu(routeList);
-          this.setBackMenuList(backMenuList);
-
-          // remove meta.ignoreRoute item
-          routeList = filter(routeList, routeRemoveIgnoreFilter);
-          routeList = routeList.filter(routeRemoveIgnoreFilter);
-
-          routeList = flatMultiLevelRoutes(routeList);
-          routes = [PAGE_NOT_FOUND_ROUTE, ...routeList];
-          break;
+        routeList = convertRoute(userInfo.permissionList);
+      } catch (error) {
+        console.error(error);
       }
+
+      // Dynamically introduce components
+      routeList = transformObjToRoute(routeList);
+
+      // 根据路由生成菜单
+      const backMenuList = transformRouteToMenu(routeList);
+      this.setBackMenuList(backMenuList);
+
+      // remove meta.ignoreRoute item
+      routeList = filter(routeList, routeRemoveIgnoreFilter);
+      routeList = routeList.filter(routeRemoveIgnoreFilter);
+
+      routeList = flatMultiLevelRoutes(routeList);
+      routes = [PAGE_NOT_FOUND_ROUTE, ...routeList];
 
       routes.push(ERROR_LOG_ROUTE);
       patchHomeAffix(routes);

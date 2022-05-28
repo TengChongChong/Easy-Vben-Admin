@@ -1,4 +1,4 @@
-import { SysUser } from '/@/api/sys/model/sysUserModel';
+import { SysUser } from '/@/api/auth/model/sysUserModel';
 import type { LockInfo } from '/#/store';
 import type { ProjectConfig } from '/#/config';
 import type { RouteLocationNormalized } from 'vue-router';

@@ -10,8 +10,6 @@ export interface SysRole extends BasicModel {
   code: string;
   // 备注
   remarks: string;
-  // 父角色名称
-  parentName: string;
   // 权限ids
   permissionIds: string[];
 }
