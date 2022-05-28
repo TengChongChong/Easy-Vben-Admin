@@ -10,6 +10,12 @@ import { cloneDeep, isEqual } from 'lodash-es';
 import { formatToDate } from '/@/utils/dateUtil';
 import { ACTION_COLUMN_FLAG, DEFAULT_ALIGN, INDEX_COLUMN_FLAG, PAGE_SIZE } from '../const';
 import DictTag from '/@/components/Dict/DictTag.vue';
+import { useDictStoreWithOut } from '/@/store/modules/dict';
+
+// 字典
+const dictStore = useDictStoreWithOut();
+// 字典配置前缀
+const DICT_FORMAT_PREFIX = 'dict|';
 
 function handleItem(item: BasicColumn, ellipsis: boolean) {
   const { key, dataIndex, children } = item;
@@ -39,6 +45,13 @@ function handleChildren(children: BasicColumn[] | undefined, ellipsis: boolean) 
   });
 }
 
+/**
+ * 序号
+ *
+ * @param propsRef
+ * @param getPaginationRef
+ * @param columns
+ */
 function handleIndexColumn(
   propsRef: ComputedRef<BasicTableProps>,
   getPaginationRef: ComputedRef<boolean | PaginationProps>,
@@ -102,6 +115,19 @@ function handleActionColumn(propsRef: ComputedRef<BasicTableProps>, columns: Bas
   }
 }
 
+/**
+ * 处理字典过滤
+ *
+ * @param columns columns
+ */
+function handleDictFilters(columns) {
+  columns.map((item) => {
+    if (item.filters && isString(item.filters) && item.filters.startsWith(DICT_FORMAT_PREFIX)) {
+      item.filters = dictStore.selectDictFilters(item.filters.replace(DICT_FORMAT_PREFIX, ''));
+    }
+  });
+}
+
 export function useColumns(
   propsRef: ComputedRef<BasicTableProps>,
   getPaginationRef: ComputedRef<boolean | PaginationProps>,
@@ -114,6 +140,7 @@ export function useColumns(
 
     handleIndexColumn(propsRef, getPaginationRef, columns);
     handleActionColumn(propsRef, columns);
+    handleDictFilters(columns);
     if (!columns) {
       return [];
     }
@@ -306,9 +333,6 @@ export function formatCell(text: string, format: CellFormat, record: Recordable,
   }
 
   try {
-    // 字典
-    const DICT_FORMAT_PREFIX = 'dict|';
-
     // 日期类型
     const DATE_FORMAT_PREFIX = 'date|';
     if (isString(format) && text) {
