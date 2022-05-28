@@ -22,3 +22,12 @@ export interface TreeSelectModel {
   label: string;
   children?: TreeSelectModel[];
 }
+
+/**
+ * 表格过滤
+ */
+export interface TableFilterModel {
+  value: string | number;
+  text: string;
+  children?: TableFilterModel[];
+}
