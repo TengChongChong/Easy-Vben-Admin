@@ -1,3 +1,5 @@
+import { isArray } from '/@/utils/is';
+
 interface TreeHelperConfig {
   id: string;
   children: string;
@@ -7,7 +9,7 @@ interface TreeHelperConfig {
 const DEFAULT_CONFIG: TreeHelperConfig = {
   id: 'id',
   children: 'children',
-  pid: 'pid',
+  pid: 'parentId',
 };
 
 const getConfig = (config: Partial<TreeHelperConfig>) => Object.assign({}, DEFAULT_CONFIG, config);
@@ -44,6 +46,17 @@ export function treeToList<T = any>(tree: any, config: Partial<TreeHelperConfig>
     result.splice(i + 1, 0, ...result[i][children!]);
   }
   return result;
+}
+
+export function clearTreeEmptyChildren<T = any>(tree: any, children: string): T {
+  tree.map((item) => {
+    if (item[children] && isArray(item[children]) && item[children].length === 0) {
+      item[children] = undefined;
+    } else {
+      item[children] = clearTreeEmptyChildren(item[children], children);
+    }
+  });
+  return tree;
 }
 
 export function findNode<T = any>(
