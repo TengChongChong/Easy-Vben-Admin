@@ -1,6 +1,7 @@
 <template>
   <a-cascader
     v-model:value="state"
+    v-bind="$attrs"
     :options="options"
     :load-data="loadData"
     change-on-select
@@ -19,7 +20,7 @@
   </a-cascader>
 </template>
 <script lang="ts">
-  import { defineComponent, PropType, ref, unref, watch, watchEffect } from 'vue';
+  import { defineComponent, PropType, ref, unref, useAttrs, watch, watchEffect } from 'vue';
   import { Cascader } from 'ant-design-vue';
   import { propTypes } from '/@/utils/propTypes';
   import { isFunction } from '/@/utils/is';
@@ -76,6 +77,7 @@
       const loading = ref<boolean>(false);
       const emitData = ref<any[]>([]);
       const isFirstLoad = ref(true);
+      const attrs = useAttrs();
       const { t } = useI18n();
       // Embedded in the form, just use the hook binding to perform form verification
       const [state] = useRuleFormItem(props, 'value', 'change', emitData);
@@ -188,6 +190,7 @@
         state,
         options,
         loading,
+        attrs,
         t,
         handleChange,
         loadData,
