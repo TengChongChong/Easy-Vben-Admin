@@ -8,6 +8,7 @@ import { ComponentType } from './componentType';
 import { VueNode } from '/@/utils/propTypes';
 import { RoleEnum } from '/@/enums/roleEnum';
 import { VNode } from '@vue/runtime-core';
+import { TableFilterModel } from '/@/api/model/selectModel';
 
 export declare type SortOrder = 'ascend' | 'descend';
 
@@ -415,13 +416,7 @@ export type CellFormat =
 // @ts-ignore
 export interface BasicColumn extends ColumnProps<Recordable> {
   children?: BasicColumn[];
-  filters?: {
-    text: string;
-    value: string;
-    children?:
-      | unknown[]
-      | (((props: Record<string, unknown>) => unknown[]) & (() => unknown[]) & (() => unknown[]));
-  }[];
+  filters?: TableFilterModel[] | string;
 
   //
   flag?: 'INDEX' | 'DEFAULT' | 'CHECKBOX' | 'RADIO' | 'ACTION';
