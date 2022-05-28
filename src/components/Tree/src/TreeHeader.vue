@@ -1,5 +1,5 @@
 <template>
-  <div :class="bem()" class="flex px-2 py-1.5 items-center">
+  <div :class="bem()" class="tree-title flex px-2 py-1.5 items-center">
     <slot name="headerTitle" v-if="slots.headerTitle"></slot>
     <BasicTitle :helpMessage="helpMessage" v-if="!slots.headerTitle && title">
       {{ title }}
@@ -40,7 +40,7 @@
   import { useI18n } from '/@/hooks/web/useI18n';
   import { useDebounceFn } from '@vueuse/core';
   import { createBEM } from '/@/utils/bem';
-  import { ToolbarEnum } from './tree';
+  import { ToolbarEnum } from '/@/components/Tree/src/tree';
 
   const searchValue = ref('');
 
@@ -168,3 +168,15 @@
     },
   );
 </script>
+
+<style lang="less">
+  @prefix-cls: ~'@{namespace}-basic-title';
+
+  .tree-title {
+    .@{prefix-cls} {
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 20px;
+    }
+  }
+</style>

@@ -1,6 +1,13 @@
 <script lang="tsx">
   import type { CSSProperties } from 'vue';
-  import type { FieldNames, TreeState, TreeItem, KeyType, CheckKeys, TreeActionType } from './tree';
+  import type {
+    FieldNames,
+    TreeState,
+    TreeItem,
+    KeyType,
+    CheckKeys,
+    TreeActionType,
+  } from '/@/components/Tree/src/tree';
 
   import {
     defineComponent,
@@ -24,8 +31,8 @@
   import { useTree } from './useTree';
   import { useContextMenu } from '/@/hooks/web/useContextMenu';
   import { CreateContextOptions } from '/@/components/ContextMenu';
-  import { treeEmits, treeProps } from './tree';
   import { createBEM } from '/@/utils/bem';
+  import { treeProps, treeEmits } from '/@/components/Tree/src/tree';
 
   export default defineComponent({
     name: 'BasicTree',
@@ -34,7 +41,6 @@
     emits: treeEmits,
     setup(props, { attrs, slots, emit, expose }) {
       const [bem] = createBEM('tree');
-
       const state = reactive<TreeState>({
         checkStrictly: props.checkStrictly,
         expandedKeys: props.expandedKeys || [],
