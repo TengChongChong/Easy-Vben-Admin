@@ -3,7 +3,6 @@ import { MenuTypeEnum, MenuModeEnum, TriggerEnum, MixSidebarTriggerEnum } from '
 import { CacheTypeEnum } from '/@/enums/cacheEnum';
 import {
   ContentEnum,
-  PermissionModeEnum,
   ThemeEnum,
   RouterTransitionEnum,
   SettingButtonPositionEnum,
@@ -25,12 +24,6 @@ const setting: ProjectConfig = {
   // SettingButtonPositionEnum.HEADER: 位于头部
   // SettingButtonPositionEnum.FIXED: 固定在右侧
   settingButtonPosition: SettingButtonPositionEnum.AUTO,
-
-  // 权限模式,默认前端角色权限模式
-  // ROUTE_MAPPING: 前端模式（菜单由路由生成，默认）
-  // ROLE: 前端模式（菜单路由分开）
-  // BACK: 后台动态获取
-  permissionMode: PermissionModeEnum.ROUTE_MAPPING,
 
   // 权限缓存存放位置。默认存放于localStorage
   permissionCacheType: CacheTypeEnum.LOCAL,
@@ -143,7 +136,6 @@ const setting: ProjectConfig = {
   // 动画配置
   transitionSetting: {
     //  是否开启切换动画
-    // The disabled state will also disable pageLoading
     enable: true,
 
     // 动画名

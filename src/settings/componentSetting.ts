@@ -1,6 +1,7 @@
 // 用于配置某些组件的常规配置，而无需修改组件
 
 import type { SorterResult } from '../components/Table';
+import { isArray } from '/@/utils/is';
 
 export default {
   // 表格配置
@@ -40,6 +41,15 @@ export default {
     },
     // 自定义过滤方法
     defaultFilterFn: (data: Partial<Recordable<string[]>>) => {
+      // ! 这里强制将数组使用,拼接
+      if (data) {
+        for (const key in data) {
+          if (isArray(data[key])) {
+            // @ts-ignore
+            data[key] = data[key].join(',');
+          }
+        }
+      }
       return data;
     },
   },
