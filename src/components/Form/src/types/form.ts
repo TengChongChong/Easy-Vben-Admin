@@ -49,6 +49,7 @@ export type RegisterFn = (formInstance: FormActionType) => void;
 export type UseFormReturnType = [RegisterFn, FormActionType];
 
 export interface FormProps {
+  auth?: string;
   name?: string;
   layout?: 'vertical' | 'inline' | 'horizontal';
   // Form value
@@ -125,6 +126,7 @@ export interface FormProps {
   colon?: boolean;
 }
 export interface FormSchema {
+  auth?: string;
   // Field name
   field: string;
   // Event name triggered by internal value change, default change
