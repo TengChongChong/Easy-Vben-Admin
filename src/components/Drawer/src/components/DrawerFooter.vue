@@ -32,7 +32,7 @@
   import { useDesign } from '/@/hooks/web/useDesign';
 
   import { footerProps } from '../props';
-  import Icon from '/@/components/Icon/src/Icon.vue';
+  import { Icon } from '/@/components/Icon';
   export default defineComponent({
     name: 'BasicDrawerFooter',
     components: { Icon },
