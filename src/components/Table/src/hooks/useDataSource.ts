@@ -317,6 +317,7 @@ export function useDataSource(
           current: opt.page || 1,
         });
       }
+      clearSelectedRowKeys();
       emit('fetch-success', {
         items: unref(resultItems),
         total: resultTotal,
