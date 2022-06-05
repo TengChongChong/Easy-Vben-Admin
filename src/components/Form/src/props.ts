@@ -35,6 +35,14 @@ export const basicProps = {
   },
   baseColProps: {
     type: Object as PropType<Partial<ColEx>>,
+    default: () => {
+      return {
+        xl: 6,
+        lg: 8,
+        md: 12,
+        sm: 24,
+      };
+    },
   },
   autoSetPlaceHolder: propTypes.bool.def(true),
   // 在INPUT组件上单击回车时，是否自动提交
