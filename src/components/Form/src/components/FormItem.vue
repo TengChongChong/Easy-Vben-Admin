@@ -13,6 +13,7 @@
   import { cloneDeep, upperFirst } from 'lodash-es';
   import { useItemLabelWidth } from '../hooks/useLabelWidth';
   import { useI18n } from '/@/hooks/web/useI18n';
+  import { usePermission } from '/@/hooks/web/usePermission';
 
   export default defineComponent({
     name: 'BasicFormItem',
@@ -99,8 +100,10 @@
         return disabled;
       });
 
+      const { hasPermission } = usePermission();
+
       function getShow(): { isShow: boolean; isIfShow: boolean } {
-        const { show, ifShow } = props.schema;
+        const { show, ifShow, auth } = props.schema;
         const { showAdvancedButton } = props.formProps;
         const itemIsAdvanced = showAdvancedButton
           ? isBoolean(props.schema.isAdvanced)
@@ -123,7 +126,7 @@
         if (isFunction(ifShow)) {
           isIfShow = ifShow(unref(getValues));
         }
-        isShow = isShow && itemIsAdvanced;
+        isShow = isShow && itemIsAdvanced && hasPermission(auth);
         return { isShow, isIfShow };
       }
 
