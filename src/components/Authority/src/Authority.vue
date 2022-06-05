@@ -11,12 +11,7 @@
   export default defineComponent({
     name: 'Authority',
     props: {
-      /**
-       * Specified role is visible
-       * When the permission mode is the role mode, the value value can pass the role value.
-       * When the permission mode is background, the value value can pass the code permission value
-       * @default ''
-       */
+      // 权限或角色标识
       value: {
         type: [Number, Array, String] as PropType<RoleEnum | RoleEnum[] | string | string[]>,
         default: '',
