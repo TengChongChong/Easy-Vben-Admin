@@ -2,6 +2,7 @@ import type { App } from 'vue';
 // import { Button } from './Button';
 import {
   Alert,
+  Avatar,
   Button,
   Layout,
   Card,
@@ -22,6 +23,7 @@ import {
 export function registerGlobComp(app: App) {
   app
     .use(Alert)
+    .use(Avatar)
     .use(Button)
     .use(Layout)
     .use(Card)
