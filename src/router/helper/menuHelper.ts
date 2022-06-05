@@ -2,7 +2,6 @@ import { AppRouteModule } from '/@/router/types';
 import type { MenuModule, Menu, AppRouteRecordRaw } from '/@/router/types';
 import { findPath, treeMap } from '/@/utils/helper/treeHelper';
 import { cloneDeep } from 'lodash-es';
-// import { isUrl } from '/@/utils/is';
 import { RouteParams } from 'vue-router';
 import { toRaw } from 'vue';
 
@@ -26,15 +25,18 @@ export function transformMenuModule(menuModule: MenuModule): Menu {
  * @param routeModList 路由
  */
 function clearHideMenu(routeModList: AppRouteModule[]) {
-  routeModList.map((item, index) => {
-    if (item.meta.hideMenu) {
+  for (let i = 0; i < routeModList.length; i++) {
+    if (routeModList[i].meta.hideMenu) {
       // 不显示的菜单
-      routeModList.splice(index, 1);
+      routeModList.splice(i, 1);
+      i--;
     }
-    if (item.children) {
-      clearHideMenu(item.children);
+
+    if (routeModList[i]?.children) {
+      // @ts-ignore
+      clearHideMenu(routeModList[i].children);
     }
-  });
+  }
 }
 
 /**
@@ -73,7 +75,6 @@ export function transformRouteToMenu(routeModList: AppRouteModule[], routerMappi
       };
     },
   });
-  console.log(list);
   return cloneDeep(list);
 }
 

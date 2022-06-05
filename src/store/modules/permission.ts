@@ -16,11 +16,8 @@ import { PageEnum } from '/@/enums/pageEnum';
 import { isNotBlank } from '/@/utils/is';
 import { SysPermission } from '/@/api/auth/model/sysPermissionModel';
 import { MenuTypeEnum } from '/@/enums/menuEnum';
-import { SysRole } from '/@/api/auth/model/sysRoleModel';
 
 interface PermissionState {
-  // 角色标识
-  roleCodeList: string[];
   // 权限标识
   permCodeList: string[];
   // 是否已经动态添加菜单
@@ -34,16 +31,12 @@ export const usePermissionStore = defineStore({
   id: 'app-permission',
   state: (): PermissionState => ({
     permCodeList: [],
-    roleCodeList: [],
     isDynamicAddedRoute: false,
     lastBuildMenuTime: 0,
     backMenuList: [],
   }),
   getters: {
-    getRoleCodeList(): string[] | number[] {
-      return this.roleCodeList;
-    },
-    getPermCodeList(): string[] | number[] {
+    getPermCodeList(): string[] {
       return this.permCodeList;
     },
     getBackMenuList(): Menu[] {
@@ -57,13 +50,6 @@ export const usePermissionStore = defineStore({
     },
   },
   actions: {
-    /**
-     * 设置角色标识
-     * @param codeList
-     */
-    setRoleCodeList(codeList: string[]) {
-      this.roleCodeList = codeList;
-    },
     /**
      * 设置权限标识
      * @param codeList
@@ -98,7 +84,6 @@ export const usePermissionStore = defineStore({
     resetState(): void {
       this.isDynamicAddedRoute = false;
       this.permCodeList = [];
-      this.roleCodeList = [];
       this.backMenuList = [];
       this.lastBuildMenuTime = 0;
     },
@@ -116,21 +101,6 @@ export const usePermissionStore = defineStore({
         }
       });
       this.setPermCodeList(codeList);
-    },
-    /**
-     * 更改角色标识
-     *
-     * @param roleList 权限
-     */
-    changeRoleCode(roleList: SysRole[]) {
-      const codeList: string[] = [];
-      roleList.map(({ code }) => {
-        if (isNotBlank(code)) {
-          // @ts-ignore
-          codeList.push(code);
-        }
-      });
-      this.setRoleCodeList(codeList);
     },
     /**
      * 构建路由
@@ -184,6 +154,7 @@ export const usePermissionStore = defineStore({
               name: item.name || generatorName(item),
               component: item.component || 'LAYOUT',
               meta: {
+                // @ts-ignore
                 title: item.title,
                 icon: item.icon,
                 hideMenu: item.display === '0',
@@ -236,10 +207,9 @@ export const usePermissionStore = defineStore({
       let routeList: AppRouteRecordRaw[] = [];
       try {
         const userStore = useUserStore();
-        const userInfo = userStore.getUserInfo;
+        const userInfo = userStore.getCurrentUser;
 
         this.changePermissionCode(userInfo.permissionList);
-        this.changeRoleCode(userInfo.roleList);
 
         routeList = convertRoute(userInfo.permissionList);
       } catch (error) {
