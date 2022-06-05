@@ -7,7 +7,7 @@ export interface SysPermission extends BasicModel {
   // 类型
   type?: string;
   // 标题
-  title: string;
+  title?: string;
   // 组件名称
   name?: string;
   // 标识

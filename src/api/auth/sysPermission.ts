@@ -3,7 +3,7 @@ import { SysPermission } from '/@/api/auth/model/sysPermissionModel';
 import { TreeNodeModel } from '/@/api/model/treeModel';
 
 // base url
-const BASE_URL = '/auth/sys/permission/';
+const BASE_URL = '/api/auth/sys/permission/';
 
 /**
  * 查询

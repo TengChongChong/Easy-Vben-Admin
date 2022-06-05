@@ -23,21 +23,21 @@
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
 
   import { add, save, selectAll } from '/@/api/auth/sysPermission';
-  import Icon from '/@/components/Icon/src/Icon.vue';
+  import { Icon } from '/@/components/Icon';
   import { isArray } from '/@/utils/is';
   import { SysPermission } from '/@/api/auth/model/sysPermissionModel';
   import { listToTree } from '/@/utils/helper/treeHelper';
   import { TreeNode } from '/@/api/model/treeModel';
 
   export default defineComponent({
-    name: 'SysPermissionInput',
+    name: 'AuthPermissionInput',
     components: { Icon, BasicForm, BasicDrawer },
     emits: ['success', 'register'],
     setup(_, { emit }) {
       const id = ref();
       const version = ref();
 
-      const [registerForm, { resetFields, setFieldsValue, validate }] = useForm({
+      const [registerForm, { resetFields, setFieldsValue, validate, updateSchema }] = useForm({
         labelWidth: 100,
         schemas: [
           {
@@ -55,7 +55,6 @@
             component: 'ApiTreeSelect',
             componentProps: {
               api: selectAll,
-              params: { t: new Date().getTime() },
               afterFetch: (res) => {
                 const treeNodes: TreeNode[] = [] as TreeNode[];
                 res.map((item) => {
@@ -179,9 +178,10 @@
 
       const [registerDrawer, { changeLoading, closeDrawer }] = useDrawerInner(async (data) => {
         changeLoading(true);
+        await updateParentMenu();
         // 重置表单
         await resetFields();
-        id.value = data?.id || null;
+        id.value = data?.id;
         version.value = data?.version || 0;
 
         await setFieldsValue({
@@ -189,6 +189,15 @@
         });
         changeLoading(false);
       });
+
+      async function updateParentMenu() {
+        await updateSchema({
+          field: 'parentId',
+          componentProps: {
+            t: new Date().getTime(),
+          },
+        });
+      }
 
       async function handleSave(callback: (_: SysPermission) => any) {
         try {
@@ -217,10 +226,12 @@
       async function handleSaveAndAdd() {
         await handleSave((res) => {
           nextTick(() => {
+            updateParentMenu();
             add(res.parentId).then(async (data) => {
               // 重置表单
               await resetFields();
               id.value = null;
+              version.value = null;
               await setFieldsValue({
                 ...data,
               });

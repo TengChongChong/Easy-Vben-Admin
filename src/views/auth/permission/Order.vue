@@ -22,7 +22,7 @@
   import { SysPermission } from '/@/api/auth/model/sysPermissionModel';
 
   export default defineComponent({
-    name: 'SysPermissionOrder',
+    name: 'AuthPermissionOrder',
     components: { BasicDrawer },
     emits: ['success', 'register'],
     setup(_, { emit }) {
@@ -35,16 +35,18 @@
         });
       });
 
-      function setProps(treeNodes: any[], parentId: string | undefined) {
-        let index = 1;
-        treeNodes.map((item) => {
-          item.orderNo = index;
-          item.parentId = parentId;
-          if (item.children && item.children.length) {
-            setProps(item.children, item.id);
-          }
-          index++;
-        });
+      function setProps(treeNodes: TreeProps['treeData'], parentId: string | undefined) {
+        if (treeNodes) {
+          let index = 1;
+          treeNodes.map((item) => {
+            item.orderNo = index;
+            item.parentId = parentId;
+            if (item.children && item.children.length) {
+              setProps(item.children, item.id);
+            }
+            index++;
+          });
+        }
       }
 
       async function handleSubmit() {

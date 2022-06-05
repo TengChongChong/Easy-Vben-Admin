@@ -1,32 +1,30 @@
 import { BasicColumn, FormSchema } from '/@/components/Table';
-import { createVNode } from 'vue';
-import Icon from '/@/components/Icon/src/Icon.vue';
+import { createVNode, h } from 'vue';
+import { Icon } from '/@/components/Icon';
+import { Switch } from 'ant-design-vue';
+import { useMessage } from '/@/hooks/web/useMessage';
+import { setStatus } from '/@/api/auth/sysPermission';
 
 /**
  * 查询条件
  */
-export function searchFormSchema(): FormSchema[] {
-  return [
-    {
-      field: 'title',
-      label: '名称',
-      component: 'Input',
-      colProps: { span: 6 },
-    },
-    {
-      field: 'code',
-      label: '权限标识',
-      component: 'Input',
-      colProps: { span: 6 },
-    },
-    {
-      field: 'path',
-      label: '路径',
-      component: 'Input',
-      colProps: { span: 6 },
-    },
-  ];
-}
+export const searchFormSchema: FormSchema[] = [
+  {
+    field: 'title',
+    label: '名称',
+    component: 'Input',
+  },
+  {
+    field: 'code',
+    label: '权限标识',
+    component: 'Input',
+  },
+  {
+    field: 'path',
+    label: '路径',
+    component: 'Input',
+  },
+];
 
 // 表格列数据
 export const columns: BasicColumn[] = [
@@ -75,8 +73,31 @@ export const columns: BasicColumn[] = [
     title: '状态',
     dataIndex: 'status',
     width: 100,
-    format: 'dict|commonStatus',
     filters: 'dict|commonStatus',
+    customRender: ({ record }) => {
+      if (!Reflect.has(record, 'pendingStatus')) {
+        record.pendingStatus = false;
+      }
+      return h(Switch, {
+        checked: record.status === '1',
+        checkedChildren: '启用',
+        unCheckedChildren: '禁用',
+        loading: record.pendingStatus,
+        onChange(checked: boolean) {
+          record.pendingStatus = true;
+          const newStatus = checked ? '1' : '2';
+          const { createMessage } = useMessage();
+          setStatus(record.id, newStatus)
+            .then(() => {
+              record.status = newStatus;
+              createMessage.success(`操作成功`);
+            })
+            .finally(() => {
+              record.pendingStatus = false;
+            });
+        },
+      });
+    },
   },
   {
     title: '显示',

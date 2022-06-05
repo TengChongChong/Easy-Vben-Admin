@@ -1,21 +1,24 @@
 <template>
-  <div>
+  <PageWrapper dense>
     <!-- 表格 -->
     <BasicTable
       @register="registerTable"
       :rowSelection="{ type: 'checkbox', onChange: onSelectChange }"
     >
       <template #toolbar>
-        <a-button-add @click="handleCreate" />
+        <a-button-add auth="sys:permission:save" @click="handleCreate" />
         <a-button-remove-batch
+          auth="sys:permission:remove"
           :id="checkedKeys"
-          @click="handleRemove"
-          v-model:loading="removeBatchLoading"
+          :api="remove"
+          @success="reload"
         />
+        <Authority value="sys:permission:save">
+          <a-button @click="handleOrder">
+            <template #icon> <Icon icon="ant-design:ordered-list-outlined" /> </template> 排序
+          </a-button>
+        </Authority>
 
-        <a-button @click="handleOrder">
-          <template #icon> <Icon icon="ant-design:ordered-list-outlined" /> </template> 排序
-        </a-button>
         <a-button @click="expandAll">
           <template #icon> <Icon icon="ant-design:plus-outlined" /> </template> 展开全部
         </a-button>
@@ -26,21 +29,26 @@
 
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'action'">
-          <a-button-add-sub :id="record.id" @click="handleCreate" />
+          <a-button-add-sub auth="sys:permission:save" :id="record.id" @click="handleCreate" />
           <a-divider type="vertical" />
-          <a-button-edit :id="record.id" @click="handleEdit" />
+          <a-button-edit auth="sys:permission:save" :id="record.id" @click="handleEdit" />
           <a-divider type="vertical" />
-          <a-button-remove :id="record.id" @click="handleRemove" />
+          <a-button-remove
+            auth="sys:permission:remove"
+            :id="record.id"
+            :api="remove"
+            @success="reload"
+          />
         </template>
       </template>
     </BasicTable>
     <!-- 表单 -->
     <SysPermissionInput @register="registerDrawer" @success="reload" />
     <SysPermissionOrder @register="registerOrderDrawer" @success="reload" />
-  </div>
+  </PageWrapper>
 </template>
 <script lang="ts">
-  import { defineComponent, nextTick, ref } from 'vue';
+  import { defineComponent, ref } from 'vue';
   import { useTable } from '/@/components/Table';
   import { select, add, get, remove } from '/@/api/auth/sysPermission';
   import BasicTable from '/@/components/Table/src/BasicTable.vue';
@@ -50,15 +58,19 @@
   import AButtonEdit from '/@/components/Button/src/ButtonEdit.vue';
   import AButtonRemove from '/@/components/Button/src/ButtonRemove.vue';
   import AButtonRemoveBatch from '/@/components/Button/src/ButtonRemoveBatch.vue';
-  import Icon from '/@/components/Icon/src/Icon.vue';
+  import { Icon } from '/@/components/Icon';
   import { clearTreeEmptyChildren, listToTree } from '/@/utils/helper/treeHelper';
   import SysPermissionInput from '/@/views/auth/permission/Input.vue';
   import SysPermissionOrder from '/@/views/auth/permission/Order.vue';
   import AButtonAddSub from '/@/components/Button/src/ButtonAddSub.vue';
+  import { Authority } from '/@/components/Authority';
+  import { PageWrapper } from '/@/components/Page';
 
   export default defineComponent({
-    name: 'SysPermissionList',
+    name: 'AuthPermissionList',
     components: {
+      PageWrapper,
+      Authority,
       AButtonAddSub,
       SysPermissionOrder,
       SysPermissionInput,
@@ -70,9 +82,6 @@
       BasicTable,
     },
     setup() {
-      // 按钮状态
-      const removeBatchLoading = ref(false);
-
       // 表格选中数据
       const checkedKeys = ref<Array<string>>([]);
 
@@ -82,7 +91,7 @@
       /**
        * 初始化表格
        */
-      const [registerTable, { reload, setProps, expandAll, collapseAll }] = useTable({
+      const [registerTable, { reload, expandAll, collapseAll }] = useTable({
         title: '菜单',
         api: select,
         afterFetch: (items) => {
@@ -93,21 +102,15 @@
         pagination: false,
         showIndexColumn: false,
         columns,
+        useSearchForm: true,
+        formConfig: {
+          schemas: searchFormSchema,
+        },
         actionColumn: {
           width: 140,
           title: '操作',
           key: 'action',
         },
-      });
-
-      nextTick(() => {
-        // 设置表格查询条件
-        setProps({
-          useSearchForm: true,
-          formConfig: {
-            schemas: searchFormSchema(),
-          },
-        });
       });
 
       /**
@@ -132,19 +135,13 @@
           openDrawer(true, data);
         });
       };
-      const handleRemove = (id: string) => {
-        remove(id).then(() => {
-          removeBatchLoading.value = false;
-          reload();
-        });
-      };
 
       return {
         checkedKeys,
         onSelectChange(selectedRowKeys: string[]) {
           checkedKeys.value = selectedRowKeys;
         },
-        removeBatchLoading,
+        remove,
         registerDrawer,
         registerTable,
         registerOrderDrawer,
@@ -155,7 +152,6 @@
         handleOrder,
         handleCreate,
         handleEdit,
-        handleRemove,
       };
     },
   });
