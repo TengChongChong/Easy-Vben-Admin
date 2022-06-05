@@ -3,6 +3,21 @@
 .@{tree-prefix-cls} {
   background-color: @component-background;
 
+  &.tree-sm {
+    .@{namespace}-basic-title {
+      font-size: 14px;
+      font-weight: 400;
+    }
+
+    .@{tree-prefix-cls}-header {
+      padding: 5px;
+    }
+
+    .@{tree-prefix-cls}-body {
+      padding: 0;
+    }
+  }
+
   .ant-tree-node-content-wrapper {
     position: relative;
 
@@ -47,6 +62,11 @@
   }
 
   &-header {
+    padding: 16px 10px;
     border-bottom: 1px solid @border-color-base;
+  }
+
+  &-body {
+    padding: 16px 10px;
   }
 }

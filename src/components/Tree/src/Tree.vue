@@ -41,6 +41,7 @@
     emits: treeEmits,
     setup(props, { attrs, slots, emit, expose }) {
       const [bem] = createBEM('tree');
+      const [bemBody] = createBEM('tree-body');
       const state = reactive<TreeState>({
         checkStrictly: props.checkStrictly,
         expandedKeys: props.expandedKeys || [],
@@ -437,7 +438,9 @@
             )}
             <Spin spinning={unref(props.loading)} tip="加载中...">
               <ScrollContainer style={scrollStyle} v-show={!unref(getNotFound)}>
-                <Tree {...unref(getBindValues)} showIcon={false} treeData={treeData.value} />
+                <div class={bemBody()}>
+                  <Tree {...unref(getBindValues)} showIcon={false} treeData={treeData.value} />
+                </div>
               </ScrollContainer>
               <Empty
                 v-show={unref(getNotFound)}

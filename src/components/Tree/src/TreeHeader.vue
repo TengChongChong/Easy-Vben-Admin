@@ -1,5 +1,5 @@
 <template>
-  <div :class="bem()" class="tree-title flex px-2 py-1.5 items-center">
+  <div :class="bem()" class="tree-title flex items-center">
     <slot name="headerTitle" v-if="slots.headerTitle"></slot>
     <BasicTitle :helpMessage="helpMessage" v-if="!slots.headerTitle && title">
       {{ title }}
@@ -168,15 +168,3 @@
     },
   );
 </script>
-
-<style lang="less">
-  @prefix-cls: ~'@{namespace}-basic-title';
-
-  .tree-title {
-    .@{prefix-cls} {
-      font-size: 14px;
-      font-weight: 400;
-      line-height: 20px;
-    }
-  }
-</style>
