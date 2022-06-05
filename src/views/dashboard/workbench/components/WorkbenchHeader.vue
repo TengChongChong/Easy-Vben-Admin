@@ -29,5 +29,5 @@
   import headerImg from '/@/assets/images/header.jpg';
 
   const userStore = useUserStore();
-  const userinfo = computed(() => userStore.getUserInfo);
+  const userinfo = computed(() => userStore.getCurrentUser);
 </script>

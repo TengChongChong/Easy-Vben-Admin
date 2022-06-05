@@ -5,8 +5,8 @@ import { RoleEnum } from '/@/enums/roleEnum';
 import { PageEnum } from '/@/enums/pageEnum';
 import { ROLES_KEY, TOKEN_KEY, USER_INFO_KEY } from '/@/enums/cacheEnum';
 import { getAuthCache, setAuthCache } from '/@/utils/auth';
-import { SysUser, LoginParams } from '../../api/auth/model/sysUserModel';
-import { doLogout, getUserInfo, login } from '../../api/auth/sysUser';
+import { SysUser, LoginParams } from '/@/api/auth/model/sysUserModel';
+import { doLogout, getCurrentUser, login } from '/@/api/auth/auth';
 import { useI18n } from '/@/hooks/web/useI18n';
 import { useMessage } from '/@/hooks/web/useMessage';
 import { router } from '/@/router';
@@ -39,7 +39,7 @@ export const useUserStore = defineStore({
     lastUpdateTime: 0,
   }),
   getters: {
-    getUserInfo(): SysUser {
+    getCurrentUser(): SysUser {
       return this.userInfo || getAuthCache<SysUser>(USER_INFO_KEY) || {};
     },
     getToken(): string {
@@ -107,7 +107,7 @@ export const useUserStore = defineStore({
     async afterLoginAction(goHome?: boolean): Promise<SysUser | null> {
       if (!this.getToken) return null;
       // 获取用户信息
-      const userInfo = await this.getUserInfoAction();
+      const userInfo = await this.getCurrentUserAction();
 
       const sessionTimeout = this.sessionTimeout;
       if (sessionTimeout) {
@@ -131,9 +131,9 @@ export const useUserStore = defineStore({
      *
      * @returns
      */
-    async getUserInfoAction(): Promise<SysUser | null> {
+    async getCurrentUserAction(): Promise<SysUser | null> {
       if (!this.getToken) return null;
-      const userInfo = await getUserInfo();
+      const userInfo = await getCurrentUser();
 
       // 角色标识
       const { roleList } = userInfo;

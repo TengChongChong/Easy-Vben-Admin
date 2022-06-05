@@ -1,10 +1,18 @@
 <template>
   <Dropdown placement="bottomLeft" :overlayClassName="`${prefixCls}-dropdown-overlay`">
     <span :class="[prefixCls, `${prefixCls}--${theme}`]" class="flex">
-      <img :class="`${prefixCls}__header`" :src="getUserInfo.avatar" />
+      <img
+        v-if="getCurrentUser.avatar"
+        :class="`${prefixCls}__header`"
+        :src="getCurrentUser.avatar"
+      />
+      <a-avatar size="small" :class="`${prefixCls}__header`" v-if="!getCurrentUser.avatar">{{
+        getCurrentUser.nickname.substring(0, 1)
+      }}</a-avatar>
+
       <span :class="`${prefixCls}__info hidden md:block`">
         <span :class="`${prefixCls}__name  `" class="truncate">
-          {{ getUserInfo.nickname }}
+          {{ getCurrentUser.nickname }}
         </span>
       </span>
     </span>
@@ -18,6 +26,7 @@
           v-if="getShowDoc"
         />
         <MenuDivider v-if="getShowDoc" />
+        <MenuItem key="personal-center" text="个人中心" icon="ant-design:user-outlined" />
         <MenuItem
           v-if="getUseLockPage"
           key="lock"
@@ -48,11 +57,11 @@
   import { useDesign } from '/@/hooks/web/useDesign';
   import { useModal } from '/@/components/Modal';
 
-  import headerImg from '/@/assets/images/header.jpg';
   import { propTypes } from '/@/utils/propTypes';
   import { openWindow } from '/@/utils';
 
   import { createAsyncComponent } from '/@/utils/factory/createAsyncComponent';
+  import { useGo } from '/@/hooks/web/usePage';
 
   export default defineComponent({
     name: 'UserDropdown',
@@ -71,10 +80,11 @@
       const { t } = useI18n();
       const { getShowDoc, getUseLockPage } = useHeaderSetting();
       const userStore = useUserStore();
+      const go = useGo();
 
-      const getUserInfo = computed(() => {
-        const { nickname = '', avatar } = userStore.getUserInfo || {};
-        return { nickname, avatar: avatar || headerImg };
+      const getCurrentUser = computed(() => {
+        const { nickname = '', avatar } = userStore.getCurrentUser || {};
+        return { nickname, avatar: avatar };
       });
 
       const [register, { openModal }] = useModal();
@@ -101,6 +111,9 @@
           case 'doc':
             openDoc();
             break;
+          case 'personal-center':
+            go('/auth/personal/center/view');
+            break;
           case 'lock':
             handleLock();
             break;
@@ -110,7 +123,7 @@
       return {
         prefixCls,
         t,
-        getUserInfo,
+        getCurrentUser,
         handleMenuClick,
         getShowDoc,
         register,
@@ -134,11 +147,12 @@
     img {
       width: 24px;
       height: 24px;
-      margin-right: 12px;
     }
 
     &__header {
+      margin-right: 12px;
       border-radius: 50%;
+      background-color: @primary-color;
     }
 
     &__name {

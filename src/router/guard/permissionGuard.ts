@@ -71,7 +71,7 @@ export function createPermissionGuard(router: Router) {
     if (userStore.getLastUpdateTime === 0) {
       // 如果上次更新时间为空，重新获取当前用户信息
       try {
-        await userStore.getUserInfoAction();
+        await userStore.getCurrentUserAction();
       } catch (err) {
         next();
         return;

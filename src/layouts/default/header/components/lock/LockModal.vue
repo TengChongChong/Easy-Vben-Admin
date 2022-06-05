@@ -44,7 +44,7 @@
       const userStore = useUserStore();
       const lockStore = useLockStore();
 
-      const getRealName = computed(() => userStore.getUserInfo?.nickname);
+      const getRealName = computed(() => userStore.getCurrentUser?.nickname);
       const [register, { closeModal }] = useModalInner();
 
       const [registerForm, { validateFields, resetFields }] = useForm({
@@ -75,7 +75,7 @@
       }
 
       const avatar = computed(() => {
-        const { avatar } = userStore.getUserInfo;
+        const { avatar } = userStore.getCurrentUser;
         return avatar || headerImg;
       });
 
