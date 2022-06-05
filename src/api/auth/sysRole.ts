@@ -3,7 +3,7 @@ import { TreeNodeModel } from '/@/api/model/treeModel';
 import { SysRole } from '/@/api/auth/model/sysRoleModel';
 
 // base url
-const BASE_URL = '/auth/sys/role/';
+const BASE_URL = '/api/auth/sys/role/';
 
 /**
  * 查询

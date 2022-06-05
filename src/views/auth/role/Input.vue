@@ -10,10 +10,11 @@
     <BasicForm @register="registerForm">
       <template #menu="{ model, field }">
         <BasicTree
+          class="tree-sm"
           v-model:value="model[field]"
           :treeData="treeData"
           ref="treeRef"
-          @check="onBusinessSelectChange"
+          @check="onTreeSelectChange"
           checkable
           toolbar
           title="选择工具"
@@ -35,16 +36,16 @@
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
 
   import { add, save } from '/@/api/auth/sysRole';
-  import Icon from '/@/components/Icon/src/Icon.vue';
+  import { Icon } from '/@/components/Icon';
   import { SysRole } from '/@/api/auth/model/sysRoleModel';
-  import BasicTree from '/@/components/Tree/src/Tree.vue';
+  import { BasicTree } from '/@/components/Tree';
   import { TreeActionType, TreeItem } from '/@/components/Tree/src/tree';
   import { selectAll } from '/@/api/auth/sysPermission';
-  import { findNode, listToTree, treeToList } from '/@/utils/helper/treeHelper';
-  import { isArray } from '/@/utils/is';
+  import { convertCheckedKeys, listToTree } from '/@/utils/helper/treeHelper';
+  import { RoleEnum } from '/@/enums/roleEnum';
 
   export default defineComponent({
-    name: 'SysRoleInput',
+    name: 'AuthRoleInput',
     components: { BasicTree, Icon, BasicForm, BasicDrawer },
     emits: ['success', 'register'],
     setup(_, { emit }) {
@@ -78,6 +79,7 @@
             componentProps: {
               dictType: 'whether',
             },
+            auth: RoleEnum.SYS_ADMIN,
           },
           {
             field: 'status',
@@ -120,16 +122,14 @@
         unref(treeRef)?.expandAll(false);
         // 重置表单
         await resetFields();
-        id.value = data?.id || null;
+        id.value = data?.id;
         version.value = data?.version || 0;
         await selectAll().then((res) => {
           treeData.value = listToTree(res);
         });
+        allSelectedNodes.value = data.permissionIds;
+        data.permissionIds = convertCheckedKeys(unref(treeData), data.permissionIds);
 
-        data.permissionIds = convertCheckedKeys(data.permissionIds);
-        allSelectedNodes.value = data.permissionIds.checked.concat(
-          data.permissionIds.halfCheckedKeys,
-        );
         await setFieldsValue({
           ...data,
         });
@@ -137,45 +137,7 @@
         changeLoading(false);
       });
 
-      function convertCheckedKeys(checkedKeys: string[]) {
-        if (!checkedKeys || !isArray(checkedKeys) || checkedKeys.length === 0) {
-          return [];
-        }
-        const checked: {
-          halfCheckedKeys: string[];
-          checked: string[];
-        } = {
-          halfCheckedKeys: [],
-          checked: [],
-        };
-
-        checkedKeys.map((key) => {
-          const currentNode = findNode(unref(treeData), (n) => n.key === key);
-          if (currentNode) {
-            if (currentNode.children && currentNode.children.length) {
-              const childrenArray = treeToList(currentNode.children);
-              let hav = true;
-              for (let i = 0; i < childrenArray.length; i++) {
-                if (checkedKeys.indexOf(childrenArray[i].key) === -1) {
-                  // 子节点未全部选中
-                  hav = false;
-                }
-              }
-              if (hav) {
-                checked.checked.push(key);
-              } else {
-                checked.halfCheckedKeys.push(key);
-              }
-            } else {
-              checked.checked.push(key);
-            }
-          }
-        });
-
-        return checked;
-      }
-
-      function onBusinessSelectChange(selectedKeys, info) {
+      function onTreeSelectChange(selectedKeys, info) {
         allSelectedNodes.value = selectedKeys.concat(info.halfCheckedKeys);
       }
 
@@ -187,7 +149,6 @@
           if (unref(allSelectedNodes)?.length) {
             values.permissionIds = unref(allSelectedNodes);
           }
-
           await save({ ...values, id: id.value, version: version.value }).then((res) => {
             emit('success');
             callback(res);
@@ -212,6 +173,7 @@
               // 重置表单
               await resetFields();
               id.value = null;
+              version.value = null;
               await setFieldsValue({
                 ...data,
               });
@@ -228,7 +190,7 @@
         registerForm,
         handleSubmit,
         handleSaveAndAdd,
-        onBusinessSelectChange,
+        onTreeSelectChange,
       };
     },
   });
