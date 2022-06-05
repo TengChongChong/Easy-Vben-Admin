@@ -1,12 +1,14 @@
 <template>
-  <a-tooltip>
-    <template #title>{{ text }}</template>
-    <a-button type="link" :loading="loading" size="small" @click="handleClick">
-      <template #icon>
-        <Icon icon="ant-design:edit-outlined" />
-      </template>
-    </a-button>
-  </a-tooltip>
+  <Authority :value="auth">
+    <a-tooltip>
+      <template #title>{{ text }}</template>
+      <a-button type="link" :loading="loading" size="small" @click="handleClick">
+        <template #icon>
+          <Icon icon="ant-design:edit-outlined" />
+        </template>
+      </a-button>
+    </a-tooltip>
+  </Authority>
 </template>
 
 <script lang="ts">
@@ -14,12 +16,14 @@
 
   const { t } = useI18n();
   import { defineComponent } from 'vue';
-  import Icon from '/@/components/Icon/src/Icon.vue';
+  import { Icon } from '/@/components/Icon';
   import { propTypes } from '/@/utils/propTypes';
+  import { Authority } from '/@/components/Authority';
   export default defineComponent({
     name: 'AButtonEdit',
-    components: { Icon },
+    components: { Authority, Icon },
     props: {
+      auth: propTypes.string,
       id: propTypes.string,
       text: propTypes.string.def(t('common.editText')),
       loading: propTypes.bool.def(false),

@@ -18,7 +18,7 @@
 <script lang="ts" setup>
   import { computed, unref } from 'vue';
   import { Button } from 'ant-design-vue';
-  import Icon from '/@/components/Icon/src/Icon.vue';
+  import { Icon } from '/@/components/Icon';
   import { buttonProps } from './props';
   import { useAttrs } from '/@/hooks/core/useAttrs';
 

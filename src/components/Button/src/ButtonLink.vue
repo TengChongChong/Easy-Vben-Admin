@@ -1,21 +1,25 @@
 <template>
-  <a-button type="primary" @click="handleClick">
-    <template v-if="icon" #icon>
-      <Icon :icon="icon" />
-    </template>
-    {{ text }}
-  </a-button>
+  <Authority :value="auth">
+    <a-button type="primary" @click="handleClick">
+      <template v-if="icon" #icon>
+        <Icon :icon="icon" />
+      </template>
+      {{ text }}
+    </a-button>
+  </Authority>
 </template>
 
 <script lang="ts">
   import { defineComponent } from 'vue';
   import { useGo } from '/@/hooks/web/usePage';
-  import Icon from '/@/components/Icon/src/Icon.vue';
+  import { Icon } from '/@/components/Icon';
   import { propTypes } from '/@/utils/propTypes';
+  import { Authority } from '/@/components/Authority';
   export default defineComponent({
     name: 'AButtonLink',
-    components: { Icon },
+    components: { Authority, Icon },
     props: {
+      auth: propTypes.string,
       icon: propTypes.string,
       path: propTypes.string.isRequired,
       text: propTypes.string,

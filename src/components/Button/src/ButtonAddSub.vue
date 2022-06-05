@@ -1,23 +1,27 @@
 <template>
-  <a-tooltip>
-    <template #title>{{ text }}</template>
-    <a-button type="link" :loading="loading" size="small" @click="handleClick">
-      <template #icon>
-        <Icon icon="ant-design:plus-outlined" />
-      </template>
-    </a-button>
-  </a-tooltip>
+  <Authority :value="auth">
+    <a-tooltip>
+      <template #title>{{ text }}</template>
+      <a-button type="link" :loading="loading" size="small" @click="handleClick">
+        <template #icon>
+          <Icon icon="ant-design:plus-outlined" />
+        </template>
+      </a-button>
+    </a-tooltip>
+  </Authority>
 </template>
 
 <script lang="ts">
   import { defineComponent } from 'vue';
-  import Icon from '/@/components/Icon/src/Icon.vue';
+  import { Icon } from '/@/components/Icon';
   import { propTypes } from '/@/utils/propTypes';
   import { useGo } from '/@/hooks/web/usePage';
+  import { Authority } from '/@/components/Authority';
   export default defineComponent({
     name: 'AButtonAddSub',
-    components: { Icon },
+    components: { Authority, Icon },
     props: {
+      auth: propTypes.string,
       id: propTypes.string,
       path: propTypes.string,
       loading: propTypes.bool.def(false),
