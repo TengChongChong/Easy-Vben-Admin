@@ -18,6 +18,4 @@ export interface SysDept extends BasicModel {
   orderNo: number;
   // 部门类型名称
   typeName: string;
-  // 上级部门名称
-  parentName: string;
 }
