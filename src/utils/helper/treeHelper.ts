@@ -1,4 +1,5 @@
 import { isArray } from '/@/utils/is';
+import { TreeItem } from '/@/components/Tree/src/tree';
 
 interface TreeHelperConfig {
   id: string;
@@ -222,4 +223,48 @@ export function eachTree(treeDatas: any[], callBack: Fn, parentNode = {}) {
       eachTree(element.children, callBack, newNode);
     }
   });
+}
+
+/**
+ * 将后端返回的选中数据转为Tree所需的选中数据
+ *
+ * @param treeData 树数据
+ * @param checkedKeys 选中节点key
+ */
+export function convertCheckedKeys(treeData: TreeItem[], checkedKeys: string[]) {
+  if (!checkedKeys || !isArray(checkedKeys) || checkedKeys.length === 0) {
+    return [];
+  }
+  const checked: {
+    halfCheckedKeys: string[];
+    checked: string[];
+  } = {
+    halfCheckedKeys: [],
+    checked: [],
+  };
+
+  checkedKeys.map((key) => {
+    const currentNode = findNode(treeData, (n) => n.key === key);
+    if (currentNode) {
+      if (currentNode.children && currentNode.children.length) {
+        const childrenArray = treeToList(currentNode.children);
+        let hav = true;
+        for (let i = 0; i < childrenArray.length; i++) {
+          if (checkedKeys.indexOf(childrenArray[i].key) === -1) {
+            // 子节点未全部选中
+            hav = false;
+          }
+        }
+        if (hav) {
+          checked.checked.push(key);
+        } else {
+          checked.halfCheckedKeys.push(key);
+        }
+      } else {
+        checked.checked.push(key);
+      }
+    }
+  });
+
+  return checked;
 }
