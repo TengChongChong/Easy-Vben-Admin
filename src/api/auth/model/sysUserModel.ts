@@ -7,12 +7,14 @@ import { SysPermission } from './sysPermissionModel';
  * 用户
  */
 export interface SysUser extends BasicModel {
-  // 岗位id
-  postId: string;
   // 用户名
   username: string;
   // 昵称
   nickname: string;
+  // 密码
+  password?: string;
+  // 盐
+  salt?: string;
   // 性别
   sex: string;
   // 邮箱
@@ -21,8 +23,6 @@ export interface SysUser extends BasicModel {
   phoneNumber: string;
   // 生日
   birthday: Date;
-  // 最后登录时间
-  lastLoginDate: Date;
   // 头像
   avatar: string;
   avatarLg: string;
@@ -31,6 +31,12 @@ export interface SysUser extends BasicModel {
   avatarXs: string;
   // 来源
   source: string;
+  // 岗位id
+  postId: string;
+  // 最后登录时间
+  lastLoginDate: Date;
+  // 所属部门Id
+  deptId: string;
   // 所属部门
   dept: SysDept;
   // 角色
