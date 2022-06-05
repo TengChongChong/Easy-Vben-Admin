@@ -4,7 +4,7 @@ import { defHttp } from '/@/utils/http/axios';
 import { SelectModel } from '/@/api/model/selectModel';
 
 // base url
-const BASE_URL = '/auth/sys/dict/type/';
+const BASE_URL = '/api/auth/sys/dict/type/';
 
 /**
  * 查询

@@ -37,7 +37,7 @@
         changeLoading(true);
         // 重置表单
         await resetFields();
-        id.value = data?.id || null;
+        id.value = data?.id;
         version.value = data?.version || 0;
 
         await setFieldsValue({
@@ -54,6 +54,8 @@
             closeDrawer();
             emit('success');
           });
+        } catch (e) {
+          console.error(e);
         } finally {
           changeLoading(false);
         }

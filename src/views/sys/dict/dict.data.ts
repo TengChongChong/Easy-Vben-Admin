@@ -1,6 +1,4 @@
 import { BasicColumn, FormSchema } from '/@/components/Table';
-import { createVNode } from 'vue';
-import DictTag from '/@/components/Dict/DictTag.vue';
 import { selectAll } from '/@/api/sys/sysDictType';
 
 /**
@@ -20,19 +18,16 @@ export function searchFormSchema(reloadTable: () => any): FormSchema[] {
           reloadTable();
         },
       },
-      colProps: { span: 6 },
     },
     {
       field: 'name',
       label: '名称',
       component: 'Input',
-      colProps: { span: 6 },
     },
     {
       field: 'code',
       label: '编码',
       component: 'Input',
-      colProps: { span: 6 },
     },
   ];
 }
@@ -45,13 +40,6 @@ export const columns: BasicColumn[] = [
     sorter: true,
     fixed: 'left',
     width: 150,
-    format: (_, record) => {
-      return createVNode(DictTag, {
-        dictType: record.dictType,
-        value: record.code,
-        t: new Date().getTime(),
-      });
-    },
   },
   {
     title: '编码',

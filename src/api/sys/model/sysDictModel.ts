@@ -4,7 +4,6 @@ import { BasicModel } from '/@/api/model/baseModel';
  * 字典
  */
 export interface SysDict extends BasicModel {
-  id: string;
   // 名称
   name: string;
   // 编码

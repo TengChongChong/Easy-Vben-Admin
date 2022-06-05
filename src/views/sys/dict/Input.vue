@@ -23,7 +23,7 @@
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
 
   import { add, save } from '/@/api/sys/sysDict';
-  import Icon from '/@/components/Icon/src/Icon.vue';
+  import { Icon } from '/@/components/Icon';
   import { selectAll } from '/@/api/sys/sysDictType';
   import { SysDict } from '/@/api/sys/model/sysDictModel';
   import { isArray, isString } from '/@/utils/is';
@@ -122,7 +122,7 @@
         changeLoading(true);
         // 重置表单
         await resetFields();
-        id.value = data?.id || null;
+        id.value = data?.id;
         version.value = data?.version || 0;
 
         changeDictType(data.dictType);
@@ -148,6 +148,7 @@
           field: 'parentCode',
           componentProps: {
             dictType: dictType,
+            t: new Date().getTime(),
           },
         });
         // 清空值
@@ -178,6 +179,7 @@
       async function handleSubmit() {
         await handleSave((_) => {
           changeLoading(false);
+          dictStore.initDict(true);
           closeDrawer();
         });
       }
@@ -185,20 +187,23 @@
       async function handleSaveAndAdd() {
         await handleSave((res) => {
           nextTick(() => {
-            add(undefined, res.dictType).then(async (data) => {
-              // 重置表单
-              await resetFields();
-              id.value = null;
+            dictStore.initDict(true, () => {
+              add(undefined, res.dictType).then(async (data) => {
+                // 重置表单
+                await resetFields();
+                id.value = null;
+                version.value = null;
 
-              if (isString(res.parentCode)) {
-                data.parentCode = dictStore.getPath(res.dictType, res.parentCode);
-              }
+                if (isString(res.parentCode)) {
+                  data.parentCode = dictStore.getPath(res.dictType, res.parentCode);
+                }
 
-              await setFieldsValue({
-                ...data,
+                await setFieldsValue({
+                  ...data,
+                });
+                changeDictType(data.dictType);
+                changeLoading(false);
               });
-
-              changeLoading(false);
             });
           });
         });

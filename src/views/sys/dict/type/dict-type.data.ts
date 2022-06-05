@@ -4,22 +4,18 @@ import { BasicColumn, FormSchema } from '/@/components/Table';
  * 查询条件
  *
  */
-export function searchFormSchema(): FormSchema[] {
-  return [
-    {
-      field: 'name',
-      label: '名称',
-      component: 'Input',
-      colProps: { span: 6 },
-    },
-    {
-      field: 'type',
-      label: '类型',
-      component: 'Input',
-      colProps: { span: 6 },
-    },
-  ];
-}
+export const searchFormSchema: FormSchema[] = [
+  {
+    field: 'name',
+    label: '名称',
+    component: 'Input',
+  },
+  {
+    field: 'type',
+    label: '类型',
+    component: 'Input',
+  },
+];
 
 // 表格列数据
 export const columns: BasicColumn[] = [
@@ -46,6 +42,7 @@ export const columns: BasicColumn[] = [
     dataIndex: 'sys',
     sorter: true,
     width: 100,
+    auth: 'sys:admin',
     format: 'dict|whether',
     filters: 'dict|whether',
   },
@@ -84,6 +81,7 @@ export const formSchema: FormSchema[] = [
     field: 'sys',
     label: '是否系统',
     required: true,
+    auth: 'sys:admin',
     component: 'DictRadio',
     componentProps: {
       dictType: 'whether',

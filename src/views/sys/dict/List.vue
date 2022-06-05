@@ -1,33 +1,47 @@
 <template>
-  <div>
+  <PageWrapper dense>
     <!-- 表格 -->
     <BasicTable
       @register="registerTable"
       :rowSelection="{ type: 'checkbox', onChange: onSelectChange }"
     >
       <template #toolbar>
-        <a-button-add @click="handleCreate" />
+        <a-button-add auth="sys:dict:save" @click="handleCreate" />
         <a-button-remove-batch
+          auth="sys:dict:remove"
           :id="checkedKeys"
-          @click="handleRemove"
-          v-model:loading="removeBatchLoading"
+          :api="remove"
+          @success="reload"
         />
-        <a-button-link
-          path="/sys/dict/type/list"
-          text="字典类型管理"
-          icon="ant-design:menu-outlined"
-        />
-        <a-button @click="reloadCache">
-          <Icon icon="ant-design:reload-outlined" />
-          刷新字典缓存
-        </a-button>
+        <Authority value="sys:dict:type:save">
+          <a-button-link
+            path="/sys/dict/type/list"
+            text="字典类型管理"
+            icon="ant-design:menu-outlined"
+          />
+        </Authority>
+        <Authority value="sys:dict:save">
+          <a-button @click="reloadCache">
+            <Icon icon="ant-design:reload-outlined" />
+            刷新缓存
+          </a-button>
+        </Authority>
       </template>
 
       <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'name'">
+          <a-tag v-if="record.displayType" :color="record.displayType">{{ record.name }}</a-tag>
+          <span v-else>{{ record.name }}</span>
+        </template>
         <template v-if="column.key === 'action'">
           <a-tooltip>
             <template #title>新增下级</template>
-            <a-button type="link" size="small" @click="handleCreate(record.id, record.dictType)">
+            <a-button
+              auth="sys:dict:save"
+              type="link"
+              size="small"
+              @click="handleCreate(record.id, record.dictType)"
+            >
               <template #icon>
                 <Icon icon="ant-design:plus-outlined" />
               </template>
@@ -35,15 +49,15 @@
           </a-tooltip>
 
           <a-divider type="vertical" />
-          <a-button-edit :id="record.id" @click="handleEdit" />
+          <a-button-edit auth="sys:dict:save" :id="record.id" @click="handleEdit" />
           <a-divider type="vertical" />
-          <a-button-remove :id="record.id" @click="handleRemove" />
+          <a-button-remove auth="sys:dict:remove" :id="record.id" :api="remove" @success="reload" />
         </template>
       </template>
     </BasicTable>
     <!-- 表单 -->
     <SysDictInput @register="registerDrawer" @success="reload" />
-  </div>
+  </PageWrapper>
 </template>
 <script lang="ts">
   import { defineComponent, nextTick, ref } from 'vue';
@@ -57,14 +71,18 @@
   import AButtonRemove from '/@/components/Button/src/ButtonRemove.vue';
   import AButtonRemoveBatch from '/@/components/Button/src/ButtonRemoveBatch.vue';
   import SysDictInput from '/@/views/sys/dict/Input.vue';
-  import Icon from '/@/components/Icon/src/Icon.vue';
+  import { Icon } from '/@/components/Icon';
   import { useMessage } from '/@/hooks/web/useMessage';
   import AButtonLink from '/@/components/Button/src/ButtonLink.vue';
   import { useDictStore } from '/@/store/modules/dict';
+  import { Authority } from '/@/components/Authority';
+  import { PageWrapper } from '/@/components/Page';
 
   export default defineComponent({
     name: 'SysDictList',
     components: {
+      PageWrapper,
+      Authority,
       AButtonLink,
       Icon,
       SysDictInput,
@@ -77,8 +95,6 @@
     setup() {
       const { createMessage } = useMessage();
 
-      // 按钮状态
-      const removeBatchLoading = ref(false);
       // 表格选中数据
       const checkedKeys = ref<Array<string>>([]);
 
@@ -128,12 +144,6 @@
           openDrawer(true, data);
         });
       };
-      const handleRemove = (id: string) => {
-        remove(id).then(() => {
-          removeBatchLoading.value = false;
-          reload();
-        });
-      };
 
       const reloadTable = () => {
         nextTick(() => {
@@ -159,13 +169,12 @@
         onSelectChange(selectedRowKeys: string[]) {
           checkedKeys.value = selectedRowKeys;
         },
-        removeBatchLoading,
+        remove,
         registerDrawer,
         registerTable,
         reload,
         handleCreate,
         handleEdit,
-        handleRemove,
         reloadCache,
       };
     },
