@@ -2,13 +2,13 @@
   <a-cascader
     v-model:value="state"
     v-bind="$attrs"
-    :options="getOptions"
+    :options="tree"
     change-on-select
     @change="handleChange"
   />
 </template>
 <script lang="ts">
-  import { defineComponent, ref, computed, watch } from 'vue';
+  import { defineComponent, ref, watch } from 'vue';
   import { useRuleFormItem } from '/@/hooks/component/useFormItem';
   import { useAttrs } from '/@/hooks/core/useAttrs';
   import { useDictStore } from '/@/store/modules/dict';
@@ -22,6 +22,8 @@
       dictType: propTypes.string,
       value: propTypes.array,
       displayRenderArray: propTypes.array,
+      // 仅用于字典管理页面动态更新
+      t: propTypes.number,
     },
     emits: ['options-change', 'change'],
     setup(props) {
@@ -33,12 +35,14 @@
       // Embedded in the form, just use the hook binding to perform form verification
       const [state] = useRuleFormItem(props, 'value', 'change', emitData);
 
-      const getOptions = computed(() => {
-        return tree.value;
-      });
-
       watch(
         () => props.dictType,
+        () => {
+          getTree();
+        },
+      );
+      watch(
+        () => props.t,
         () => {
           getTree();
         },
@@ -54,7 +58,7 @@
 
       getTree();
 
-      return { state, attrs, getOptions, handleChange };
+      return { state, attrs, tree, handleChange };
     },
   });
 </script>

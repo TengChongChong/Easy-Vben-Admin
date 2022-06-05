@@ -45,7 +45,7 @@
       watch(
         () => props.params,
         () => {
-          !unref(isFirstLoaded) && fetch();
+          unref(isFirstLoaded) && fetch();
         },
         { deep: true },
       );
@@ -53,7 +53,7 @@
       watch(
         () => props.immediate,
         (v) => {
-          v && !isFirstLoaded.value && fetch();
+          v && unref(isFirstLoaded) && fetch();
         },
       );
 

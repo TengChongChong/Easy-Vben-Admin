@@ -38,6 +38,8 @@
       // 搜索字段
       treeNodeFilterProp: propTypes.string.def('title'),
       afterFetch: { type: Function as PropType<Fn> },
+      // 仅用于管理页面动态更新
+      t: propTypes.number,
     },
     emits: ['options-change', 'change'],
     setup(props, { attrs, emit }) {
@@ -63,15 +65,22 @@
       watch(
         () => props.params,
         () => {
-          !unref(isFirstLoaded) && fetch();
+          unref(isFirstLoaded) && fetch();
         },
         { deep: true },
       );
 
       watch(
+        () => props.t,
+        () => {
+          unref(isFirstLoaded) && fetch();
+        },
+      );
+
+      watch(
         () => props.immediate,
         (v) => {
-          v && !isFirstLoaded.value && fetch();
+          v && unref(isFirstLoaded) && fetch();
         },
       );
 
@@ -126,7 +135,7 @@
         if (isString(props.value) || isNumber(props.value)) {
           pathArray = findPath(treeData.value, (n) => n.id === props.value);
         }
-        if (pathArray.length > 1) {
+        if (pathArray && pathArray.length > 1) {
           // 去掉最后一级（当前节点不需要展开）
           pathArray = pathArray.slice(0, pathArray.length - 1);
           pathArray.map((item) => {
