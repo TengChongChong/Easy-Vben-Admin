@@ -360,7 +360,6 @@
   .@{prefix-cls} {
     max-width: 100%;
     height: 100%;
-    padding: 16px;
 
     &-row__striped {
       td {
@@ -369,6 +368,8 @@
     }
 
     &-form-container {
+      padding: 16px;
+
       .ant-form {
         padding: 12px 10px 6px;
         margin-bottom: 16px;
@@ -382,7 +383,7 @@
     }
 
     .ant-table-wrapper {
-      padding: 15px;
+      padding: 16px;
       background-color: @component-background;
       border-radius: 2px;
 
