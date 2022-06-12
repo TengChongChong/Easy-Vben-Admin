@@ -149,6 +149,16 @@ export const useUserStore = defineStore({
       return userInfo;
     },
     /**
+     * 刷新当前登录用户信息
+     *
+     * @returns
+     */
+    async refreshCurrentUserAction(): Promise<SysUser | null> {
+      console.log('刷新当前登录用户信息');
+      return this.getCurrentUserAction();
+    },
+
+    /**
      * 退出
      */
     async logout(goLogin = false) {
