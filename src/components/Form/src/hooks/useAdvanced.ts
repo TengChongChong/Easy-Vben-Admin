@@ -152,7 +152,7 @@ export default function ({
 
     advanceState.actionSpan = (realItemColSum % BASIC_COL_LEN) + unref(getEmptySpan);
 
-    getAdvanced(unref(getProps).actionColOptions || { span: BASIC_COL_LEN }, itemColSum, true);
+    getAdvanced(unref(getProps).baseColProps || { span: BASIC_COL_LEN }, itemColSum, true);
 
     emit('advanced-change');
   }

@@ -66,10 +66,10 @@ export const basicProps = {
     },
   },
   rulesMessageJoinLabel: propTypes.bool.def(true),
-  // 超过1行自动折叠
-  autoAdvancedLine: propTypes.number.def(1),
+  // 超过3行自动折叠
+  autoAdvancedLine: propTypes.number.def(3),
   // 不受折叠影响的行数
-  alwaysShowLines: propTypes.number.def(1),
+  alwaysShowLines: propTypes.number.def(2),
 
   // 是否显示操作按钮
   showActionButtonGroup: propTypes.bool.def(true),
@@ -82,7 +82,7 @@ export const basicProps = {
   // 重置按钮配置
   resetButtonOptions: Object as PropType<Partial<ButtonProps>>,
 
-  // 显示确认按钮
+  // 显示查询按钮
   showSubmitButton: propTypes.bool.def(true),
   // 确认按钮配置
   submitButtonOptions: Object as PropType<Partial<ButtonProps>>,
