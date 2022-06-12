@@ -53,13 +53,11 @@
           {
             field: 'password',
             label: t('layout.header.lockScreenPassword'),
-            colProps: {
-              span: 24,
-            },
             component: 'InputPassword',
             required: true,
           },
         ],
+        baseColProps: { md: 24 },
       });
 
       async function handleLock() {

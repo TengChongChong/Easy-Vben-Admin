@@ -7,7 +7,7 @@
         :src="getCurrentUser.avatar"
       />
       <a-avatar size="small" :class="`${prefixCls}__header`" v-if="!getCurrentUser.avatar">{{
-        getCurrentUser.nickname.substring(0, 1)
+        getCurrentUser.nickname?.substring(0, 1)
       }}</a-avatar>
 
       <span :class="`${prefixCls}__info hidden md:block`">
