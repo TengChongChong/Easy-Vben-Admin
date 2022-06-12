@@ -46,7 +46,7 @@
       const getInfo = () => {
         get(unref(id)).then((res) => {
           // 设置标题
-          setTitle(res.url);
+          setTitle(`详情 > ${res.url}`);
 
           logInfo.value = res;
         });
