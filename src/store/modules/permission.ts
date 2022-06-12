@@ -5,7 +5,11 @@ import { store } from '/@/store';
 import { useI18n } from '/@/hooks/web/useI18n';
 import { useUserStore } from './user';
 import { transformObjToRoute, flatMultiLevelRoutes } from '/@/router/helper/routeHelper';
-import { transformRouteToMenu } from '/@/router/helper/menuHelper';
+import {
+  setCurrentActiveMenu,
+  setHideChildrenInMenu,
+  transformRouteToMenu,
+} from '/@/router/helper/menuHelper';
 
 import { ERROR_LOG_ROUTE, PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic';
 
@@ -162,9 +166,18 @@ export const usePermissionStore = defineStore({
                 icon: item.icon,
                 hideMenu: item.display === '0',
                 ignoreKeepAlive: false,
-                frameSrc: isExternal && !isNewPageOpenMode ? item.path : undefined,
               },
             };
+            if (routeRecord.path.indexOf(':')) {
+              routeRecord.meta.dynamicLevel = 3;
+              routeRecord.meta.realPath = routeRecord.path.substring(
+                0,
+                routeRecord.path.indexOf(':') - 1,
+              );
+            }
+            if (isExternal && !isNewPageOpenMode) {
+              routeRecord.meta.frameSrc = item.path;
+            }
             if (isExternal && !isNewPageOpenMode) {
               routeRecord.path = `/${item.id}`;
             }
@@ -172,6 +185,11 @@ export const usePermissionStore = defineStore({
           }
         });
         route = listToTree(permissionArray) as AppRouteRecordRaw[];
+
+        setHideChildrenInMenu(route);
+
+        setCurrentActiveMenu(route, null);
+
         return route;
       };
 

@@ -4,6 +4,7 @@ import { findPath, treeMap } from '/@/utils/helper/treeHelper';
 import { cloneDeep } from 'lodash-es';
 import { RouteParams } from 'vue-router';
 import { toRaw } from 'vue';
+import { isNullOrUnDef } from '/@/utils/is';
 
 export function getAllParentPath<T = Recordable>(treeData: T[], path: string) {
   const menuList = findPath(treeData, (n) => n.path === path) as Menu[];
@@ -20,23 +21,45 @@ export function transformMenuModule(menuModule: MenuModule): Menu {
 }
 
 /**
- * 清除隐藏的菜单项
+ * 如果所有子路由都是隐藏的，设置hideChildrenInMenu属性
  *
  * @param routeModList 路由
  */
-function clearHideMenu(routeModList: AppRouteModule[]) {
-  for (let i = 0; i < routeModList.length; i++) {
-    if (routeModList[i].meta.hideMenu) {
-      // 不显示的菜单
-      routeModList.splice(i, 1);
-      i--;
+export function setHideChildrenInMenu(routeModList: AppRouteModule[]) {
+  routeModList.map((item) => {
+    if (item.children && item.children.length) {
+      setHideChildrenInMenu(item.children);
+      let havDisplay = false;
+      for (let i = 0; i < item.children.length && !havDisplay; i++) {
+        if (isNullOrUnDef(item.children[i].meta.hideMenu) || !item.children[i].meta.hideMenu) {
+          havDisplay = true;
+        }
+      }
+      if (!havDisplay) {
+        item.meta.hideChildrenInMenu = true;
+      }
     }
+  });
+}
 
-    if (routeModList[i]?.children) {
-      // @ts-ignore
-      clearHideMenu(routeModList[i].children);
+/**
+ * 设置当前激活路由，用于访问隐藏的路由时激活父路由
+ *
+ * @param routeModList 路由
+ * @param parent 父路由
+ */
+export function setCurrentActiveMenu(
+  routeModList: AppRouteModule[],
+  parent: AppRouteModule | null,
+) {
+  routeModList.map((item) => {
+    if (item.meta.hideMenu && parent) {
+      item.meta.currentActiveMenu = parent.path;
     }
-  }
+    if (item.children && item.children.length) {
+      setCurrentActiveMenu(item.children, item);
+    }
+  });
 }
 
 /**
@@ -47,7 +70,6 @@ function clearHideMenu(routeModList: AppRouteModule[]) {
  */
 export function transformRouteToMenu(routeModList: AppRouteModule[], routerMapping = false) {
   const cloneRouteModList = cloneDeep(routeModList);
-  clearHideMenu(cloneRouteModList);
   const routeList: AppRouteRecordRaw[] = [];
 
   cloneRouteModList.forEach((item) => {
