@@ -1,6 +1,6 @@
 <template>
   <Authority :value="auth">
-    <a-button type="primary" @click="handleClick">
+    <a-button :type="type" :size="size" @click="handleClick">
       <template v-if="icon" #icon>
         <Icon :icon="icon" />
       </template>
@@ -15,22 +15,23 @@
   import { Icon } from '/@/components/Icon';
   import { propTypes } from '/@/utils/propTypes';
   import { Authority } from '/@/components/Authority';
+
   export default defineComponent({
     name: 'AButtonLink',
     components: { Authority, Icon },
     props: {
+      type: propTypes.string,
+      size: propTypes.string,
       auth: propTypes.string,
       icon: propTypes.string,
       path: propTypes.string.isRequired,
       text: propTypes.string,
     },
-    emits: ['click'],
-    setup(props, { emit }) {
+    setup(props) {
       const go = useGo();
 
       return {
         handleClick: () => {
-          emit('click');
           go(props.path);
         },
       };
