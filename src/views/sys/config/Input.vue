@@ -25,6 +25,7 @@
   import { save } from '/@/api/sys/sysConfig';
   import { Icon } from '/@/components/Icon';
   import { SysConfig } from '/@/api/sys/model/sysConfigModel';
+  import { RoleEnum } from '/@/enums/roleEnum';
 
   export default defineComponent({
     name: 'SysConfigInput',
@@ -66,7 +67,7 @@
             field: 'sys',
             label: '是否系统',
             required: true,
-            auth: 'sys:admin',
+            auth: RoleEnum.SYS_ADMIN,
             component: 'DictRadio',
             componentProps: {
               dictType: 'whether',

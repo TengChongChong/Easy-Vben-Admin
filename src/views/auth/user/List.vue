@@ -1,52 +1,64 @@
 <template>
-  <PageWrapper dense contentFullHeight fixedHeight contentClass="flex">
-    <DeptTree class="w-1/4 xl:w-1/5" @select="handleSelect" />
-    <!-- 表格 -->
-    <BasicTable
-      @register="registerTable"
-      class="w-3/4 xl:w-4/5"
-      :searchInfo="searchInfo"
-      :rowSelection="{ type: 'checkbox', onChange: onSelectChange }"
-    >
-      <template #toolbar>
-        <a-button-add v-if="searchInfo.deptId" auth="sys:user:save" @click="handleCreate" />
-        <a-button-remove-batch
-          auth="sys:user:remove"
-          :id="checkedKeys"
-          :api="remove"
-          @success="reload"
-        />
-      </template>
+  <PageWrapper dense>
+    <a-row>
+      <a-col :xxl="6" :xl="8" :lg="10" :md="12" :sm="24">
+        <DeptTree @select="handleSelect" />
+      </a-col>
+      <a-col :xxl="18" :xl="16" :lg="14" :md="12" :sm="24">
+        <!-- 表格 -->
+        <BasicTable
+          @register="registerTable"
+          :searchInfo="searchInfo"
+          :rowSelection="{ type: 'checkbox', onChange: onSelectChange }"
+        >
+          <template #toolbar>
+            <a-button-add v-if="searchInfo.deptId" auth="sys:user:save" @click="handleCreate" />
+            <a-button-remove-batch
+              auth="sys:user:remove"
+              :id="checkedKeys"
+              :api="remove"
+              @success="reload"
+            />
+          </template>
 
-      <template #bodyCell="{ column, record }">
-        <template v-if="column.key === 'avatar'">
-          <a-avatar v-if="record.avatar" :src="apiUrl + record.avatar" />
-          <a-avatar v-if="!record.avatar">{{ record.nickname.substring(0, 1) }}</a-avatar>
-        </template>
+          <template #bodyCell="{ column, record }">
+            <template v-if="column.key === 'avatar'">
+              <a-avatar v-if="record.avatar" :src="apiUrl + record.avatar" />
+              <a-avatar v-if="!record.avatar">{{ record.nickname?.substring(0, 1) }}</a-avatar>
+            </template>
 
-        <template v-if="column.key === 'action'">
-          <a-tooltip>
-            <template #title>重置密码</template>
-            <a-popconfirm
-              title="确定要重置为默认密码吗？"
-              ok-text="是"
-              cancel-text="否"
-              @confirm="handleResetPassword(record.id)"
-            >
-              <a-button type="link" danger size="small">
-                <template #icon>
-                  <Icon icon="ant-design:redo-outlined" />
-                </template>
-              </a-button>
-            </a-popconfirm>
-          </a-tooltip>
-          <a-divider type="vertical" />
-          <a-button-edit auth="sys:user:save" :id="record.id" @click="handleEdit" />
-          <a-divider type="vertical" />
-          <a-button-remove auth="sys:user:remove" :id="record.id" :api="remove" @success="reload" />
-        </template>
-      </template>
-    </BasicTable>
+            <template v-if="column.key === 'action'">
+              <Authority value="sys:user:save">
+                <a-tooltip>
+                  <template #title>重置密码</template>
+                  <a-popconfirm
+                    title="确定要重置为默认密码吗？"
+                    ok-text="是"
+                    cancel-text="否"
+                    @confirm="handleResetPassword(record.id)"
+                  >
+                    <a-button type="link" danger size="small">
+                      <template #icon>
+                        <Icon icon="ant-design:redo-outlined" />
+                      </template>
+                    </a-button>
+                  </a-popconfirm>
+                </a-tooltip>
+              </Authority>
+              <a-divider type="vertical" />
+              <a-button-edit auth="sys:user:save" :id="record.id" @click="handleEdit" />
+              <a-divider type="vertical" />
+              <a-button-remove
+                auth="sys:user:remove"
+                :id="record.id"
+                :api="remove"
+                @success="reload"
+              />
+            </template>
+          </template>
+        </BasicTable>
+      </a-col>
+    </a-row>
     <!-- 表单 -->
     <SysUserInput @register="registerDrawer" @success="reload" />
   </PageWrapper>
@@ -66,6 +78,7 @@
   import { PageWrapper } from '/@/components/Page';
   import DeptTree from '/@/views/auth/user/DeptTree.vue';
   import { useGlobSetting } from '/@/hooks/setting';
+  import { Authority } from '/@/components/Authority';
   import { Icon } from '/@/components/Icon';
   import { Modal } from 'ant-design-vue';
 
@@ -81,6 +94,7 @@
       AButtonEdit,
       AButtonAdd,
       BasicTable,
+      Authority,
     },
     setup() {
       const globSetting = useGlobSetting();
@@ -100,6 +114,11 @@
         useSearchForm: true,
         formConfig: {
           schemas: searchFormSchema,
+          baseColProps: {
+            xxl: 8,
+            xl: 12,
+            lg: 24,
+          },
         },
         actionColumn: {
           width: 140,

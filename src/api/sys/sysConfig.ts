@@ -41,21 +41,6 @@ export function getByKey(key: string) {
 }
 
 /**
- * 新增
- *
- * @param id 父id
- * @param dictType 字典类型
- */
-export function add(id: string | undefined, dictType: string | undefined) {
-  return defHttp.get<SysConfig>({
-    url: `${BASE_URL}add/${id || ''}`,
-    params: {
-      dictType,
-    },
-  });
-}
-
-/**
  * 删除
  *
  * @param ids ids

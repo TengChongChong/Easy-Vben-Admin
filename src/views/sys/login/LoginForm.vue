@@ -84,8 +84,6 @@
   </Form>
 </template>
 <script lang="ts" setup>
-  import md5 from 'md5';
-
   import { reactive, ref, unref, computed } from 'vue';
 
   import { Checkbox, Form, Input, Row, Col, Button, Divider, Alert } from 'ant-design-vue';
@@ -104,6 +102,7 @@
   import { useUserStore } from '/@/store/modules/user';
   import { LoginStateEnum, useLoginState, useFormRules, useFormValid } from './useLogin';
   import { useDesign } from '/@/hooks/web/useDesign';
+  import { encryptByMd5 } from '/@/utils/cipher';
 
   const ACol = Col;
   const ARow = Row;
@@ -140,8 +139,8 @@
     try {
       loading.value = true;
       const userInfo = await userStore.login({
-        password: md5(data.password),
-        username: data.username,
+        password: encryptByMd5(data.password.trim()),
+        username: data.username.trim(),
         mode: 'none',
       });
       if (userInfo) {

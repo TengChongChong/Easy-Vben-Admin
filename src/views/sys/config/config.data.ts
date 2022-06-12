@@ -1,4 +1,5 @@
 import { BasicColumn, FormSchema } from '/@/components/Table';
+import { RoleEnum } from '/@/enums/roleEnum';
 
 /**
  * 查询条件
@@ -12,6 +13,11 @@ export const searchFormSchema: FormSchema[] = [
   {
     field: 'value',
     label: 'value',
+    component: 'Input',
+  },
+  {
+    field: 'remarks',
+    label: '备注',
     component: 'Input',
   },
 ];
@@ -44,7 +50,7 @@ export const columns: BasicColumn[] = [
     dataIndex: 'sys',
     sorter: true,
     width: 100,
-    auth: 'sys:admin',
+    auth: RoleEnum.SYS_ADMIN,
     format: 'dict|whether',
     filters: 'dict|whether',
   },

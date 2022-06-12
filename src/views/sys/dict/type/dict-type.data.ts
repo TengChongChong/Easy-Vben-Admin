@@ -1,4 +1,5 @@
 import { BasicColumn, FormSchema } from '/@/components/Table';
+import { RoleEnum } from '/@/enums/roleEnum';
 
 /**
  * 查询条件
@@ -42,7 +43,7 @@ export const columns: BasicColumn[] = [
     dataIndex: 'sys',
     sorter: true,
     width: 100,
-    auth: 'sys:admin',
+    auth: RoleEnum.SYS_ADMIN,
     format: 'dict|whether',
     filters: 'dict|whether',
   },
@@ -81,7 +82,7 @@ export const formSchema: FormSchema[] = [
     field: 'sys',
     label: '是否系统',
     required: true,
-    auth: 'sys:admin',
+    auth: RoleEnum.SYS_ADMIN,
     component: 'DictRadio',
     componentProps: {
       dictType: 'whether',
