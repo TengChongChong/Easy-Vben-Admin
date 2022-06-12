@@ -1,6 +1,11 @@
 import type { AppRouteRecordRaw } from '/@/router/types';
 
-import { PAGE_NOT_FOUND_ROUTE, REDIRECT_ROUTE } from '/@/router/routes/basic';
+import {
+  MAIL_VERIFIES,
+  PAGE_NOT_FOUND_ROUTE,
+  REDIRECT_ROUTE,
+  SYS_FUNCTION,
+} from '/@/router/routes/basic';
 
 import { mainOutRoutes } from './mainOut';
 import { PageEnum } from '/@/enums/pageEnum';
@@ -14,7 +19,7 @@ export const RootRoute: AppRouteRecordRaw = {
     title: 'Root',
   },
 };
-
+// 登录
 export const LoginRoute: AppRouteRecordRaw = {
   path: '/login',
   name: 'Login',
@@ -31,4 +36,6 @@ export const basicRoutes = [
   ...mainOutRoutes,
   REDIRECT_ROUTE,
   PAGE_NOT_FOUND_ROUTE,
+  SYS_FUNCTION,
+  MAIL_VERIFIES,
 ];

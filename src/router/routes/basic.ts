@@ -76,3 +76,35 @@ export const ERROR_LOG_ROUTE: AppRouteRecordRaw = {
     },
   ],
 };
+
+// 公共路由
+export const SYS_FUNCTION: AppRouteRecordRaw = {
+  path: '/sys-function',
+  name: 'SysFunction',
+  component: LAYOUT,
+  redirect: '/auth/personal/center/view',
+  meta: {
+    title: '系统功能',
+  },
+  children: [
+    {
+      path: '/auth/personal/center/view',
+      name: 'AuthPersonalCenterView',
+      component: () => import('/@/views/auth/personal/center/View.vue'),
+      meta: {
+        title: '个人中心',
+        icon: 'ant-design:user-outlined',
+      },
+    },
+  ],
+};
+
+// 邮箱验证
+export const MAIL_VERIFIES: AppRouteRecordRaw = {
+  path: '/auth/personal/center/mail-verifies/:code',
+  name: 'AuthPersonalSettingMailVerifies',
+  component: () => import('/@/views/auth/personal/center/MailVerifies.vue'),
+  meta: {
+    title: '邮箱验证',
+  },
+};
