@@ -21,7 +21,7 @@ export const searchFormSchema: FormSchema[] = [
   },
   {
     field: 'path',
-    label: '路径',
+    label: 'Path',
     component: 'Input',
   },
 ];
@@ -53,7 +53,7 @@ export const columns: BasicColumn[] = [
     width: 200,
   },
   {
-    title: 'path',
+    title: 'Path',
     dataIndex: 'path',
     width: 240,
   },

@@ -94,7 +94,7 @@
           },
           {
             field: 'path',
-            label: '地址',
+            label: 'Path',
             component: 'Input',
             rules: [{ max: 255, message: '编码不能超过255个字符', trigger: 'blur' }],
             ifShow: ({ values }) => values.type === 'menu',
