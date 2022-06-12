@@ -144,14 +144,15 @@ export class VAxios {
       });
     }
 
+    const { requestOptions } = this.options;
+    config.url = `${requestOptions?.apiUrl}${config.url}`;
+
     return this.axiosInstance.request<T>({
       ...config,
       method: 'POST',
       data: formData,
       headers: {
         'Content-type': ContentTypeEnum.FORM_DATA,
-        // @ts-ignore
-        ignoreCancelToken: true,
       },
     });
   }
