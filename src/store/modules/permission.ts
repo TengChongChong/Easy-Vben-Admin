@@ -27,6 +27,7 @@ interface PermissionState {
   // 菜单
   backMenuList: Menu[];
 }
+
 export const usePermissionStore = defineStore({
   id: 'app-permission',
   state: (): PermissionState => ({
@@ -123,7 +124,7 @@ export const usePermissionStore = defineStore({
        */
       function generatorName(menu: SysPermission): string {
         if (menu.component) {
-          const paths = menu.component.split(/\/|-/);
+          const paths = menu.component.replace('.vue', '').split(/\/|-/);
           let name = '';
           paths.map((item) => {
             name += item.replace(/^\S/, function (s) {
@@ -146,22 +147,28 @@ export const usePermissionStore = defineStore({
         const permissionArray: AppRouteRecordRaw[] = [];
         permissionList.map((item) => {
           if (item.type != MenuTypeEnum.BUTTON) {
-            permissionArray.push({
+            const isExternal = item.external === '1';
+            const isNewPageOpenMode = item.openMode === '2';
+            const routeRecord: AppRouteRecordRaw = {
               // @ts-ignore
               id: item.id,
               parentId: item.parentId,
               path: item.path || `/${item.id}`,
               name: item.name || generatorName(item),
-              component: item.component || 'LAYOUT',
+              component: isExternal ? 'IFrame' : item.component || 'LAYOUT',
               meta: {
                 // @ts-ignore
                 title: item.title,
                 icon: item.icon,
                 hideMenu: item.display === '0',
                 ignoreKeepAlive: false,
-                frameSrc: item.external === '1' ? item.path : undefined,
+                frameSrc: isExternal && !isNewPageOpenMode ? item.path : undefined,
               },
-            });
+            };
+            if (isExternal && !isNewPageOpenMode) {
+              routeRecord.path = `/${item.id}`;
+            }
+            permissionArray.push(routeRecord);
           }
         });
         route = listToTree(permissionArray) as AppRouteRecordRaw[];
@@ -190,6 +197,7 @@ export const usePermissionStore = defineStore({
             children && children.length > 0 && patcher(children, currentPath);
           });
         }
+
         try {
           patcher(routes);
         } catch (e) {
