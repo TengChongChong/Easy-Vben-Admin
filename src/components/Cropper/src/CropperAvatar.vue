@@ -46,6 +46,7 @@
   import { useI18n } from '/@/hooks/web/useI18n';
   import type { ButtonProps } from '/@/components/Button';
   import Icon from '/@/components/Icon';
+  import { useGlobSetting } from '/@/hooks/setting';
 
   const props = {
     width: { type: [String, Number], default: '200px' },
@@ -67,6 +68,9 @@
       const [register, { openModal, closeModal }] = useModal();
       const { createMessage } = useMessage();
       const { t } = useI18n();
+
+      const globSetting = useGlobSetting();
+      const apiUrl = ref(globSetting.apiUrl);
 
       const getClass = computed(() => [prefixCls]);
 
@@ -91,9 +95,9 @@
         },
       );
 
-      function handleUploadSuccess({ source }) {
-        sourceValue.value = source;
-        emit('change', source);
+      function handleUploadSuccess({ data }) {
+        sourceValue.value = apiUrl.value + data.url;
+        emit('change', data);
         createMessage.success(t('component.cropper.uploadSuccess'));
       }
 
