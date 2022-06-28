@@ -42,7 +42,6 @@
       // icon size
       size: {
         type: [String, Number] as PropType<string | number>,
-        default: 16,
       },
       spin: propTypes.bool.def(false),
       prefix: propTypes.string.def(''),
