@@ -27,12 +27,14 @@
         />
         <MenuDivider v-if="getShowDoc" />
         <MenuItem key="personal-center" text="个人中心" icon="ant-design:user-outlined" />
+        <MenuItem key="sys-message" text="我的消息" icon="ant-design:mail-outlined" />
         <MenuItem
           v-if="getUseLockPage"
           key="lock"
           :text="t('layout.header.tooltipLock')"
           icon="ion:lock-closed-outline"
         />
+        <MenuDivider />
         <MenuItem
           key="logout"
           :text="t('layout.header.dropdownItemLoginOut')"
@@ -113,6 +115,9 @@
             break;
           case 'personal-center':
             go('/auth/personal/center/view');
+            break;
+          case 'sys-message':
+            go('/sys/message/view/receive');
             break;
           case 'lock':
             handleLock();
