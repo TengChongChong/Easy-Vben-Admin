@@ -54,7 +54,6 @@
             field: 'password',
             label: t('layout.header.lockScreenPassword'),
             component: 'InputPassword',
-            required: true,
           },
         ],
         baseColProps: { md: 24 },
