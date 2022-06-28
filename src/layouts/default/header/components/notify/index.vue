@@ -1,63 +1,100 @@
 <template>
   <div :class="prefixCls">
-    <Popover title="" trigger="click" :overlayClassName="`${prefixCls} ${prefixCls}__overlay`">
-      <Badge :count="count" dot :numberStyle="numberStyle">
+    <a-popover title="" trigger="click" :overlayClassName="`${prefixCls} ${prefixCls}__overlay`">
+      <a-badge :count="count" dot>
         <BellOutlined />
-      </Badge>
+      </a-badge>
       <template #content>
-        <Tabs>
-          <template v-for="item in listData" :key="item.key">
-            <TabPane>
-              <template #tab>
-                {{ item.name }}
-                <span v-if="item.list.length !== 0">({{ item.list.length }})</span>
-              </template>
-              <!-- 绑定title-click事件的通知列表中标题是“可点击”的-->
-              <NoticeList :list="item.list" v-if="item.key === '1'" @title-click="onNoticeClick" />
-              <NoticeList :list="item.list" v-else />
-            </TabPane>
-          </template>
-        </Tabs>
+        <a-tabs>
+          <a-tab-pane key="message">
+            <template #tab>
+              消息
+              <span v-if="messageList.length">({{ messageList.length }})</span>
+            </template>
+            <MessageList :list="messageList" />
+          </a-tab-pane>
+          <a-tab-pane key="to-do">
+            <template #tab>
+              待办
+              <span v-if="toDoList.length">({{ toDoList.length }})</span>
+            </template>
+            todo: 待开发
+          </a-tab-pane>
+        </a-tabs>
       </template>
-    </Popover>
+    </a-popover>
   </div>
 </template>
 <script lang="ts">
-  import { computed, defineComponent, ref } from 'vue';
-  import { Popover, Tabs, Badge } from 'ant-design-vue';
+  import { computed, defineComponent, onMounted, ref } from 'vue';
   import { BellOutlined } from '@ant-design/icons-vue';
-  import { tabListData, ListItem } from './data';
-  import NoticeList from './NoticeList.vue';
+  import MessageList from './MessageList.vue';
   import { useDesign } from '/@/hooks/web/useDesign';
-  import { useMessage } from '/@/hooks/web/useMessage';
+  import { SysMessage } from '/@/api/sys/model/sysMessageModel';
+  import { selectReceive, selectUnreadCount } from '/@/api/sys/sysMessage';
+  import { SysMessageDetailsStatus } from '/@/views/sys/message/message.data';
+  import { getByKey } from '/@/api/sys/sysConfig';
 
   export default defineComponent({
-    components: { Popover, BellOutlined, Tabs, TabPane: Tabs.TabPane, Badge, NoticeList },
+    components: { BellOutlined, MessageList },
     setup() {
       const { prefixCls } = useDesign('header-notify');
-      const { createMessage } = useMessage();
-      const listData = ref(tabListData);
+      let timeStamp: Nullable<number> = null;
 
-      const count = computed(() => {
-        let count = 0;
-        for (let i = 0; i < tabListData.length; i++) {
-          count += tabListData[i].list.length;
+      // 消息检查定时任务
+      let messageCheckTimeout: Nullable<TimeoutHandle> = null;
+
+      onMounted(async () => {
+        if (timeStamp == null) {
+          try {
+            // 获取后台配置的 新消息检查间隔时长
+            getByKey('messageCheckInterval').then((res) => {
+              timeStamp = Number(res.value) * 1000;
+            });
+          } catch (e) {
+            timeStamp = 1000 * 60 * 5;
+          } finally {
+            if (messageCheckTimeout == null) {
+              refreshMessage();
+            }
+          }
         }
-        return count;
       });
 
-      function onNoticeClick(record: ListItem) {
-        createMessage.success('你点击了通知，ID=' + record.id);
-        // 可以直接将其标记为已读（为标题添加删除线）,此处演示的代码会切换删除线状态
-        record.titleDelete = !record.titleDelete;
+      // 未读消息
+      const messageList = ref<SysMessage[]>([]);
+      // 待办任务
+      const toDoList = ref<SysMessage[]>([]);
+
+      const count = computed(() => {
+        return messageList.value.length + toDoList.value.length;
+      });
+
+      function refreshMessage() {
+        selectUnreadCount().then((res) => {
+          if (res > 0) {
+            // 有未读消息
+            selectReceive(
+              { detailsStatus: SysMessageDetailsStatus.RECEIVE_STATUS_UNREAD },
+              { pageSize: 20 },
+            ).then((res) => {
+              messageList.value = res.records as SysMessage[];
+            });
+          }
+        });
+
+        if (timeStamp) {
+          messageCheckTimeout = setTimeout(() => {
+            refreshMessage();
+          }, timeStamp);
+        }
       }
 
       return {
         prefixCls,
-        listData,
+        messageList,
+        toDoList,
         count,
-        onNoticeClick,
-        numberStyle: {},
       };
     },
   });
@@ -66,10 +103,12 @@
   @prefix-cls: ~'@{namespace}-header-notify';
 
   .@{prefix-cls} {
-    padding-top: 2px;
-
     &__overlay {
       max-width: 360px;
+
+      .ant-popover-inner-content {
+        padding-top: 0;
+      }
     }
 
     .ant-tabs-content {
