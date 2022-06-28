@@ -1,0 +1,140 @@
+.generator {
+  .generator-form {
+    padding: 1rem;
+
+    .config-items {
+      position: relative;
+      margin: 0 -0.5rem;
+
+      &.config-table {
+        .config-item {
+          width: auto;
+          padding: 0.5rem;
+
+          .config-item-body {
+            text-align: center;
+
+            .config-item-body-control-tool {
+              top: -3px !important;
+            }
+          }
+        }
+      }
+
+      &.config-input {
+        .config-item {
+          width: 49.99%;
+
+          .config-item-body {
+            .config-item-body-label {
+              > label {
+                height: auto !important;
+              }
+            }
+
+            .config-item-body-control-tool {
+              top: -3px !important;
+            }
+          }
+        }
+      }
+
+      .config-item {
+        display: inline-block;
+        width: 24.99%;
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+
+        .config-item-body {
+          display: flex;
+          flex-flow: row wrap;
+          padding: 0.5rem 1rem;
+          border: 1px dashed @primary-color;
+          border-radius: 2px;
+          background-color: #fff;
+
+          .config-item-body-label {
+            display: inline-block;
+            flex-grow: 0;
+            width: 100px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-align: right;
+            vertical-align: middle;
+
+            > label {
+              position: relative;
+              display: inline-flex;
+              align-items: center;
+              max-width: 100%;
+              height: 44px;
+              color: rgb(0 0 0 / 85%);
+              font-size: 14px;
+              cursor: pointer;
+
+              &::after {
+                content: ':';
+                position: relative;
+                top: -0.5px;
+                margin: 0 8px 0 2px;
+              }
+            }
+          }
+
+          .config-item-body-control {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            flex: 1 1 0;
+            width: calc(100% - 100px);
+            padding-right: 24px;
+
+            .config-item-body-control-mark {
+              position: absolute;
+              top: -12px;
+              left: -14px;
+
+              .control-mark {
+                display: inline-block;
+                width: 8px;
+                height: 8px;
+                border-radius: 50%;
+                margin: 0 2px;
+
+                &.control-mark-filter {
+                  background-color: #1890ff;
+                }
+
+                &.control-mark-format {
+                  background-color: #13c2c2;
+                }
+              }
+            }
+
+            .config-item-body-control-tool {
+              position: absolute;
+              top: 8px;
+              right: -3px;
+
+              .ant-btn {
+                min-width: 18px;
+                width: 18px;
+                height: 18px;
+                font-size: 11px;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .footer-button {
+      padding: 1rem;
+      text-align: right;
+
+      .ant-btn {
+        margin: 0 10px;
+      }
+    }
+  }
+}
