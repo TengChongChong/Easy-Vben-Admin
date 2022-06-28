@@ -1,56 +1,44 @@
 <template>
   <div :class="prefixCls" :style="{ width: containerWidth }">
-    <ImgUpload
-      :fullscreen="fullscreen"
-      @uploading="handleImageUploading"
-      @done="handleDone"
-      v-if="showImageUpload"
-      v-show="editorRef"
-      :disabled="disabled"
-    />
     <textarea
       :id="tinymceId"
       ref="elRef"
       :style="{ visibility: 'hidden' }"
       v-if="!initOptions.inline"
-    ></textarea>
+    >
+    </textarea>
     <slot v-else></slot>
+
+    <insert-image-modal
+      @register="registerInsertImageModal"
+      @uploading="handleUploading"
+      @done="handleDone"
+    />
   </div>
 </template>
 
 <script lang="ts">
+  // tinymce 插件列表 http://tinymce.ax-z.cn/plugins/advlist.php
   import type { Editor, RawEditorSettings } from 'tinymce';
   import tinymce from 'tinymce/tinymce';
   import 'tinymce/themes/silver';
   import 'tinymce/icons/default/icons';
+  // 高级列表
   import 'tinymce/plugins/advlist';
-  import 'tinymce/plugins/anchor';
+  import 'tinymce/plugins/lists';
+  // 自动链接
   import 'tinymce/plugins/autolink';
-  import 'tinymce/plugins/autosave';
-  import 'tinymce/plugins/code';
-  import 'tinymce/plugins/codesample';
-  import 'tinymce/plugins/directionality';
   import 'tinymce/plugins/fullscreen';
   import 'tinymce/plugins/hr';
-  import 'tinymce/plugins/insertdatetime';
   import 'tinymce/plugins/link';
-  import 'tinymce/plugins/lists';
-  import 'tinymce/plugins/media';
-  import 'tinymce/plugins/nonbreaking';
-  import 'tinymce/plugins/noneditable';
-  import 'tinymce/plugins/pagebreak';
   import 'tinymce/plugins/paste';
-  import 'tinymce/plugins/preview';
-  import 'tinymce/plugins/print';
-  import 'tinymce/plugins/save';
+  // 查找替换
   import 'tinymce/plugins/searchreplace';
-  import 'tinymce/plugins/spellchecker';
+  // tab切入切出
   import 'tinymce/plugins/tabfocus';
-  // import 'tinymce/plugins/table';
-  import 'tinymce/plugins/template';
+  import 'tinymce/plugins/table';
+  // 快速排版
   import 'tinymce/plugins/textpattern';
-  import 'tinymce/plugins/visualblocks';
-  import 'tinymce/plugins/visualchars';
   import 'tinymce/plugins/wordcount';
 
   import {
@@ -63,7 +51,7 @@
     onDeactivated,
     onBeforeUnmount,
   } from 'vue';
-  import ImgUpload from './ImgUpload.vue';
+  import InsertImageModal from './InsertImageModal.vue';
   import { toolbar, plugins } from './tinymce';
   import { buildShortUUID } from '/@/utils/uuid';
   import { bindHandlers } from './helper';
@@ -72,6 +60,7 @@
   import { isNumber } from '/@/utils/is';
   import { useLocale } from '/@/locales/useLocale';
   import { useAppStore } from '/@/store/modules/app';
+  import { useModal } from '/@/components/Modal';
 
   const tinymceProps = {
     options: {
@@ -105,19 +94,18 @@
     },
     showImageUpload: {
       type: Boolean,
-      default: true,
+      default: false,
     },
   };
 
   export default defineComponent({
     name: 'Tinymce',
-    components: { ImgUpload },
+    components: { InsertImageModal },
     inheritAttrs: false,
     props: tinymceProps,
     emits: ['change', 'update:modelValue', 'inited', 'init-error'],
     setup(props, { emit, attrs }) {
       const editorRef = ref<Nullable<Editor>>(null);
-      const fullscreen = ref(false);
       const tinymceId = ref<string>(buildShortUUID('tiny-vue'));
       const elRef = ref<Nullable<HTMLElement>>(null);
 
@@ -151,7 +139,8 @@
           selector: `#${unref(tinymceId)}`,
           height,
           toolbar,
-          menubar: 'file edit insert view format table',
+          // 工具栏 'file edit insert view format table',
+          menubar: '',
           plugins,
           language_url: publicPath + 'resource/tinymce/langs/' + langName.value + '.js',
           language: langName.value,
@@ -172,15 +161,17 @@
         };
       });
 
-      const disabled = computed(() => {
-        const { options } = props;
-        const getdDisabled = options && Reflect.get(options, 'readonly');
-        const editor = unref(editorRef);
-        if (editor) {
-          editor.setMode(getdDisabled ? 'readonly' : 'design');
-        }
-        return getdDisabled ?? false;
+      tinymce.PluginManager.add('insertImage', function (editor) {
+        // 注册一个工具栏按钮名称
+        editor.ui.registry.addButton('insertImage', {
+          icon: 'image',
+          tooltip: '添加图片',
+          onAction: function () {
+            openInsertImageModal(true);
+          },
+        });
       });
+      const [registerInsertImageModal, { openModal: openInsertImageModal }] = useModal();
 
       watch(
         () => attrs.disabled,
@@ -282,33 +273,29 @@
           emit('update:modelValue', content);
           emit('change', content);
         });
-
-        editor.on('FullscreenStateChanged', (e) => {
-          fullscreen.value = e.state;
-        });
       }
 
-      function handleImageUploading(name: string) {
+      function handleUploading(name: string) {
         const editor = unref(editorRef);
         if (!editor) {
           return;
         }
-        editor.execCommand('mceInsertContent', false, getUploadingImgName(name));
+        editor.execCommand('mceInsertContent', false, getUploadingName(name));
         const content = editor?.getContent() ?? '';
         setValue(editor, content);
       }
 
-      function handleDone(name: string, url: string) {
+      function handleDone(name: string, html: string) {
         const editor = unref(editorRef);
         if (!editor) {
           return;
         }
         const content = editor?.getContent() ?? '';
-        const val = content?.replace(getUploadingImgName(name), `<img src="${url}"/>`) ?? '';
+        const val = content?.replace(getUploadingName(name), html) ?? '';
         setValue(editor, val);
       }
 
-      function getUploadingImgName(name: string) {
+      function getUploadingName(name: string) {
         return `[uploading:${name}]`;
       }
 
@@ -319,11 +306,10 @@
         tinymceContent,
         elRef,
         tinymceId,
-        handleImageUploading,
+        handleUploading,
         handleDone,
         editorRef,
-        fullscreen,
-        disabled,
+        registerInsertImageModal,
       };
     },
   });
