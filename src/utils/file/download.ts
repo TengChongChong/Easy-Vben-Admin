@@ -1,5 +1,16 @@
 import { openWindow } from '..';
 import { dataURLtoBlob, urlToBase64 } from './base64Conver';
+import { useGlobSetting } from '/@/hooks/setting';
+
+/**
+ * 下载文件
+ *
+ * @param id {string} 文件下载id
+ */
+export function downloadFileById(id: string) {
+  const globSetting = useGlobSetting();
+  downloadByUrl({ url: `${globSetting.apiUrl}/download/${id}` });
+}
 
 /**
  * Download online pictures
