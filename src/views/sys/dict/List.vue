@@ -61,10 +61,9 @@
 </template>
 <script lang="ts">
   import { defineComponent, nextTick, ref } from 'vue';
-  import { useTable } from '/@/components/Table';
+  import { BasicTable, useTable } from '/@/components/Table';
   import { select, add, get, remove, refresh } from '/@/api/sys/sysDict';
-  import BasicTable from '/@/components/Table/src/BasicTable.vue';
-  import { columns, searchFormSchema } from '/@/views/sys/dict/dict.data';
+  import { columns } from '/@/views/sys/dict/dict.data';
   import { useDrawer } from '/@/components/Drawer';
   import AButtonAdd from '/@/components/Button/src/ButtonAdd.vue';
   import AButtonEdit from '/@/components/Button/src/ButtonEdit.vue';
@@ -77,6 +76,7 @@
   import { useDictStore } from '/@/store/modules/dict';
   import { Authority } from '/@/components/Authority';
   import { PageWrapper } from '/@/components/Page';
+  import { selectAll } from '/@/api/sys/sysDictType';
 
   export default defineComponent({
     name: 'SysDictList',
@@ -102,25 +102,41 @@
       /**
        * 初始化表格
        */
-      const [registerTable, { reload, getForm, setProps }] = useTable({
+      const [registerTable, { reload, getForm }] = useTable({
         title: '字典',
         api: select,
         columns,
+        useSearchForm: true,
+        formConfig: {
+          schemas: [
+            {
+              field: 'dictType',
+              label: '类型',
+              component: 'ApiSelect',
+              componentProps: {
+                api: selectAll,
+                onChange: () => {
+                  reloadTable();
+                },
+              },
+            },
+            {
+              field: 'code',
+              label: '编码',
+              component: 'Input',
+            },
+            {
+              field: 'name',
+              label: '名称',
+              component: 'Input',
+            },
+          ],
+        },
         actionColumn: {
           width: 140,
           title: '操作',
           key: 'action',
         },
-      });
-
-      nextTick(() => {
-        // 设置表格查询条件
-        setProps({
-          useSearchForm: true,
-          formConfig: {
-            schemas: searchFormSchema(reloadTable),
-          },
-        });
       });
 
       /**

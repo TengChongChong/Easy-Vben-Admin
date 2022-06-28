@@ -1,4 +1,5 @@
 import { BasicColumn, FormSchema } from '/@/components/Table';
+import dayjs from 'dayjs';
 
 /**
  * 查询条件
@@ -39,6 +40,21 @@ export const searchFormSchema: FormSchema[] = [
     label: '操作人',
     component: 'Input',
   },
+  {
+    field: '[startOperationDate, endOperationDate]',
+    label: '操作时间',
+    component: 'RangePicker',
+    componentProps: {
+      allowEmpty: [true, true],
+      showTime: true,
+      ranges: {
+        今天: [dayjs().startOf('day'), dayjs().endOf('day')],
+        本周: [dayjs().startOf('week'), dayjs().endOf('week')],
+        本月: [dayjs().startOf('month'), dayjs().endOf('month')],
+      },
+    },
+    colProps: { xxl: 12, xl: 16, md: 24 },
+  },
 ];
 
 // 表格列数据
@@ -63,16 +79,24 @@ export const columns: BasicColumn[] = [
     width: 120,
   },
   {
+    title: 'Http Method',
+    dataIndex: 'httpMethod',
+    sorter: true,
+    width: 160,
+    format: 'dict|httpMethod',
+    filters: 'dict|httpMethod',
+  },
+  {
     title: 'Uri',
     dataIndex: 'uri',
     sorter: true,
-    width: 160,
+    width: 280,
   },
   {
     title: '类',
     dataIndex: 'clazz',
     sorter: true,
-    width: 240,
+    width: 460,
     ellipsis: true,
     customRender: ({ record }) => `${record.clazz}.${record.methodName}()`,
   },

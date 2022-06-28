@@ -88,7 +88,7 @@
 </template>
 <script lang="ts">
   import { defineComponent, ref } from 'vue';
-  import { useTable } from '/@/components/Table';
+  import { BasicTable, useTable } from '/@/components/Table';
   import {
     select,
     add,
@@ -98,7 +98,6 @@
     startAll,
     pauseAll,
   } from '/@/api/scheduler/schedulerJob';
-  import BasicTable from '/@/components/Table/src/BasicTable.vue';
   import { columns, searchFormSchema } from '/@/views/scheduler/job/job.data';
   import { useDrawer } from '/@/components/Drawer';
   import AButtonAdd from '/@/components/Button/src/ButtonAdd.vue';

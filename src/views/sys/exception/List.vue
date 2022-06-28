@@ -16,16 +16,7 @@
 
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'action'">
-          <a-tooltip>
-            <template #title>详情</template>
-            <a-button-link
-              type="link"
-              size="small"
-              :path="`/sys/exception/info/${record.id}`"
-              icon="ant-design:search-outlined"
-            />
-          </a-tooltip>
-
+          <a-button-info :path="`/sys/exception/info/${record.id}`" />
           <a-divider type="vertical" />
           <a-button-remove
             auth="sys:exception:remove"
@@ -40,19 +31,18 @@
 </template>
 <script lang="ts">
   import { defineComponent, ref } from 'vue';
-  import { useTable } from '/@/components/Table';
+  import { BasicTable, useTable } from '/@/components/Table';
   import { select, remove } from '/@/api/sys/sysException';
-  import BasicTable from '/@/components/Table/src/BasicTable.vue';
   import { columns, searchFormSchema } from '/@/views/sys/exception/exception.data';
   import AButtonRemove from '/@/components/Button/src/ButtonRemove.vue';
   import AButtonRemoveBatch from '/@/components/Button/src/ButtonRemoveBatch.vue';
   import { PageWrapper } from '/@/components/Page';
-  import AButtonLink from '/@/components/Button/src/ButtonLink.vue';
+  import AButtonInfo from '/@/components/Button/src/ButtonInfo.vue';
 
   export default defineComponent({
     name: 'SysExceptionList',
     components: {
-      AButtonLink,
+      AButtonInfo,
       PageWrapper,
       AButtonRemoveBatch,
       AButtonRemove,
@@ -72,6 +62,7 @@
         useSearchForm: true,
         formConfig: {
           schemas: searchFormSchema,
+          actionColOptions: { xxl: 6, xl: 8, md: 24 },
         },
         actionColumn: {
           width: 100,

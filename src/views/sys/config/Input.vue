@@ -3,7 +3,7 @@
     v-bind="$attrs"
     @register="registerDrawer"
     showFooter
-    title="字典"
+    title="系统参数"
     width="30%"
     @ok="handleSubmit"
   >
@@ -48,6 +48,7 @@
                 setInputComponent(value);
               },
             },
+            itemProps: { validateTrigger: 'blur' },
           },
           {
             field: 'sysKey',
@@ -72,6 +73,7 @@
             componentProps: {
               dictType: 'whether',
             },
+            itemProps: { validateTrigger: 'blur' },
           },
           {
             field: 'remarks',

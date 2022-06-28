@@ -29,9 +29,8 @@
 </template>
 <script lang="ts">
   import { defineComponent, ref } from 'vue';
-  import { useTable } from '/@/components/Table';
+  import { BasicTable, useTable } from '/@/components/Table';
   import { select, add, get, remove } from '/@/api/auth/sysRole';
-  import BasicTable from '/@/components/Table/src/BasicTable.vue';
   import { columns, searchFormSchema } from '/@/views/auth/role/role.data';
   import { useDrawer } from '/@/components/Drawer';
   import AButtonAdd from '/@/components/Button/src/ButtonAdd.vue';

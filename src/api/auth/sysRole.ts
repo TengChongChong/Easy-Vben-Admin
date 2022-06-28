@@ -1,6 +1,7 @@
 import { defHttp } from '/@/utils/http/axios';
 import { TreeNodeModel } from '/@/api/model/treeModel';
 import { SysRole } from '/@/api/auth/model/sysRoleModel';
+import { Page } from '/@/api/model/pageModel';
 
 // base url
 const BASE_URL = '/api/auth/sys/role/';
@@ -9,11 +10,12 @@ const BASE_URL = '/api/auth/sys/role/';
  * 查询
  *
  * @param params 查询条件
+ * @param pager 分页
  */
-export function select(params: SysRole) {
-  return defHttp.get<SysRole[]>({
+export function select(params: SysRole, pager: Page<SysRole>) {
+  return defHttp.get<Page<SysRole>>({
     url: BASE_URL,
-    params,
+    params: Object.assign(params, pager),
   });
 }
 

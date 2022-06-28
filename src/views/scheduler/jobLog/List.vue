@@ -6,8 +6,7 @@
 </template>
 <script lang="ts">
   import { defineComponent, reactive, watch } from 'vue';
-  import { useTable } from '/@/components/Table';
-  import BasicTable from '/@/components/Table/src/BasicTable.vue';
+  import { BasicTable, useTable } from '/@/components/Table';
   import { PageWrapper } from '/@/components/Page';
   import { select } from '/@/api/scheduler/schedulerJobLog';
   import { propTypes } from '/@/utils/propTypes';

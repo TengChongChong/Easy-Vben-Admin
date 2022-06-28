@@ -35,7 +35,7 @@
       const id = ref();
       const version = ref();
 
-      const [registerForm, { resetFields, setFieldsValue, validate, updateSchema }] = useForm({
+      const [registerForm, { resetFields, setFieldsValue, validate }] = useForm({
         labelWidth: 100,
         schemas: [
           {
@@ -82,6 +82,7 @@
             componentProps: {
               dictType: 'whether',
             },
+            itemProps: { validateTrigger: 'blur' },
           },
           {
             field: 'status',
@@ -91,6 +92,7 @@
             componentProps: {
               dictType: 'schedulerJobStatus',
             },
+            itemProps: { validateTrigger: 'blur' },
           },
           {
             field: 'remarks',
@@ -110,43 +112,11 @@
         id.value = data?.id;
         version.value = data?.version || 0;
 
-        setInputComponent(data?.type);
         await setFieldsValue({
           ...data,
         });
         changeLoading(false);
       });
-
-      function setInputComponent(type) {
-        switch (type) {
-          case 'text':
-            updateSchema({
-              field: 'value',
-              component: 'Input',
-              rules: [{ max: 255, message: 'value不能超过255个字符', trigger: 'blur' }],
-            });
-            break;
-          case 'number':
-            updateSchema({
-              field: 'value',
-              component: 'InputNumber',
-              rules: [
-                { type: 'number', max: 99999999, message: 'value不能大于999', trigger: 'blur' },
-                { type: 'number', min: -99999999, message: 'value不能小于0', trigger: 'blur' },
-              ],
-            });
-            break;
-          case 'boolean':
-            updateSchema({
-              field: 'value',
-              component: 'DictRadio',
-              componentProps: {
-                dictType: 'boolean',
-                rules: [{ max: 255, message: 'value不能超过255个字符', trigger: 'blur' }],
-              },
-            });
-        }
-      }
 
       async function handleSave(callback: (_: SchedulerJob) => any) {
         try {

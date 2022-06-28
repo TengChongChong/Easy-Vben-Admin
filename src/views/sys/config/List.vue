@@ -40,9 +40,8 @@
 </template>
 <script lang="ts">
   import { defineComponent, ref } from 'vue';
-  import { useTable } from '/@/components/Table';
+  import { BasicTable, useTable } from '/@/components/Table';
   import { select, get, remove, refresh } from '/@/api/sys/sysConfig';
-  import BasicTable from '/@/components/Table/src/BasicTable.vue';
   import { columns, searchFormSchema } from '/@/views/sys/config/config.data';
   import { useDrawer } from '/@/components/Drawer';
   import AButtonAdd from '/@/components/Button/src/ButtonAdd.vue';

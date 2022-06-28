@@ -7,15 +7,7 @@
     >
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'action'">
-          <a-tooltip>
-            <template #title>详情</template>
-            <a-button-link
-              type="link"
-              size="small"
-              :path="`/sys/log/info/${record.id}`"
-              icon="ant-design:search-outlined"
-            />
-          </a-tooltip>
+          <a-button-info :path="`/sys/log/info/${record.id}`" />
         </template>
       </template>
     </BasicTable>
@@ -23,17 +15,16 @@
 </template>
 <script lang="ts">
   import { defineComponent, ref } from 'vue';
-  import { useTable } from '/@/components/Table';
+  import { BasicTable, useTable } from '/@/components/Table';
   import { select } from '/@/api/sys/sysLog';
-  import BasicTable from '/@/components/Table/src/BasicTable.vue';
   import { columns, searchFormSchema } from '/@/views/sys/log/log.data';
   import { PageWrapper } from '/@/components/Page';
-  import AButtonLink from '/@/components/Button/src/ButtonLink.vue';
+  import AButtonInfo from '/@/components/Button/src/ButtonInfo.vue';
 
   export default defineComponent({
     name: 'SysLogList',
     components: {
-      AButtonLink,
+      AButtonInfo,
       PageWrapper,
       BasicTable,
     },
@@ -51,6 +42,7 @@
         useSearchForm: true,
         formConfig: {
           schemas: searchFormSchema,
+          actionColOptions: { xxl: 12, xl: 24, md: 24 },
         },
         actionColumn: {
           width: 80,

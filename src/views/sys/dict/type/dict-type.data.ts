@@ -7,13 +7,13 @@ import { RoleEnum } from '/@/enums/roleEnum';
  */
 export const searchFormSchema: FormSchema[] = [
   {
-    field: 'name',
-    label: '名称',
+    field: 'type',
+    label: '类型',
     component: 'Input',
   },
   {
-    field: 'type',
-    label: '类型',
+    field: 'name',
+    label: '名称',
     component: 'Input',
   },
 ];
@@ -21,13 +21,13 @@ export const searchFormSchema: FormSchema[] = [
 // 表格列数据
 export const columns: BasicColumn[] = [
   {
-    title: '名称',
-    dataIndex: 'name',
+    title: '类型',
+    dataIndex: 'type',
     sorter: true,
   },
   {
-    title: '类型',
-    dataIndex: 'type',
+    title: '名称',
+    dataIndex: 'name',
     sorter: true,
   },
   {
@@ -65,18 +65,18 @@ export const columns: BasicColumn[] = [
 // 表单
 export const formSchema: FormSchema[] = [
   {
-    field: 'name',
-    label: '名称',
-    component: 'Input',
-    required: true,
-    rules: [{ max: 32, message: '名称不能超过32个字符', trigger: 'blur' }],
-  },
-  {
     field: 'type',
     label: '类型',
     component: 'Input',
     required: true,
     rules: [{ max: 32, message: '类型不能超过32个字符', trigger: 'blur' }],
+  },
+  {
+    field: 'name',
+    label: '名称',
+    component: 'Input',
+    required: true,
+    rules: [{ max: 32, message: '名称不能超过32个字符', trigger: 'blur' }],
   },
   {
     field: 'sys',
@@ -87,6 +87,7 @@ export const formSchema: FormSchema[] = [
     componentProps: {
       dictType: 'whether',
     },
+    itemProps: { validateTrigger: 'blur' },
   },
   {
     field: 'status',
@@ -96,5 +97,6 @@ export const formSchema: FormSchema[] = [
     componentProps: {
       dictType: 'commonStatus',
     },
+    itemProps: { validateTrigger: 'blur' },
   },
 ];

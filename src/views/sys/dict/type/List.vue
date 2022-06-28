@@ -34,9 +34,8 @@
 </template>
 <script lang="ts">
   import { defineComponent, ref } from 'vue';
-  import { useTable } from '/@/components/Table';
+  import { BasicTable, useTable } from '/@/components/Table';
   import { select, add, get, remove } from '/@/api/sys/sysDictType';
-  import BasicTable from '/@/components/Table/src/BasicTable.vue';
   import { columns, searchFormSchema } from '/@/views/sys/dict/type/dict-type.data';
   import { useDrawer } from '/@/components/Drawer';
   import SysDictTypeInput from '/@/views/sys/dict/type/Input.vue';

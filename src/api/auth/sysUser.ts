@@ -1,5 +1,7 @@
 import { defHttp } from '/@/utils/http/axios';
 import { SysUser } from '/@/api/auth/model/sysUserModel';
+import { Page } from '/@/api/model/pageModel';
+import { isArray } from '/@/utils/is';
 
 // base url
 const BASE_URL = '/api/auth/sys/user/';
@@ -8,11 +10,42 @@ const BASE_URL = '/api/auth/sys/user/';
  * 查询
  *
  * @param params 查询条件
+ * @param pager 分页
  */
-export function select(params: SysUser) {
-  return defHttp.get<SysUser[]>({
+export function select(params: SysUser, pager: Page<SysUser>) {
+  return defHttp.get<Page<SysUser>>({
     url: BASE_URL,
-    params,
+    params: Object.assign(params, pager),
+  });
+}
+
+/**
+ * 搜索用户
+ *
+ * @param keyword 关键字
+ * @param range 范围
+ * @param deptId 部门Id，传入此参数时将忽略`range`
+ * @param pager 分页
+ */
+export function search(keyword: string, range: string, deptId: string, pager: Page<SysUser>) {
+  return defHttp.get<Page<SysUser>>({
+    url: `${BASE_URL}search`,
+    params: {
+      keyword,
+      range,
+      deptId,
+      ...pager,
+    },
+  });
+}
+/**
+ * 获取指定用户信息，用于回显已选择的用户
+ *
+ * @param ids ids
+ */
+export function selectUsersByIds(ids: string | string[]) {
+  return defHttp.get<SysUser[]>({
+    url: `${BASE_URL}users/${isArray(ids) ? ids.join(',') : ids}`,
   });
 }
 

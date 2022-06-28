@@ -48,6 +48,7 @@
               dictType: 'permissionType',
             },
             required: true,
+            itemProps: { validateTrigger: 'blur' },
           },
           {
             field: 'parentId',
@@ -135,6 +136,7 @@
             componentProps: {
               dictType: 'whether',
             },
+            itemProps: { validateTrigger: 'blur' },
           },
           {
             field: 'external',
@@ -144,6 +146,7 @@
             componentProps: {
               dictType: 'external',
             },
+            itemProps: { validateTrigger: 'blur' },
             ifShow: ({ values }) => values.type === 'menu',
           },
           {
@@ -154,6 +157,7 @@
             componentProps: {
               dictType: 'openMode',
             },
+            itemProps: { validateTrigger: 'blur' },
             ifShow: ({ values }) => values.type === 'menu',
           },
           {
@@ -164,6 +168,7 @@
             componentProps: {
               dictType: 'commonStatus',
             },
+            itemProps: { validateTrigger: 'blur' },
           },
           {
             field: 'remarks',

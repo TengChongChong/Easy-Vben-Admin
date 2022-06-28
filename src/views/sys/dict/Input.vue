@@ -19,7 +19,7 @@
 </template>
 <script lang="ts">
   import { defineComponent, nextTick, ref } from 'vue';
-  import { BasicForm, useForm } from '/@/components/Form/index';
+  import { BasicForm, useForm } from '/@/components/Form';
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
 
   import { add, save } from '/@/api/sys/sysDict';
@@ -52,6 +52,7 @@
               },
             },
             required: true,
+            itemProps: { validateTrigger: 'blur' },
           },
           {
             field: 'parentCode',
@@ -62,18 +63,18 @@
             },
           },
           {
-            field: 'name',
-            label: '名称',
-            component: 'Input',
-            required: true,
-            rules: [{ max: 64, message: '名称不能超过64个字符', trigger: 'blur' }],
-          },
-          {
             field: 'code',
             label: '编码',
             component: 'Input',
             required: true,
             rules: [{ max: 64, message: '编码不能超过64个字符', trigger: 'blur' }],
+          },
+          {
+            field: 'name',
+            label: '名称',
+            component: 'Input',
+            required: true,
+            rules: [{ max: 64, message: '名称不能超过64个字符', trigger: 'blur' }],
           },
           {
             field: 'status',
@@ -83,6 +84,7 @@
             componentProps: {
               dictType: 'commonStatus',
             },
+            itemProps: { validateTrigger: 'blur' },
           },
           {
             field: 'orderNo',

@@ -49,9 +49,8 @@
 </template>
 <script lang="ts">
   import { defineComponent, ref } from 'vue';
-  import { useTable } from '/@/components/Table';
+  import { BasicTable, useTable } from '/@/components/Table';
   import { select, add, get, remove } from '/@/api/auth/sysPermission';
-  import BasicTable from '/@/components/Table/src/BasicTable.vue';
   import { columns, searchFormSchema } from '/@/views/auth/permission/permission.data';
   import { useDrawer } from '/@/components/Drawer';
   import AButtonAdd from '/@/components/Button/src/ButtonAdd.vue';
@@ -69,6 +68,7 @@
   export default defineComponent({
     name: 'AuthPermissionList',
     components: {
+      BasicTable,
       PageWrapper,
       Authority,
       AButtonAddSub,
@@ -79,7 +79,6 @@
       AButtonRemove,
       AButtonEdit,
       AButtonAdd,
-      BasicTable,
     },
     setup() {
       // 表格选中数据

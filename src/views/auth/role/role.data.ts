@@ -19,6 +19,14 @@ export const searchFormSchema: FormSchema[] = [
     label: '标识',
     component: 'Input',
   },
+  {
+    field: 'status',
+    label: '状态',
+    component: 'DictSelect',
+    componentProps: {
+      dictType: 'commonStatus',
+    },
+  },
 ];
 
 // 表格列数据

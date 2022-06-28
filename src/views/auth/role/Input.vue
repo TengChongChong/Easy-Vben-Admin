@@ -79,6 +79,7 @@
             componentProps: {
               dictType: 'whether',
             },
+            itemProps: { validateTrigger: 'blur' },
             auth: RoleEnum.SYS_ADMIN,
           },
           {
@@ -89,6 +90,7 @@
             componentProps: {
               dictType: 'commonStatus',
             },
+            itemProps: { validateTrigger: 'blur' },
           },
           {
             field: 'orderNo',

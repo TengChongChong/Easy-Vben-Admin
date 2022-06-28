@@ -112,6 +112,7 @@
             componentProps: {
               dictType: 'commonStatus',
             },
+            itemProps: { validateTrigger: 'blur' },
           },
           {
             label: '角色',

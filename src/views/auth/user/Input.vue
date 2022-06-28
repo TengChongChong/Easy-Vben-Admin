@@ -58,13 +58,6 @@
         labelWidth: 100,
         schemas: [
           {
-            field: 'username',
-            label: '用户名',
-            component: 'Input',
-            required: true,
-            rules: [{ max: 32, message: '名称不能超过32个字符', trigger: 'blur' }],
-          },
-          {
             field: 'nickname',
             label: '昵称',
             component: 'Input',
@@ -72,11 +65,21 @@
             rules: [{ max: 32, message: '昵称不能超过32个字符', trigger: 'blur' }],
           },
           {
+            field: 'username',
+            label: '用户名',
+            component: 'Input',
+            required: true,
+            rules: [{ max: 32, message: '名称不能超过32个字符', trigger: 'blur' }],
+          },
+          {
             field: 'password',
             label: '密码',
             component: 'InputPassword',
             helpMessage: '如不填写将使用平台默认密码',
             rules: [{ max: 32, message: '密码不能超过32个字符', trigger: 'blur' }],
+            componentProps: {
+              autocomplete: 'new-password',
+            },
           },
           {
             field: 'roleIdList',
@@ -93,6 +96,7 @@
             componentProps: {
               dictType: 'sex',
             },
+            itemProps: { validateTrigger: 'blur' },
           },
           {
             field: 'status',
@@ -102,6 +106,7 @@
             componentProps: {
               dictType: 'commonStatus',
             },
+            itemProps: { validateTrigger: 'blur' },
           },
           {
             field: 'phoneNumber',

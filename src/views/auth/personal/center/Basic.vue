@@ -56,6 +56,7 @@
             componentProps: {
               dictType: 'sex',
             },
+            itemProps: { validateTrigger: 'blur' },
           },
           {
             field: 'birthday',

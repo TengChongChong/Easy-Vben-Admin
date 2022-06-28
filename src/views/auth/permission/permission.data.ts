@@ -48,6 +48,13 @@ export const columns: BasicColumn[] = [
     },
   },
   {
+    title: '类型',
+    dataIndex: 'type',
+    width: 100,
+    format: 'dict|permissionType',
+    filters: 'dict|permissionType',
+  },
+  {
     title: '权限标识',
     dataIndex: 'code',
     width: 200,
@@ -61,13 +68,6 @@ export const columns: BasicColumn[] = [
     title: '排序值',
     dataIndex: 'orderNo',
     width: 80,
-  },
-  {
-    title: '类型',
-    dataIndex: 'type',
-    width: 100,
-    format: 'dict|permissionType',
-    filters: 'dict|permissionType',
   },
   {
     title: '状态',

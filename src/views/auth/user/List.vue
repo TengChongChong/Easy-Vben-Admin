@@ -2,7 +2,9 @@
   <PageWrapper dense>
     <a-row>
       <a-col :xxl="6" :xl="8" :lg="10" :md="12" :sm="24">
-        <DeptTree @select="handleSelect" />
+        <div class="m-4 mr-0 overflow-hidden bg-white">
+          <DeptTree @select="handleSelect" />
+        </div>
       </a-col>
       <a-col :xxl="18" :xl="16" :lg="14" :md="12" :sm="24">
         <!-- 表格 -->
@@ -65,9 +67,8 @@
 </template>
 <script lang="ts">
   import { defineComponent, reactive, ref } from 'vue';
-  import { useTable } from '/@/components/Table';
+  import { BasicTable, useTable } from '/@/components/Table';
   import { select, add, get, remove, resetPassword } from '/@/api/auth/sysUser';
-  import BasicTable from '/@/components/Table/src/BasicTable.vue';
   import { columns, searchFormSchema } from '/@/views/auth/user/user.data';
   import { useDrawer } from '/@/components/Drawer';
   import AButtonAdd from '/@/components/Button/src/ButtonAdd.vue';
@@ -76,7 +77,7 @@
   import AButtonRemoveBatch from '/@/components/Button/src/ButtonRemoveBatch.vue';
   import SysUserInput from '/@/views/auth/user/Input.vue';
   import { PageWrapper } from '/@/components/Page';
-  import DeptTree from '/@/views/auth/user/DeptTree.vue';
+  import DeptTree from '/@/components/Dept/DeptTree.vue';
   import { useGlobSetting } from '/@/hooks/setting';
   import { Authority } from '/@/components/Authority';
   import { Icon } from '/@/components/Icon';
