@@ -1,14 +1,12 @@
 <template>
-  <div class="m-4 mr-0 overflow-hidden bg-white">
-    <BasicTree
-      title="部门"
-      toolbar
-      search
-      :clickRowToExpand="false"
-      :treeData="treeData"
-      @select="handleSelect"
-    />
-  </div>
+  <BasicTree
+    title="部门"
+    toolbar
+    search
+    :clickRowToExpand="false"
+    :treeData="treeData"
+    @select="handleSelect"
+  />
 </template>
 <script lang="ts">
   import { defineComponent, onMounted, ref } from 'vue';
