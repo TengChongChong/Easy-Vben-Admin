@@ -13,7 +13,7 @@ export interface BasicFetchResult<T> {
  */
 export interface BasicModel {
   // id
-  id: string;
+  id?: string;
   // 父id
   parentId?: string;
   // 状态
