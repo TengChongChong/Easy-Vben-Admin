@@ -37,8 +37,8 @@ export const basicProps = {
     type: Object as PropType<Partial<ColEx>>,
     default: () => {
       return {
-        xl: 6,
-        lg: 8,
+        xxl: 6,
+        xl: 8,
         md: 12,
         sm: 24,
       };
