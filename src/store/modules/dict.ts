@@ -174,7 +174,6 @@ export const useDictStore = defineStore({
       }
       this.isLoading = true;
       // 初始化字典数据
-      console.log('初始化字典数据');
       selectAll().then((data) => {
         this.setDict(data);
         callback();
