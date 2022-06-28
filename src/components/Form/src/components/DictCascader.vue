@@ -25,7 +25,7 @@
       // 仅用于字典管理页面动态更新
       t: propTypes.number,
     },
-    emits: ['options-change', 'change'],
+    emits: ['options-change', 'change', 'update:value'],
     setup(props) {
       const emitData = ref<any[]>([]);
       const attrs = useAttrs();

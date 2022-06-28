@@ -17,13 +17,17 @@
   import { useDictStore } from '/@/store/modules/dict';
 
   export default defineComponent({
-    name: 'RadioButtonGroup',
+    name: 'DictRadio',
+    inheritAttrs: false,
     props: dictProps,
+    emits: ['change', 'update:value'],
     setup(props) {
       const attrs = useAttrs();
-      const [state] = useRuleFormItem(props);
+      const emitData = ref<any[]>([]);
       const dictStore = useDictStore();
       const dictArray = ref<SysDict[]>([]);
+
+      const [state] = useRuleFormItem(props, 'value', 'change', emitData);
 
       const getOptions = computed(() => {
         let options: SelectModel[] = [];

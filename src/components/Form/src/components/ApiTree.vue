@@ -19,6 +19,7 @@
   export default defineComponent({
     name: 'ApiTree',
     components: { ATree: Tree, LoadingOutlined },
+    inheritAttrs: false,
     props: {
       api: { type: Function as PropType<(arg?: Recordable) => Promise<Recordable>> },
       params: { type: Object },
@@ -26,7 +27,7 @@
       resultField: propTypes.string.def(''),
       afterFetch: { type: Function as PropType<Fn> },
     },
-    emits: ['options-change', 'change'],
+    emits: ['options-change', 'change', 'update:value'],
     setup(props, { attrs, emit }) {
       const treeData = ref<Recordable[]>([]);
       const isFirstLoaded = ref<Boolean>(false);

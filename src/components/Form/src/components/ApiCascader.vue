@@ -41,6 +41,7 @@
       LoadingOutlined,
       [Cascader.name]: Cascader,
     },
+    inheritAttrs: false,
     props: {
       value: {
         type: Array,
@@ -70,7 +71,7 @@
         type: Array,
       },
     },
-    emits: ['change', 'defaultChange'],
+    emits: ['change', 'defaultChange', 'update:value'],
     setup(props, { emit }) {
       const apiData = ref<any[]>([]);
       const options = ref<Option[]>([]);

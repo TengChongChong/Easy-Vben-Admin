@@ -29,6 +29,7 @@
   export default defineComponent({
     name: 'ApiTreeSelect',
     components: { ATreeSelect: TreeSelect, LoadingOutlined },
+    inheritAttrs: false,
     props: {
       value: [Array, String, Number],
       api: { type: Function as PropType<(arg?: Recordable) => Promise<Recordable>> },
@@ -41,7 +42,7 @@
       // 仅用于管理页面动态更新
       t: propTypes.number,
     },
-    emits: ['options-change', 'change'],
+    emits: ['options-change', 'change', 'update:value'],
     setup(props, { attrs, emit }) {
       const treeData = ref<Recordable[]>([]);
       const isFirstLoaded = ref<Boolean>(false);

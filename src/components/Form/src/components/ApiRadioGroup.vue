@@ -25,6 +25,7 @@
 
   export default defineComponent({
     name: 'ApiRadioGroup',
+    inheritAttrs: false,
     props: {
       api: {
         type: Function as PropType<(arg?: Recordable | string) => Promise<OptionsItem[]>>,
@@ -47,7 +48,7 @@
       valueField: propTypes.string.def('value'),
       immediate: propTypes.bool.def(true),
     },
-    emits: ['options-change', 'change'],
+    emits: ['options-change', 'change', 'update:value'],
     setup(props, { emit }) {
       const options = ref<OptionsItem[]>([]);
       const loading = ref(false);

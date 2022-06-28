@@ -58,10 +58,11 @@
       resultField: propTypes.string.def(''),
       labelField: propTypes.string.def('label'),
       valueField: propTypes.string.def('value'),
+      afterFetch: { type: Function as PropType<Fn> },
       immediate: propTypes.bool.def(true),
       alwaysLoad: propTypes.bool.def(false),
     },
-    emits: ['options-change', 'change'],
+    emits: ['options-change', 'change', 'update:value'],
     setup(props, { emit }) {
       const options = ref<OptionsItem[]>([]);
       const loading = ref(false);
@@ -102,12 +103,15 @@
       );
 
       async function fetch() {
-        const api = props.api;
+        const { api, afterFetch } = props;
         if (!api || !isFunction(api)) return;
         options.value = [];
         try {
           loading.value = true;
-          const res = await api(props.params);
+          let res = await api(props.params);
+          if (afterFetch && isFunction(afterFetch)) {
+            res = afterFetch(res);
+          }
           if (Array.isArray(res)) {
             options.value = res;
             emitChange();

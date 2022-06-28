@@ -3,31 +3,35 @@
     <div style="width: 100%" :style="{ textAlign: actionColOpt.style.textAlign }">
       <FormItem>
         <slot name="resetBefore"></slot>
-        <Button
+        <a-button
           type="default"
           class="mr-2"
           v-bind="getResetBtnOptions"
           @click="resetAction"
           v-if="showResetButton"
         >
-          <Icon icon="ant-design:undo-outlined" />
+          <template #icon>
+            <Icon icon="ant-design:undo-outlined" />
+          </template>
           {{ getResetBtnOptions.text }}
-        </Button>
+        </a-button>
         <slot name="submitBefore"></slot>
 
-        <Button
+        <a-button
           type="primary"
           class="mr-2"
           v-bind="getSubmitBtnOptions"
           @click="submitAction"
           v-if="showSubmitButton"
         >
-          <Icon icon="ant-design:search-outlined" />
+          <template #icon>
+            <Icon icon="ant-design:search-outlined" />
+          </template>
           {{ getSubmitBtnOptions.text }}
-        </Button>
+        </a-button>
 
         <slot name="advanceBefore"></slot>
-        <Button
+        <a-button
           type="link"
           size="small"
           @click="toggleAdvanced"
@@ -35,7 +39,7 @@
         >
           {{ isAdvanced ? t('component.form.putAway') : t('component.form.unfold') }}
           <BasicArrow class="ml-1" :expand="!isAdvanced" up />
-        </Button>
+        </a-button>
         <slot name="advanceAfter"></slot>
       </FormItem>
     </div>
@@ -43,10 +47,9 @@
 </template>
 <script lang="ts">
   import type { ColEx } from '../types/index';
-  //import type { ButtonProps } from 'ant-design-vue/es/button/buttonTypes';
+  import type { ButtonProps } from 'ant-design-vue/es/button/buttonTypes';
   import { defineComponent, computed, PropType } from 'vue';
   import { Form, Col } from 'ant-design-vue';
-  import { Button, ButtonProps } from '/@/components/Button';
   import { BasicArrow } from '/@/components/Basic';
   import { useFormContext } from '../hooks/useFormContext';
   import { useI18n } from '/@/hooks/web/useI18n';
@@ -60,7 +63,6 @@
     components: {
       Icon,
       FormItem: Form.Item,
-      Button,
       BasicArrow,
       [Col.name]: Col,
     },

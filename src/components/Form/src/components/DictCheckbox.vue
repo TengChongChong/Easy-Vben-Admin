@@ -1,37 +1,26 @@
 <template>
-  <a-select
-    show-search
-    v-bind="$attrs"
-    option-filter-prop="label"
-    @change="handleChange"
-    :options="getOptions"
-    v-model:value="state"
-    style="width: 100%"
-  >
-    <template #[item]="data" v-for="item in Object.keys($slots)">
-      <slot :name="item" v-bind="data || {}"></slot>
-    </template>
-  </a-select>
+  <a-checkbox-group v-bind="attrs" v-model:value="state" :options="getOptions" />
 </template>
 <script lang="ts">
-  import { defineComponent, ref, computed, watch } from 'vue';
+  import { defineComponent, computed, watch, ref } from 'vue';
   import { useRuleFormItem } from '/@/hooks/component/useFormItem';
+  import { useAttrs } from '/@/hooks/core/useAttrs';
   import { dictProps } from '/@/components/Dict/props';
-  import { useDictStore } from '/@/store/modules/dict';
   import { SelectModel } from '/@/api/model/selectModel';
   import { SysDict } from '/@/api/sys/model/sysDictModel';
+  import { useDictStore } from '/@/store/modules/dict';
 
   export default defineComponent({
-    name: 'DictSelect',
+    name: 'DictCheckbox',
     inheritAttrs: false,
     props: dictProps,
-    emits: ['options-change', 'change', 'update:value'],
+    emits: ['change', 'update:value'],
     setup(props) {
+      const attrs = useAttrs();
       const emitData = ref<any[]>([]);
       const dictStore = useDictStore();
       const dictArray = ref<SysDict[]>([]);
 
-      // Embedded in the form, just use the hook binding to perform form verification
       const [state] = useRuleFormItem(props, 'value', 'change', emitData);
 
       const getOptions = computed(() => {
@@ -56,13 +45,9 @@
         dictArray.value = dictStore.selectDictArray(props.dictType);
       }
 
-      function handleChange(_, ...args) {
-        emitData.value = args;
-      }
-
       getDictArray();
 
-      return { state, getOptions, handleChange };
+      return { state, getOptions, attrs };
     },
   });
 </script>
