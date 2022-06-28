@@ -143,6 +143,8 @@ export interface GlobConfig {
   urlPrefix?: string;
   // Project abbreviation
   shortName: string;
+  // 项目路径
+  projectPath?: string;
 }
 export interface GlobEnvConfig {
   // Site title
@@ -155,4 +157,6 @@ export interface GlobEnvConfig {
   VITE_GLOB_APP_SHORT_NAME: string;
   // Upload url
   VITE_GLOB_UPLOAD_URL?: string;
+  // 项目路径，用于代码生成
+  VITE_PROJECT_PATH?: string;
 }
