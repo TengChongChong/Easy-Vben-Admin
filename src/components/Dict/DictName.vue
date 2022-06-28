@@ -12,13 +12,13 @@
   const props = defineProps(dictProps);
 
   onMounted(() => {
-    dict.value = dictStore.getDict(props.dictType, props.value);
+    dict.value = dictStore.getDict(props.dictType, props.value as string);
   });
 
   watch(
     [props],
     () => {
-      dict.value = dictStore.getDict(props.dictType, props.value);
+      dict.value = dictStore.getDict(props.dictType, props.value as string);
     },
     { deep: true },
   );
