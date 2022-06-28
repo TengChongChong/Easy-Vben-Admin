@@ -30,6 +30,8 @@ import ApiCascader from './components/ApiCascader.vue';
 import DictCascader from './components/DictCascader.vue';
 import DictSelect from './components/DictSelect.vue';
 import DictRadio from './components/DictRadio.vue';
+import DictCheckbox from './components/DictCheckbox.vue';
+import UserSelect from '/@/components/User/UserSelect.vue';
 import { BasicUpload } from '/@/components/Upload';
 import { StrengthMeter } from '/@/components/StrengthMeter';
 import { IconPicker } from '/@/components/Icon';
@@ -76,6 +78,9 @@ componentMap.set('Divider', Divider);
 componentMap.set('DictCascader', DictCascader);
 componentMap.set('DictSelect', DictSelect);
 componentMap.set('DictRadio', DictRadio);
+componentMap.set('DictCheckbox', DictCheckbox);
+
+componentMap.set('UserSelect', UserSelect);
 
 export function add(compName: ComponentType, component: Component) {
   componentMap.set(compName, component);

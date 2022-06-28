@@ -116,4 +116,6 @@ export type ComponentType =
   | 'DictSelect'
   | 'DictCascader'
   | 'DictRadio'
-  | 'Divider';
+  | 'DictCheckbox'
+  | 'Divider'
+  | 'UserSelect';
