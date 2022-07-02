@@ -19,7 +19,6 @@
   export default defineComponent({
     name: 'ApiTree',
     components: { ATree: Tree, LoadingOutlined },
-    inheritAttrs: false,
     props: {
       api: { type: Function as PropType<(arg?: Recordable) => Promise<Recordable>> },
       params: { type: Object },

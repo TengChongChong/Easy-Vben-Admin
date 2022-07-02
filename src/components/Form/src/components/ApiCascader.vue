@@ -41,7 +41,6 @@
       LoadingOutlined,
       [Cascader.name]: Cascader,
     },
-    inheritAttrs: false,
     props: {
       value: {
         type: Array,
@@ -71,7 +70,7 @@
         type: Array,
       },
     },
-    emits: ['change', 'defaultChange', 'update:value'],
+    emits: ['change', 'update:value'],
     setup(props, { emit }) {
       const apiData = ref<any[]>([]);
       const options = ref<Option[]>([]);
@@ -172,9 +171,9 @@
         { deep: true },
       );
 
-      function handleChange(keys, args) {
+      function handleChange(keys) {
         emitData.value = keys;
-        emit('defaultChange', keys, args);
+        emit('update:value', keys);
       }
 
       function handleRenderDisplay({ labels, selectedOptions }) {

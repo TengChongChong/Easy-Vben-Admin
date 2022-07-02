@@ -25,7 +25,6 @@
 
   export default defineComponent({
     name: 'ApiRadioGroup',
-    inheritAttrs: false,
     props: {
       api: {
         type: Function as PropType<(arg?: Recordable | string) => Promise<OptionsItem[]>>,
@@ -115,8 +114,9 @@
         emit('options-change', unref(getOptions));
       }
 
-      function handleChange(_, ...args) {
+      function handleChange(value, ...args) {
         emitData.value = args;
+        emit('update:value', value);
       }
 
       return { state, getOptions, attrs, loading, t, handleChange, props };

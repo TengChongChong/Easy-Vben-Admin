@@ -17,7 +17,6 @@
 
   export default defineComponent({
     name: 'DictCascader',
-    inheritAttrs: false,
     props: {
       dictType: propTypes.string,
       value: propTypes.array,
@@ -26,7 +25,7 @@
       t: propTypes.number,
     },
     emits: ['options-change', 'change', 'update:value'],
-    setup(props) {
+    setup(props, { emit }) {
       const emitData = ref<any[]>([]);
       const attrs = useAttrs();
       const dictStore = useDictStore();
@@ -52,8 +51,9 @@
         tree.value = dictStore.selectTree(props.dictType);
       }
 
-      function handleChange(keys) {
-        emitData.value = keys;
+      function handleChange(value) {
+        emitData.value = value;
+        emit('update:value', value);
       }
 
       getTree();

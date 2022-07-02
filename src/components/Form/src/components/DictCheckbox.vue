@@ -1,10 +1,14 @@
 <template>
-  <a-checkbox-group v-bind="attrs" v-model:value="state" :options="getOptions" />
+  <a-checkbox-group
+    v-bind="$attrs"
+    v-model:value="state"
+    :options="getOptions"
+    @change="handleChange"
+  />
 </template>
 <script lang="ts">
   import { defineComponent, computed, watch, ref } from 'vue';
   import { useRuleFormItem } from '/@/hooks/component/useFormItem';
-  import { useAttrs } from '/@/hooks/core/useAttrs';
   import { dictProps } from '/@/components/Dict/props';
   import { SelectModel } from '/@/api/model/selectModel';
   import { SysDict } from '/@/api/sys/model/sysDictModel';
@@ -12,11 +16,9 @@
 
   export default defineComponent({
     name: 'DictCheckbox',
-    inheritAttrs: false,
     props: dictProps,
     emits: ['change', 'update:value'],
-    setup(props) {
-      const attrs = useAttrs();
+    setup(props, { emit }) {
       const emitData = ref<any[]>([]);
       const dictStore = useDictStore();
       const dictArray = ref<SysDict[]>([]);
@@ -47,7 +49,12 @@
 
       getDictArray();
 
-      return { state, getOptions, attrs };
+      function handleChange(value) {
+        emitData.value = value;
+        emit('update:value', value);
+      }
+
+      return { state, getOptions, handleChange };
     },
   });
 </script>

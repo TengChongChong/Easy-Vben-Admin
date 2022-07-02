@@ -29,7 +29,6 @@
   export default defineComponent({
     name: 'ApiTreeSelect',
     components: { ATreeSelect: TreeSelect, LoadingOutlined },
-    inheritAttrs: false,
     props: {
       value: [Array, String, Number],
       api: { type: Function as PropType<(arg?: Recordable) => Promise<Recordable>> },
@@ -59,8 +58,8 @@
       // Embedded in the form, just use the hook binding to perform form verification
       const [state] = useRuleFormItem(props, 'value', 'change', emitData);
 
-      function handleChange(...args) {
-        emit('change', ...args);
+      function handleChange(value) {
+        emit('update:value', value);
       }
 
       watch(

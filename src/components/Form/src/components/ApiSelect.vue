@@ -27,7 +27,6 @@
   import { Select } from 'ant-design-vue';
   import { isFunction } from '/@/utils/is';
   import { useRuleFormItem } from '/@/hooks/component/useFormItem';
-  import { useAttrs } from '/@/hooks/core/useAttrs';
   import { get, omit } from 'lodash-es';
   import { LoadingOutlined } from '@ant-design/icons-vue';
   import { useI18n } from '/@/hooks/web/useI18n';
@@ -68,7 +67,6 @@
       const loading = ref(false);
       const isFirstLoad = ref(true);
       const emitData = ref<any[]>([]);
-      const attrs = useAttrs();
       const { t } = useI18n();
 
       // Embedded in the form, just use the hook binding to perform form verification
@@ -143,11 +141,12 @@
         emit('options-change', unref(getOptions));
       }
 
-      function handleChange(_, ...args) {
+      function handleChange(value, ...args) {
         emitData.value = args;
+        emit('update:value', value);
       }
 
-      return { state, attrs, getOptions, loading, t, handleFetch, handleChange };
+      return { state, getOptions, loading, t, handleFetch, handleChange };
     },
   });
 </script>

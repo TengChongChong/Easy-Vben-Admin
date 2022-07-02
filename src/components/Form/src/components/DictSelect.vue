@@ -26,7 +26,7 @@
     inheritAttrs: false,
     props: dictProps,
     emits: ['options-change', 'change', 'update:value'],
-    setup(props) {
+    setup(props, { emit }) {
       const emitData = ref<any[]>([]);
       const dictStore = useDictStore();
       const dictArray = ref<SysDict[]>([]);
@@ -56,8 +56,9 @@
         dictArray.value = dictStore.selectDictArray(props.dictType);
       }
 
-      function handleChange(_, ...args) {
+      function handleChange(value, ...args) {
         emitData.value = args;
+        emit('update:value', value);
       }
 
       getDictArray();

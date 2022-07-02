@@ -1,5 +1,5 @@
 <template>
-  <a-radio-group v-bind="attrs" v-model:value="state">
+  <a-radio-group v-bind="attrs" v-model:value="state" @change="handleChange">
     <template v-for="item in getOptions" :key="`${item.value}`">
       <a-radio-button :value="item.value">
         {{ item.label }}
@@ -18,10 +18,9 @@
 
   export default defineComponent({
     name: 'DictRadio',
-    inheritAttrs: false,
     props: dictProps,
     emits: ['change', 'update:value'],
-    setup(props) {
+    setup(props, { emit }) {
       const attrs = useAttrs();
       const emitData = ref<any[]>([]);
       const dictStore = useDictStore();
@@ -53,7 +52,12 @@
 
       getDictArray();
 
-      return { state, getOptions, attrs };
+      function handleChange(value) {
+        emitData.value = value;
+        emit('update:value', value);
+      }
+
+      return { state, getOptions, attrs, handleChange };
     },
   });
 </script>
