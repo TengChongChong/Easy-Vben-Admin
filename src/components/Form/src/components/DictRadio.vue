@@ -1,16 +1,12 @@
 <template>
-  <a-radio-group v-bind="attrs" v-model:value="state" @change="handleChange">
-    <template v-for="item in getOptions" :key="`${item.value}`">
-      <a-radio-button :value="item.value">
-        {{ item.label }}
-      </a-radio-button>
-    </template>
+  <a-radio-group v-bind="$attrs" v-model:value="value" @change="handleChange">
+    <a-radio-button v-for="item in getOptions" :key="`${item.value}`" :value="item.value">
+      {{ item.label }}
+    </a-radio-button>
   </a-radio-group>
 </template>
 <script lang="ts">
-  import { defineComponent, computed, watch, ref } from 'vue';
-  import { useRuleFormItem } from '/@/hooks/component/useFormItem';
-  import { useAttrs } from '/@/hooks/core/useAttrs';
+  import { defineComponent, computed, watch, ref, unref } from 'vue';
   import { dictProps } from '/@/components/Dict/props';
   import { SelectModel } from '/@/api/model/selectModel';
   import { SysDict } from '/@/api/sys/model/sysDictModel';
@@ -21,12 +17,9 @@
     props: dictProps,
     emits: ['change', 'update:value'],
     setup(props, { emit }) {
-      const attrs = useAttrs();
-      const emitData = ref<any[]>([]);
       const dictStore = useDictStore();
       const dictArray = ref<SysDict[]>([]);
-
-      const [state] = useRuleFormItem(props, 'value', 'change', emitData);
+      const value = ref<string>();
 
       const getOptions = computed(() => {
         let options: SelectModel[] = [];
@@ -46,18 +39,26 @@
         },
       );
 
+      watch(
+        () => props.value,
+        () => {
+          // @ts-ignore
+          value.value = props.value;
+        },
+      );
+
       function getDictArray() {
         dictArray.value = dictStore.selectDictArray(props.dictType);
       }
 
       getDictArray();
 
-      function handleChange(value) {
-        emitData.value = value;
-        emit('update:value', value);
+      function handleChange() {
+        emit('change', unref(value));
+        emit('update:value', unref(value));
       }
 
-      return { state, getOptions, attrs, handleChange };
+      return { value, getOptions, handleChange };
     },
   });
 </script>
