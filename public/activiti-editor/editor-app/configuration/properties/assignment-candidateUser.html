@@ -1,0 +1,72 @@
+<div class="modal" ng-controller="KisBpmChoseAssignmentCtrl">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content form-horizontal">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="close()">&times;</button>
+                <h2>请选择用户</h2>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-4 col-md-6">
+                        <div class="form-group">
+                            <label for="deptId" class="col-sm-4 control-label">部门：</label>
+                            <div class="col-sm-8">
+                                <select type="text" id="deptId" class="form-control" ng-model="query.deptId" ng-change="selectUsers()">
+                                    <option ng-repeat="department in candidateDepartments" value="{{department.id}}">{{department.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6" style="display: none">
+                        <div class="form-group">
+                            <label for="roleId" class="col-sm-4 control-label">角色：</label>
+                            <div class="col-sm-8">
+                                <select id="roleId" class="form-control" ng-model="query.roleId" ng-change="selectUsers()">
+                                    <option ng-repeat="role in candidateGroups" value="{{role.id}}">{{role.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="form-group">
+                            <label for="keywords" class="col-sm-4 control-label">关键字：</label>
+                            <div class="col-sm-8">
+                                <div class="input-group">
+                                    <input type="text" id="keywords" class="form-control" ng-model="query.keywords" placeholder="输入关键字" />
+                                    <span class="input-group-btn">
+                                        <button ng-click="selectUsers()" class="btn btn-primary" type="button">查询</button>
+                                    </span>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th><input type="checkbox" ng-click="selectAll($event)"></th>
+                        <th>用户名</th>
+                        <th>昵称</th>
+                        <th>部门</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="candidateUser in candidateUsers">
+                        <td>
+                            <input type="checkbox" ng-model="candidateUser.selected" ne-true-value="{{candidateUser.id}}" ng-false-value="false">
+                        </td>
+                        <td>{{candidateUser.username}}</td>
+                        <td>{{candidateUser.nickname}}</td>
+                        <td>{{candidateUser.departName}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button ng-click="close()" class="btn btn-primary" translate>ACTION.CANCEL</button>
+                <button ng-click="save()" class="btn btn-primary" translate>ACTION.SAVE</button>
+            </div>
+        </div>
+    </div>
+</div>

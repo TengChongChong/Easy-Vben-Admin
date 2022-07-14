@@ -1,0 +1,129 @@
+<div class="modal" ng-controller="KisBpmAssignmentPopupCtrl" data-ng-init="load()">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content form-horizontal">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="close()">&times;</button>
+                <h2 translate>PROPERTY.ASSIGNMENT.TITLE</h2>
+            </div>
+            <div class="modal-body">
+                <div class="row row-no-gutter ng-hide">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">{{'PROPERTY.ASSIGNMENT.ASSIGNEE' | translate}}：</label>
+                        <div class="col-sm-10">
+                            <button ng-click="choseAssignment('assignee')" class="btn btn-sm btn-primary">选择</button>
+                            <button ng-click="removeAssignee()" ng-show="assignment.displayAssignee != null" class="btn btn-sm btn-warning">移除</button>
+
+                            <table class="table table-config" ng-show="assignment.displayAssignee != null">
+                                <thead>
+                                <tr>
+                                    <th>-</th>
+                                    <th>用户名</th>
+                                    <th>昵称</th>
+                                    <th>部门</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>-</td>
+                                    <td>{{assignment.displayAssignee.username}}</td>
+                                    <td>{{assignment.displayAssignee.nickname}}</td>
+                                    <td>{{assignment.displayAssignee.departName}}</td>
+                                    <td>
+                                        <i class="glyphicon glyphicon-minus clickable-property" ng-click="removeAssignee()"></i>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                            <div ng-show="assignment.displayAssignee == null" class="label label-warning label-no-setting">尚未设置</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row row-no-gutter">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">{{'PROPERTY.ASSIGNMENT.CANDIDATE_USERS' | translate}}：</label>
+                        <div class="col-sm-10">
+                            <!-- todo: "设置为发起人后"还可以新增自定义表达式 -->
+                            <button ng-click="addCandidateUser()" class="btn btn-sm btn-success">新增</button>
+                            <button ng-click="choseAssignment('candidateUsers')" class="btn btn-sm btn-primary">选择</button>
+                            <button ng-click="setApplyUserId()" class="btn btn-sm btn-primary">设置为发起人</button>
+                            <button ng-click="removeAllCandidateUserValue()" ng-show="assignment.displayCandidateUsers.length > 0" class="btn btn-sm btn-warning">全部移除</button>
+                            <table class="table table-config" ng-show="assignment.displayCandidateUsers.length > 0">
+                                <thead>
+                                <tr>
+                                    <th>序号</th>
+                                    <th>昵称</th>
+                                    <th>用户名</th>
+                                    <th>部门</th>
+                                    <th>ID</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="candidateUser in assignment.displayCandidateUsers">
+                                    <td>{{$index + 1}}</td>
+                                    <td>{{candidateUser.username == customExpression ? '自定义' : candidateUser.nickname}}</td>
+                                    <td>{{candidateUser.username == customExpression ? '-' : candidateUser.username}}</td>
+                                    <td>{{candidateUser.username == customExpression ? '-' : candidateUser.departName}}</td>
+                                    <td>
+                                        <input ng-show="candidateUser.username == customExpression" class="form-control form-control-sm" type="text" ng-model="assignment.candidateUsers[$index].value"/>
+                                        <input ng-show="candidateUser.username != customExpression" readonly class="form-control form-control-sm" type="text" ng-model="assignment.candidateUsers[$index].value"/>
+                                    </td>
+                                    <td>
+                                        <i class="glyphicon glyphicon-minus clickable-property" ng-click="removeCandidateUserValue($index)"></i>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                            <div ng-show="assignment.displayCandidateUsers.length == 0" class="label label-warning label-no-setting">尚未设置</div>
+
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">{{'PROPERTY.ASSIGNMENT.CANDIDATE_GROUPS' | translate}}：</label>
+                        <div class="col-sm-10">
+                            <button ng-click="addCandidateGroups()" class="btn btn-sm btn-success">新增</button>
+                            <button ng-click="choseCandidateGroups()" class="btn btn-sm btn-primary">选择</button>
+                            <button ng-click="removeAllCandidateGroupValue()" ng-show="assignment.displayCandidateGroups.length > 0" class="btn btn-sm btn-warning">全部移除</button>
+                            <table class="table table-config" ng-show="assignment.displayCandidateGroups.length > 0">
+                                <thead>
+                                <tr>
+                                    <th>序号</th>
+                                    <th>名称</th>
+                                    <th>标识</th>
+                                    <th>ID</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="candidateGroup in assignment.displayCandidateGroups">
+                                    <td>{{$index + 1}}</td>
+                                    <td>{{candidateGroup.name == customExpression ? '自定义' : candidateGroup.name}}</td>
+                                    <td>{{candidateGroup.name == customExpression ? '-' : candidateGroup.code}}</td>
+                                    <td>
+                                        <input ng-show="candidateGroup.name == customExpression" class="form-control form-control-sm" type="text" ng-model="assignment.candidateGroups[$index].value"/>
+                                        <input ng-show="candidateGroup.name != customExpression" readonly class="form-control form-control-sm" type="text" ng-model="assignment.candidateGroups[$index].value"/>
+                                    </td>
+                                    <td>
+                                        <i class="glyphicon glyphicon-minus clickable-property" ng-click="removeCandidateGroupValue($index)"></i>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                            <div ng-show="assignment.displayCandidateGroups.length == 0" class="label label-warning label-no-setting">尚未设置</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button ng-click="close()" class="btn btn-primary" translate>ACTION.CANCEL</button>
+                <button ng-click="save()" class="btn btn-primary" translate>ACTION.SAVE</button>
+            </div>
+        </div>
+    </div>
+</div>
