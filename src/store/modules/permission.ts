@@ -235,9 +235,9 @@ export const usePermissionStore = defineStore({
         const userStore = useUserStore();
         const userInfo = userStore.getCurrentUser;
 
-        this.changePermissionCode(userInfo.permissionList);
+        this.changePermissionCode(userInfo.permissionList as SysPermission[]);
 
-        routeList = convertRoute(userInfo.permissionList);
+        routeList = convertRoute(userInfo.permissionList as SysPermission[]);
       } catch (error) {
         console.error(error);
       }
