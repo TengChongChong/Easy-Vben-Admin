@@ -5,20 +5,26 @@
   import { useDictStore } from '/@/store/modules/dict';
   import { dictProps } from '/@/components/Dict/props';
   import { onMounted, ref, watch } from 'vue';
+  import { isNumber } from '/@/utils/is';
 
   const dictStore = useDictStore();
   const dict = ref();
 
   const props = defineProps(dictProps);
 
+  function getDict() {
+    const code = isNumber(props.value) ? props.value.toString() : (props.value as string);
+    dict.value = dictStore.getDict(props.dictType, code);
+  }
+
   onMounted(() => {
-    dict.value = dictStore.getDict(props.dictType, props.value as string);
+    getDict();
   });
 
   watch(
     [props],
     () => {
-      dict.value = dictStore.getDict(props.dictType, props.value as string);
+      getDict();
     },
     { deep: true },
   );

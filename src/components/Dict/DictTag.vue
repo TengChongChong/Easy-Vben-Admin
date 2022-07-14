@@ -12,6 +12,7 @@
   import { dictProps } from '/@/components/Dict/props';
   import { defineComponent, onMounted, ref, watch } from 'vue';
   import { Icon } from '/@/components/Icon';
+  import { isNumber } from '/@/utils/is';
 
   const dictStore = useDictStore();
   const dict = ref();
@@ -20,14 +21,19 @@
 
   defineComponent(Icon);
 
+  function getDict() {
+    const code = isNumber(props.value) ? props.value.toString() : (props.value as string);
+    dict.value = dictStore.getDict(props.dictType, code);
+  }
+
   onMounted(() => {
-    dict.value = dictStore.getDict(props.dictType, props.value);
+    getDict();
   });
 
   watch(
     [props],
     () => {
-      dict.value = dictStore.getDict(props.dictType, props.value);
+      getDict();
     },
     { deep: true },
   );
