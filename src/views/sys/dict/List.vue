@@ -34,24 +34,31 @@
           <span v-else>{{ record.name }}</span>
         </template>
         <template v-if="column.key === 'action'">
-          <a-tooltip>
-            <template #title>新增下级</template>
-            <a-button
-              auth="sys:dict:save"
-              type="link"
-              size="small"
-              @click="handleCreate(record.id, record.dictType)"
-            >
-              <template #icon>
-                <Icon icon="ant-design:plus-outlined" />
-              </template>
-            </a-button>
-          </a-tooltip>
+          <div class="basic-table-action center">
+            <a-tooltip>
+              <template #title>新增下级</template>
+              <a-button
+                auth="sys:dict:save"
+                type="link"
+                size="small"
+                @click="handleCreate(record.id, record.dictType)"
+              >
+                <template #icon>
+                  <Icon icon="ant-design:plus-outlined" />
+                </template>
+              </a-button>
+            </a-tooltip>
 
-          <a-divider type="vertical" />
-          <a-button-edit auth="sys:dict:save" :id="record.id" @click="handleEdit" />
-          <a-divider type="vertical" />
-          <a-button-remove auth="sys:dict:remove" :id="record.id" :api="remove" @success="reload" />
+            <a-divider type="vertical" />
+            <a-button-edit auth="sys:dict:save" :id="record.id" @click="handleEdit" />
+            <a-divider type="vertical" />
+            <a-button-remove
+              auth="sys:dict:remove"
+              :id="record.id"
+              :api="remove"
+              @success="reload"
+            />
+          </div>
         </template>
       </template>
     </BasicTable>
@@ -155,11 +162,11 @@
           openDrawer(true, data);
         });
       };
-      const handleEdit = (id: string) => {
+      function handleEdit(id: string) {
         get(id).then((data) => {
           openDrawer(true, data);
         });
-      };
+      }
 
       const reloadTable = () => {
         nextTick(() => {

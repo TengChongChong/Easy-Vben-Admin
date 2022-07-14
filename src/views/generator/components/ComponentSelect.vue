@@ -22,7 +22,7 @@
       onChange: propTypes.func,
     },
     emits: ['change', 'update:value'],
-    setup(props) {
+    setup(props, { emit }) {
       const COMPONENT_TYPE = [
         'Input',
         'InputGroup',
@@ -81,8 +81,9 @@
         options.value = opt;
       };
 
-      function handleChange(_, ...args) {
+      function handleChange(value, ...args) {
         emitData.value = args;
+        emit('update:value', value);
       }
 
       return { state, options, handleChange };

@@ -5,7 +5,7 @@
     showFooter
     title="菜单"
     width="30%"
-    @ok="handleSubmit"
+    @ok="handleSave"
   >
     <BasicForm @register="registerForm" />
 
@@ -18,7 +18,7 @@
   </BasicDrawer>
 </template>
 <script lang="ts">
-  import { defineComponent, nextTick, ref } from 'vue';
+  import { defineComponent, nextTick } from 'vue';
   import { BasicForm, useForm } from '/@/components/Form';
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
 
@@ -34,12 +34,13 @@
     components: { Icon, BasicForm, BasicDrawer },
     emits: ['success', 'register'],
     setup(_, { emit }) {
-      const id = ref();
-      const version = ref();
-
-      const [registerForm, { resetFields, setFieldsValue, validate, updateSchema }] = useForm({
-        labelWidth: 100,
+      const [
+        registerForm,
+        { resetFields, setFieldsValue, validate, updateSchema, getFieldsValue },
+      ] = useForm({
         schemas: [
+          { field: 'id', label: 'id', component: 'Input', ifShow: false },
+          { field: 'version', label: 'version', component: 'Input', ifShow: false },
           {
             field: 'type',
             label: '类型',
@@ -105,7 +106,7 @@
             label: '组件路径',
             component: 'Input',
             componentProps: {
-              prefix: '/views/',
+              prefix: '/views',
             },
             rules: [{ max: 255, message: '编码不能超过255个字符', trigger: 'blur' }],
             ifShow: ({ values }) => values.type === 'menu' && values.external !== '1',
@@ -186,12 +187,7 @@
         await updateParentMenu();
         // 重置表单
         await resetFields();
-        id.value = data?.id;
-        version.value = data?.version || 0;
-
-        await setFieldsValue({
-          ...data,
-        });
+        await setFieldsValue(data);
         changeLoading(false);
       });
 
@@ -204,16 +200,17 @@
         });
       }
 
-      async function handleSave(callback: (_: SysPermission) => any) {
+      async function handleSubmit(callback: (_: SysPermission) => any) {
         try {
           changeLoading(true);
-          const values = await validate();
+          await validate();
+          const values = getFieldsValue();
           if (values && isArray(values.parentCode)) {
             values.parentCode = values.parentCode[values.parentCode.length - 1];
           } else {
             values.parentCode = '';
           }
-          await save({ ...values, id: id.value, version: version.value }).then((res) => {
+          await save(values).then((res) => {
             emit('success');
             callback(res);
           });
@@ -222,30 +219,26 @@
         }
       }
 
-      async function handleSubmit() {
-        await handleSave((_) => {
+      async function handleSave() {
+        await handleSubmit((_) => {
           closeDrawer();
         });
       }
 
       async function handleSaveAndAdd() {
-        await handleSave((res) => {
+        await handleSubmit((res) => {
           nextTick(() => {
             updateParentMenu();
             add(res.parentId).then(async (data) => {
               // 重置表单
               await resetFields();
-              id.value = null;
-              version.value = null;
-              await setFieldsValue({
-                ...data,
-              });
+              await setFieldsValue(data);
             });
           });
         });
       }
 
-      return { registerDrawer, registerForm, handleSubmit, handleSaveAndAdd };
+      return { registerDrawer, registerForm, handleSave, handleSaveAndAdd };
     },
   });
 </script>

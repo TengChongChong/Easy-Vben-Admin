@@ -5,7 +5,7 @@
     showFooter
     title="角色"
     width="30%"
-    @ok="handleSubmit"
+    @ok="handleSave"
   >
     <BasicForm @register="registerForm">
       <template #menu="{ model, field }">
@@ -49,14 +49,13 @@
     components: { BasicTree, Icon, BasicForm, BasicDrawer },
     emits: ['success', 'register'],
     setup(_, { emit }) {
-      const id = ref();
-      const version = ref();
       const treeData = ref<TreeItem[]>([]);
       const treeRef = ref<Nullable<TreeActionType>>(null);
       const allSelectedNodes = ref<String[]>([]);
-      const [registerForm, { resetFields, setFieldsValue, validate }] = useForm({
-        labelWidth: 100,
+      const [registerForm, { resetFields, setFieldsValue, validate, getFieldsValue }] = useForm({
         schemas: [
+          { field: 'id', label: 'id', component: 'Input', ifShow: false },
+          { field: 'version', label: 'version', component: 'Input', ifShow: false },
           {
             field: 'name',
             label: '名称',
@@ -124,17 +123,13 @@
         unref(treeRef)?.expandAll(false);
         // 重置表单
         await resetFields();
-        id.value = data?.id;
-        version.value = data?.version || 0;
         await selectAll().then((res) => {
           treeData.value = listToTree(res);
         });
         allSelectedNodes.value = data.permissionIds;
         data.permissionIds = convertCheckedKeys(unref(treeData), data.permissionIds);
 
-        await setFieldsValue({
-          ...data,
-        });
+        await setFieldsValue(data);
 
         changeLoading(false);
       });
@@ -143,15 +138,16 @@
         allSelectedNodes.value = selectedKeys.concat(info.halfCheckedKeys);
       }
 
-      async function handleSave(callback: (_: SysRole) => any) {
+      async function handleSubmit(callback: (_: SysRole) => any) {
         try {
           changeLoading(true);
-          const values = await validate();
+          await validate();
+          const values = getFieldsValue();
           // 设置选中节点
           if (unref(allSelectedNodes)?.length) {
             values.permissionIds = unref(allSelectedNodes);
           }
-          await save({ ...values, id: id.value, version: version.value }).then((res) => {
+          await save(values as SysRole).then((res) => {
             emit('success');
             callback(res);
           });
@@ -161,24 +157,20 @@
         }
       }
 
-      async function handleSubmit() {
-        await handleSave((_) => {
+      async function handleSave() {
+        await handleSubmit((_) => {
           changeLoading(false);
           closeDrawer();
         });
       }
 
       async function handleSaveAndAdd() {
-        await handleSave(() => {
+        await handleSubmit(() => {
           nextTick(() => {
             add().then(async (data) => {
               // 重置表单
               await resetFields();
-              id.value = null;
-              version.value = null;
-              await setFieldsValue({
-                ...data,
-              });
+              await setFieldsValue(data);
               changeLoading(false);
             });
           });
@@ -190,7 +182,7 @@
         treeData,
         registerDrawer,
         registerForm,
-        handleSubmit,
+        handleSave,
         handleSaveAndAdd,
         onTreeSelectChange,
       };

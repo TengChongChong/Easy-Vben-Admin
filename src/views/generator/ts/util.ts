@@ -12,6 +12,7 @@ import {
 } from '/@/views/generator/ts/generator.data';
 import { SelectModel } from '/@/api/model/selectModel';
 import { PREFERENCE_SETTING } from '/@/views/generator/ts/preference-setting';
+import { useDictStoreWithOut } from '/@/store/modules/dict';
 
 /**
  * 获取controller中@RequestMapping值
@@ -29,6 +30,18 @@ export function getControllerMapping(tableName: string): string {
 export function getFrontEndPath(tableName: string): string {
   if (tableName.indexOf('_') > -1) {
     return tableName.substring(0, tableName.lastIndexOf('_')).replace(/_/g, '/');
+  } else {
+    return tableName;
+  }
+}
+/**
+ * 根据表名获取前端Api路径
+ *
+ * @param tableName 表名
+ */
+export function getFrontEndApiPath(tableName: string): string {
+  if (tableName.indexOf('_') > -1) {
+    return tableName.substring(0, tableName.indexOf('_'));
   } else {
     return tableName;
   }
@@ -56,10 +69,15 @@ export function needGeneratorInput(basicsConfig: BasicsConfigModel): boolean {
  * @param basicsConfig 配置
  */
 export function needGeneratorImportOrExport(basicsConfig: BasicsConfigModel): boolean {
-  return (
-    basicsConfig.genMethod.indexOf(GenMethod.IMPORT_DATA) > -1 ||
-    basicsConfig.genMethod.indexOf(GenMethod.EXPORT_DATA) > -1
-  );
+  return needGeneratorImport(basicsConfig) || needGeneratorExport(basicsConfig);
+}
+
+export function needGeneratorImport(basicsConfig: BasicsConfigModel): boolean {
+  return basicsConfig?.genMethod?.indexOf(GenMethod.IMPORT_DATA) > -1;
+}
+
+export function needGeneratorExport(basicsConfig: BasicsConfigModel): boolean {
+  return basicsConfig?.genMethod?.indexOf(GenMethod.EXPORT_DATA) > -1;
 }
 
 /**
@@ -238,7 +256,14 @@ function getFieldConfig(
       config.componentType = 'DictSelect';
       config.matchingMode = MatchingMode.EQ;
     } else if (FORM_TYPE.INPUT === formType) {
-      config.componentType = 'DictRadio';
+      // 检查字典数量，如果>=5就用DictSelect，反之DictRadio
+      const dictStore = useDictStoreWithOut();
+      const dictArray = dictStore.selectDictArray(dictType);
+      if (dictArray.length >= 5) {
+        config.componentType = 'DictSelect';
+      } else {
+        config.componentType = 'DictRadio';
+      }
       config.required = false;
     }
   } else {
@@ -263,7 +288,7 @@ function getFieldConfig(
           config.componentType = 'RangePicker';
           config.matchingMode = MatchingMode.DATE_RANGE;
         } else if (FORM_TYPE.INPUT === formType) {
-          config.componentType = 'TimePicker';
+          config.componentType = 'DatePicker';
         }
         break;
       case 'String':
@@ -318,7 +343,7 @@ function isPassword(field: TableField): boolean {
  *
  * @param type 字段类型
  */
-function getFieldLength(type: string): Nullable<number> {
+export function getFieldLength(type: string): Nullable<number> {
   if (type) {
     try {
       return Number(type.match(/\d+/g));
@@ -534,7 +559,7 @@ function getImportConfig(
  * @param field 字段
  * @param dictTypeArray 字典
  */
-function getDictType(
+export function getDictType(
   tableInfo: TableInfo,
   field: TableField,
   dictTypeArray: string[],
@@ -592,6 +617,12 @@ function getDictType(
     if (dictTypeArray.indexOf(dictType) > -1) {
       return dictType;
     }
+  }
+
+  // 属性
+  dictType = field.propertyName;
+  if (dictTypeArray.indexOf(dictType) > -1) {
+    return dictType;
   }
 
   // 属性 - 首字母大写

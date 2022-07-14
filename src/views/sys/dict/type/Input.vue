@@ -1,67 +1,103 @@
 <template>
-  <BasicDrawer
-    v-bind="$attrs"
-    @register="registerDrawer"
-    showFooter
-    title="字典类型"
-    width="30%"
-    @ok="handleSubmit"
-  >
+  <BasicModal v-bind="$attrs" @register="registerModel" title="字典类型">
     <BasicForm @register="registerForm" />
-  </BasicDrawer>
+    <template #footer>
+      <a-button @click="closeModal">
+        <Icon icon="ant-design:close-outlined" />
+        关闭
+      </a-button>
+      <a-button :loading="saveBtnLoading" type="primary" @click="handleSave">
+        <Icon icon="ant-design:plus-outlined" />
+        保存
+      </a-button>
+      <a-button :loading="saveBtnLoading" type="primary" @click="handleSaveAndAdd">
+        <Icon icon="ant-design:plus-outlined" />
+        保存并新增
+      </a-button>
+    </template>
+  </BasicModal>
 </template>
 <script lang="ts">
-  import { defineComponent, ref } from 'vue';
+  import { defineComponent, nextTick, ref } from 'vue';
   import { BasicForm, useForm } from '/@/components/Form/index';
-  import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
+  import { BasicModal, useModalInner } from '/@/components/Modal';
 
   import { formSchema } from './dict-type.data';
-  import { save } from '/@/api/sys/sysDictType';
+  import { add, save } from '/@/api/sys/sysDictType';
+  import { Icon } from '/@/components/Icon';
+  import { SysDictType } from '/@/api/sys/model/sysDictTypeModel';
 
   export default defineComponent({
     name: 'SysDictTypeInput',
-    components: { BasicForm, BasicDrawer },
+    components: { BasicForm, BasicModal, Icon },
     emits: ['success', 'register'],
     setup(_, { emit }) {
-      const id = ref();
-      const version = ref();
+      const saveBtnLoading = ref<boolean>(false);
 
-      const [registerForm, { resetFields, setFieldsValue, validate }] = useForm({
-        labelWidth: 100,
+      const [registerForm, { resetFields, setFieldsValue, validate, getFieldsValue }] = useForm({
         schemas: formSchema,
         showActionButtonGroup: false,
         baseColProps: { md: 24 },
       });
 
-      const [registerDrawer, { changeLoading, closeDrawer }] = useDrawerInner(async (data) => {
+      const [registerModel, { changeLoading, closeModal }] = useModalInner(async (data) => {
         changeLoading(true);
         // 重置表单
         await resetFields();
-        id.value = data?.id;
-        version.value = data?.version || 0;
-
-        await setFieldsValue({
-          ...data,
-        });
+        await setFieldsValue(data);
         changeLoading(false);
       });
 
-      async function handleSubmit() {
+      async function handleSubmit(callback: (_: SysDictType) => any) {
         try {
+          saveBtnLoading.value = true;
           changeLoading(true);
-          const values = await validate();
-          await save({ ...values, id: id.value, version: version.value }).then(() => {
-            closeDrawer();
+          await validate();
+          await save(getFieldsValue() as SysDictType).then((res) => {
             emit('success');
+            callback(res);
           });
         } catch (e) {
           console.error(e);
-        } finally {
           changeLoading(false);
+          saveBtnLoading.value = false;
         }
       }
 
-      return { registerDrawer, registerForm, handleSubmit };
+      async function handleSave() {
+        await handleSubmit((_) => {
+          changeLoading(false);
+          saveBtnLoading.value = false;
+          closeModal();
+        });
+      }
+
+      async function handleSaveAndAdd() {
+        await handleSubmit((res) => {
+          nextTick(() => {
+            add().then(async (data) => {
+              // 重置表单
+              await resetFields();
+
+              await setFieldsValue({
+                ...data,
+                sys: res.sys,
+              });
+              changeLoading(false);
+              saveBtnLoading.value = false;
+            });
+          });
+        });
+      }
+
+      return {
+        saveBtnLoading,
+        registerModel,
+        registerForm,
+        handleSaveAndAdd,
+        handleSave,
+        closeModal,
+      };
     },
   });
 </script>

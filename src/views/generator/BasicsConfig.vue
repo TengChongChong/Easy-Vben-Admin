@@ -61,7 +61,7 @@
   import {
     firstLowerCase,
     getControllerMapping,
-    getFrontEndPath,
+    getFrontEndApiPath,
     getPermissionCode,
   } from '/@/views/generator/ts/util';
   import { TableInfo } from '/@/api/generator/model/generatorModel';
@@ -107,7 +107,7 @@
             field: 'divider-template',
             component: 'Divider',
             label: '模板',
-            colProps: { xl: 24, lg: 24 },
+            colProps: { xxl: 24, xl: 24, lg: 24 },
           },
           {
             field: 'generatorTemplate',
@@ -121,7 +121,7 @@
               },
             },
             itemProps: { validateTrigger: 'blur' },
-            colProps: { xl: 24, lg: 24 },
+            colProps: { xxl: 24, xl: 24, lg: 24 },
           },
           {
             field: 'genMethod',
@@ -132,7 +132,7 @@
             componentProps: {
               dictType: 'genMethod',
             },
-            colProps: { xl: 24, lg: 24 },
+            colProps: { xxl: 24, xl: 24, lg: 24 },
           },
           {
             field: 'genFile',
@@ -143,13 +143,13 @@
             componentProps: {
               dictType: 'genFile',
             },
-            colProps: { xl: 24, lg: 24 },
+            colProps: { xxl: 24, xl: 24, lg: 24 },
           },
           {
             field: 'divider-db',
             component: 'Divider',
             label: '基础信息',
-            colProps: { xl: 24, lg: 24 },
+            colProps: { xxl: 24, xl: 24, lg: 24 },
           },
           {
             field: 'dataSource',
@@ -163,7 +163,6 @@
             },
             required: true,
             itemProps: { validateTrigger: 'blur' },
-            colProps: { xxl: 6, lg: 12, md: 24 },
           },
           {
             field: 'table',
@@ -186,7 +185,7 @@
           },
           {
             field: 'modelName',
-            label: '对象名称',
+            label: 'Model 名称',
             component: 'Input',
             helpMessage: '用于前后端Model命名',
             required: true,
@@ -200,7 +199,6 @@
             ifShow: ({ values }) =>
               values.generatorTemplate === GeneratorTemplate.TREE_TABLE_DRAWER ||
               values.generatorTemplate === GeneratorTemplate.TREE_TABLE_INPUT,
-            colProps: { xxl: 5, lg: 12, md: 24 },
           },
           {
             field: 'parentIdField',
@@ -211,13 +209,26 @@
             ifShow: ({ values }) =>
               values.generatorTemplate === GeneratorTemplate.TREE_TABLE_DRAWER ||
               values.generatorTemplate === GeneratorTemplate.TREE_TABLE_INPUT,
-            colProps: { xxl: 5, lg: 12, md: 24 },
+          },
+          {
+            field: 'businessName',
+            label: '业务名称',
+            component: 'Input',
+            helpMessage: '用于controller/entity/dao/service/ts文件注释',
+            required: true,
+          },
+          {
+            field: 'controllerMapping',
+            label: 'Api Url前缀',
+            helpMessage: '用于Controller中@RequestMapping与Api.ts中BASE_URL',
+            component: 'Input',
+            required: true,
           },
           {
             field: 'divider-java',
             component: 'Divider',
             label: '后端',
-            colProps: { xl: 24, lg: 24 },
+            colProps: { xxl: 24, xl: 24, lg: 24 },
             ifShow: ({ values }) =>
               needShow(values.genFile, [
                 GenFile.MODEL,
@@ -235,23 +246,7 @@
             slot: 'backEndPath',
             helpMessage: 'idea中的项目绝对路径，无需/结尾',
             required: true,
-            colProps: { xl: 24, lg: 24 },
-            ifShow: ({ values }) =>
-              needShow(values.genFile, [
-                GenFile.MODEL,
-                GenFile.MAPPER,
-                GenFile.SERVICE,
-                GenFile.SERVICE_IMPL,
-                GenFile.MAPPING,
-                GenFile.CONTROLLER,
-              ]),
-          },
-          {
-            field: 'businessName',
-            label: '业务名称',
-            component: 'Input',
-            helpMessage: '仅用于controller/entity/dao/service/ts文件注释',
-            required: true,
+            colProps: { xxl: 24, xl: 24, lg: 24 },
             ifShow: ({ values }) =>
               needShow(values.genFile, [
                 GenFile.MODEL,
@@ -309,14 +304,6 @@
               ]),
           },
           {
-            field: 'controllerMapping',
-            label: '@RequestMapping',
-            helpMessage: 'Controller的@RequestMapping值',
-            component: 'Input',
-            required: true,
-            ifShow: ({ values }) => needShow(values.genFile, [GenFile.CONTROLLER]),
-          },
-          {
             field: 'divider-front-end',
             component: 'Divider',
             label: '前端',
@@ -330,7 +317,7 @@
             helpMessage: 'idea中的项目绝对路径，无需/结尾',
             component: 'Input',
             required: true,
-            colProps: { xl: 24, lg: 24 },
+            colProps: { xxl: 24, xl: 24, lg: 24 },
             ifShow: ({ values }) =>
               needShow(values.genFile, [GenFile.LIST_VUE, GenFile.INPUT_VUE, GenFile.API_TS]),
           },
@@ -343,7 +330,7 @@
               prefix: '前端项目路径',
             },
             required: true,
-            colProps: { xl: 12, md: 24 },
+            colProps: { xxl: 12, xl: 12, md: 24 },
             ifShow: ({ values }) => needShow(values.genFile, [GenFile.LIST_VUE, GenFile.INPUT_VUE]),
           },
           {
@@ -355,12 +342,12 @@
               prefix: '前端项目路径',
             },
             required: true,
-            colProps: { xl: 12, md: 24 },
-            ifShow: ({ values }) => needShow(values.genFile, GenFile.API_TS),
+            colProps: { xxl: 12, xl: 12, md: 24 },
+            ifShow: ({ values }) => needShow(values.genFile, [GenFile.API_TS, GenFile.MODEL_TS]),
           },
         ],
         showActionButtonGroup: false,
-        baseColProps: { xl: 8, lg: 12, md: 24 },
+        baseColProps: { xxl: 6, xl: 8, lg: 12, md: 24 },
       });
 
       /**
@@ -385,7 +372,7 @@
               packagePath: `com.easy.admin.${table.substring(0, table.indexOf('_'))}`,
               controllerMapping: `/auth/${getControllerMapping(table)}`,
               viewPath: `/src/views/${getControllerMapping(table)}`,
-              apiPath: `/src/api/${getFrontEndPath(table)}/${firstLowerCase(entityName)}.ts`,
+              apiPath: `/src/api/${getFrontEndApiPath(table)}/${firstLowerCase(entityName)}.ts`,
             });
             // 设置模块
             setModules(table);

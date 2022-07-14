@@ -17,25 +17,27 @@
           </span>
         </template>
         <template v-if="column.key === 'action'">
-          <a-tooltip>
-            <template #title>发送</template>
-            <a-popconfirm
-              title="发送后无法修改或删除，确定要立即发送吗？"
-              ok-text="是"
-              cancel-text="否"
-              @confirm="handleSend(record.id)"
-            >
-              <a-button type="link" size="small">
-                <template #icon>
-                  <Icon icon="ant-design:send-outlined" />
-                </template>
-              </a-button>
-            </a-popconfirm>
-          </a-tooltip>
-          <a-divider type="vertical" />
-          <a-button-edit :id="record.id" @click="handleEdit" />
-          <a-divider type="vertical" />
-          <a-button-remove :id="record.id" :api="remove" @success="reload" />
+          <div class="basic-table-action center">
+            <a-tooltip>
+              <template #title>发送</template>
+              <a-popconfirm
+                title="发送后无法修改或删除，确定要立即发送吗？"
+                ok-text="是"
+                cancel-text="否"
+                @confirm="handleSend(record.id)"
+              >
+                <a-button type="link" size="small">
+                  <template #icon>
+                    <Icon icon="ant-design:send-outlined" />
+                  </template>
+                </a-button>
+              </a-popconfirm>
+            </a-tooltip>
+            <a-divider type="vertical" />
+            <a-button-edit :id="record.id" @click="handleEdit" />
+            <a-divider type="vertical" />
+            <a-button-remove :id="record.id" :api="remove" @success="reload" />
+          </div>
         </template>
       </template>
     </BasicTable>
@@ -154,9 +156,9 @@
         },
       });
 
-      const handleEdit = (id: string) => {
+      function handleEdit(id: string) {
         emit('edit-message', id);
-      };
+      }
 
       const handleSend = (id: string) => {
         send(id).then(() => {

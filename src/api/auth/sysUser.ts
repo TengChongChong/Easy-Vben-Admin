@@ -4,7 +4,7 @@ import { Page } from '/@/api/model/pageModel';
 import { isArray } from '/@/utils/is';
 
 // base url
-const BASE_URL = '/api/auth/sys/user/';
+const BASE_URL = '/api/auth/sys/user';
 
 /**
  * 查询
@@ -29,7 +29,7 @@ export function select(params: SysUser, pager: Page<SysUser>) {
  */
 export function search(keyword: string, range: string, deptId: string, pager: Page<SysUser>) {
   return defHttp.get<Page<SysUser>>({
-    url: `${BASE_URL}search`,
+    url: `${BASE_URL}/search`,
     params: {
       keyword,
       range,
@@ -45,7 +45,7 @@ export function search(keyword: string, range: string, deptId: string, pager: Pa
  */
 export function selectUsersByIds(ids: string | string[]) {
   return defHttp.get<SysUser[]>({
-    url: `${BASE_URL}users/${isArray(ids) ? ids.join(',') : ids}`,
+    url: `${BASE_URL}/users/${isArray(ids) ? ids.join(',') : ids}`,
   });
 }
 
@@ -56,7 +56,7 @@ export function selectUsersByIds(ids: string | string[]) {
  */
 export function get(id: string) {
   return defHttp.get<SysUser>({
-    url: `${BASE_URL}${id}`,
+    url: `${BASE_URL}/${id}`,
   });
 }
 
@@ -67,7 +67,7 @@ export function get(id: string) {
  */
 export function add(deptId: string) {
   return defHttp.get<SysUser>({
-    url: `${BASE_URL}add/${deptId}`,
+    url: `${BASE_URL}/add/${deptId}`,
   });
 }
 
@@ -78,7 +78,7 @@ export function add(deptId: string) {
  */
 export function remove(ids: string) {
   return defHttp.delete<boolean>({
-    url: `${BASE_URL}${ids}`,
+    url: `${BASE_URL}/${ids}`,
   });
 }
 
@@ -102,7 +102,7 @@ export function save(params: SysUser) {
  */
 export function setStatus(ids: string, status: string) {
   return defHttp.post<boolean>({
-    url: `${BASE_URL}${ids}/status/${status}`,
+    url: `${BASE_URL}/${ids}/status/${status}`,
   });
 }
 
@@ -113,6 +113,6 @@ export function setStatus(ids: string, status: string) {
  */
 export function resetPassword(ids: string) {
   return defHttp.post<string>({
-    url: `${BASE_URL}reset/password/${ids}`,
+    url: `${BASE_URL}/reset/password/${ids}`,
   });
 }

@@ -7,14 +7,13 @@
       :rowSelection="{ type: 'checkbox', onChange: onSelectChange }"
     >
       <template #toolbar>
-        <a-button-add auth="sample:general:save" @click="handleCreate" />
+        <a-button-add auth="sample:work:flow:save" @click="handleCreate" />
         <a-button-remove-batch
-          auth="sample:general:remove"
+          auth="sample:work:flow:remove"
           :id="checkedKeys"
           :api="remove"
           @success="reload"
         />
-        <a-button-import import-code="sample:general" />
         <a-button-export
           :loading="exportBtnLoading"
           auth="sample:general:select"
@@ -23,12 +22,36 @@
       </template>
 
       <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'startDate'">
+          {{ formatToDate(record.startDate, 'MM-DD HH:mm') }} ~
+          {{ formatToDate(record.endDate, 'MM-DD HH:mm') }}
+        </template>
         <template v-if="column.key === 'action'">
           <div class="basic-table-action center">
-            <a-button-edit auth="sample:general:save" :id="record.id" @click="handleEdit" />
+            <a-button-start
+              v-if="!record.processInstanceId"
+              model-key="leave"
+              :business-key="record.id"
+              :business-title="record.reason"
+              :business-details-path="`/sample/work/flow/Info.vue`"
+              @success="reload"
+            />
+            <a-button-progress v-if="record.processInstanceId" :business-key="record.id" />
+            <template
+              v-if="
+                record.processInstanceId != null &&
+                record.workFlowStatus !== '已办结' &&
+                record.workFlowStatus !== '已撤销'
+              "
+            >
+              <a-divider type="vertical" />
+              <a-button-revoke :business-key="record.id" :reason="true" @success="reload" />
+            </template>
+            <a-divider type="vertical" />
+            <a-button-edit auth="sample:work:flow:save" :id="record.id" @click="handleEdit" />
             <a-divider type="vertical" />
             <a-button-remove
-              auth="sample:general:remove"
+              auth="sample:work:flow:remove"
               :id="record.id"
               :api="remove"
               @success="reload"
@@ -38,13 +61,13 @@
       </template>
     </BasicTable>
     <!-- 表单 -->
-    <SampleGeneralInput @register="registerDrawer" @success="reload" />
+    <SampleWorkFlowInput @register="registerDrawer" @success="reload" />
   </PageWrapper>
 </template>
 <script lang="ts">
   import { defineComponent, ref, reactive } from 'vue';
   import { BasicTable, useTable } from '/@/components/Table';
-  import { searchFormSchema, columns } from '/@/views/sample/general/general.data';
+  import { searchFormSchema, columns } from '/@/views/sample/work/flow/flow.data';
   import { useDrawer } from '/@/components/Drawer';
   import AButtonAdd from '/@/components/Button/src/ButtonAdd.vue';
   import AButtonRemove from '/@/components/Button/src/ButtonRemove.vue';
@@ -52,18 +75,23 @@
   import AButtonEdit from '/@/components/Button/src/ButtonEdit.vue';
   import AButtonExport from '/@/components/Button/src/ButtonExport.vue';
   import { downloadFileById } from '/@/utils/file/download';
-  import { SampleGeneral } from '/@/api/sample/model/sampleGeneralModel';
-  import { add, remove, select, get, exportData } from '/@/api/sample/sampleGeneral';
-  import SampleGeneralInput from '/@/views/sample/general/Input.vue';
+  import { SampleWorkFlow } from '/@/api/sample/model/sampleWorkFlowModel';
+  import { add, remove, select, get, exportData } from '/@/api/sample/work/sampleWorkFlow';
+  import SampleWorkFlowInput from '/@/views/sample/work/flow/Input.vue';
   import { PageWrapper } from '/@/components/Page';
-  import AButtonImport from '/@/components/Button/src/ButtonImport.vue';
+  import AButtonStart from '/@/components/Button/src/workflow/ButtonStart.vue';
+  import { formatToDate } from '/@/utils/dateUtil';
+  import AButtonProgress from '/@/components/Button/src/workflow/ButtonProgress.vue';
+  import AButtonRevoke from '/@/components/Button/src/workflow/ButtonRevoke.vue';
 
   export default defineComponent({
-    name: 'SampleGeneralList',
+    name: 'SampleWorkFlowList',
     components: {
-      AButtonImport,
+      AButtonRevoke,
+      AButtonProgress,
+      AButtonStart,
       PageWrapper,
-      SampleGeneralInput,
+      SampleWorkFlowInput,
       AButtonAdd,
       AButtonRemoveBatch,
       AButtonRemove,
@@ -84,7 +112,7 @@
        * 初始化表格
        */
       const [registerTable, { reload }] = useTable({
-        title: '代码生成示例',
+        title: '流程示例',
         api: select,
         columns,
         useSearchForm: true,
@@ -113,7 +141,7 @@
       const handelExportData = async () => {
         exportBtnLoading.value = true;
         try {
-          await exportData(searchInfo as SampleGeneral).then((id) => {
+          await exportData(searchInfo as SampleWorkFlow).then((id) => {
             downloadFileById(id);
           });
         } catch (e) {
@@ -137,6 +165,7 @@
         handleCreate,
         handleEdit,
         reload,
+        formatToDate,
       };
     },
   });

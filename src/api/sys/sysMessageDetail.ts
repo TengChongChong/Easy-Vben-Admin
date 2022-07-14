@@ -1,7 +1,7 @@
 import { defHttp } from '/@/utils/http/axios';
 
 // base url
-const BASE_URL = '/api/auth/sys/message/detail/';
+const BASE_URL = '/api/auth/sys/message/detail';
 
 /**
  * 设置消息标星/取消标星
@@ -11,7 +11,7 @@ const BASE_URL = '/api/auth/sys/message/detail/';
  */
 export function setStar(id: string, type: boolean) {
   return defHttp.post<boolean>({
-    url: `${BASE_URL}star/${id}/${type}`,
+    url: `${BASE_URL}/star/${id}/${type}`,
   });
 }
 
@@ -22,7 +22,7 @@ export function setStar(id: string, type: boolean) {
  */
 export function removeByIds(ids: string) {
   return defHttp.delete<boolean>({
-    url: `${BASE_URL}${ids}`,
+    url: `${BASE_URL}/${ids}`,
   });
 }
 
@@ -33,6 +33,6 @@ export function removeByIds(ids: string) {
  */
 export function setRead(ids: Nullable<string>) {
   return defHttp.post<boolean>({
-    url: `${BASE_URL}read/${ids ? ids : ''}`,
+    url: `${BASE_URL}/read/${ids ? ids : ''}`,
   });
 }

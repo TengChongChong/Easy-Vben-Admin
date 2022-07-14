@@ -43,41 +43,43 @@
 
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'action'">
-          <Authority value="scheduler:job:save">
+          <div class="basic-table-action center">
+            <Authority value="scheduler:job:save">
+              <a-tooltip>
+                <template #title>立即执行</template>
+                <a-popconfirm
+                  title="确定要立即执行吗？"
+                  ok-text="是"
+                  cancel-text="否"
+                  @confirm="handleImmediateExecution(record.id)"
+                >
+                  <a-button type="link" danger size="small">
+                    <template #icon>
+                      <Icon icon="ant-design:play-circle-outlined" />
+                    </template>
+                  </a-button>
+                </a-popconfirm>
+              </a-tooltip>
+            </Authority>
+            <a-divider type="vertical" />
+            <a-button-edit auth="scheduler:job:save" :id="record.id" @click="handleEdit" />
+            <a-divider type="vertical" />
+            <a-button-remove
+              auth="scheduler:job:remove"
+              :id="record.id"
+              :api="remove"
+              @success="reload"
+            />
+            <a-divider type="vertical" />
             <a-tooltip>
-              <template #title>立即执行</template>
-              <a-popconfirm
-                title="确定要立即执行吗？"
-                ok-text="是"
-                cancel-text="否"
-                @confirm="handleImmediateExecution(record.id)"
-              >
-                <a-button type="link" danger size="small">
-                  <template #icon>
-                    <Icon icon="ant-design:play-circle-outlined" />
-                  </template>
-                </a-button>
-              </a-popconfirm>
+              <template #title>执行日志</template>
+              <a-button type="link" size="small" @click="handleOpenLogModal(record.id)">
+                <template #icon>
+                  <Icon icon="ant-design:profile-outlined" />
+                </template>
+              </a-button>
             </a-tooltip>
-          </Authority>
-          <a-divider type="vertical" />
-          <a-button-edit auth="scheduler:job:save" :id="record.id" @click="handleEdit" />
-          <a-divider type="vertical" />
-          <a-button-remove
-            auth="scheduler:job:remove"
-            :id="record.id"
-            :api="remove"
-            @success="reload"
-          />
-          <a-divider type="vertical" />
-          <a-tooltip>
-            <template #title>执行日志</template>
-            <a-button type="link" size="small" @click="handleOpenLogModal(record.id)">
-              <template #icon>
-                <Icon icon="ant-design:profile-outlined" />
-              </template>
-            </a-button>
-          </a-tooltip>
+          </div>
         </template>
       </template>
     </BasicTable>
@@ -155,16 +157,16 @@
       /**
        * 新增
        */
-      const handleCreate = () => {
+      function handleCreate() {
         add().then((data) => {
           openDrawer(true, data);
         });
-      };
-      const handleEdit = (id: string) => {
+      }
+      function handleEdit(id: string) {
         get(id).then((data) => {
           openDrawer(true, data);
         });
-      };
+      }
       const handleImmediateExecution = (id) => {
         immediateExecution(id).then(() => {
           createMessage.success('执行成功');

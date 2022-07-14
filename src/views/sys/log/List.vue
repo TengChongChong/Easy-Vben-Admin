@@ -7,7 +7,9 @@
     >
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'action'">
-          <a-button-info :path="`/sys/log/info/${record.id}`" />
+          <div class="basic-table-action center">
+            <a-button-info :path="`/sys/log/info/${record.id}`" />
+          </div>
         </template>
       </template>
     </BasicTable>

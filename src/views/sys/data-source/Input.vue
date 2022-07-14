@@ -5,7 +5,7 @@
     showFooter
     title="数据源"
     width="60%"
-    @ok="handleSubmit"
+    @ok="handleSave"
   >
     <BasicForm @register="registerForm" />
 
@@ -18,7 +18,7 @@
   </BasicDrawer>
 </template>
 <script lang="ts">
-  import { defineComponent, nextTick, ref } from 'vue';
+  import { defineComponent, nextTick } from 'vue';
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
 
@@ -31,12 +31,10 @@
     components: { Icon, BasicForm, BasicDrawer },
     emits: ['success', 'register'],
     setup(_, { emit }) {
-      const id = ref();
-      const version = ref();
-
-      const [registerForm, { resetFields, setFieldsValue, validate }] = useForm({
-        labelWidth: 100,
+      const [registerForm, { resetFields, setFieldsValue, validate, getFieldsValue }] = useForm({
         schemas: [
+          { field: 'id', label: 'id', component: 'Input', ifShow: false },
+          { field: 'version', label: 'version', component: 'Input', ifShow: false },
           {
             field: 'name',
             label: '名称',
@@ -95,20 +93,15 @@
         changeLoading(true);
         // 重置表单
         await resetFields();
-        id.value = data?.id;
-        version.value = data?.version || 0;
-
-        await setFieldsValue({
-          ...data,
-        });
+        await setFieldsValue(data);
         changeLoading(false);
       });
 
-      async function handleSave(callback: (_: SysDataSource) => any) {
+      async function handleSubmit(callback: (_: SysDataSource) => any) {
         try {
           changeLoading(true);
-          const values = await validate();
-          await save({ ...values, id: id.value, version: version.value }).then((res) => {
+          await validate();
+          await save(getFieldsValue() as SysDataSource).then((res) => {
             emit('success');
             callback(res);
           });
@@ -118,32 +111,27 @@
         }
       }
 
-      async function handleSubmit() {
-        await handleSave((_) => {
+      async function handleSave() {
+        await handleSubmit((_) => {
           changeLoading(false);
           closeDrawer();
         });
       }
 
       async function handleSaveAndAdd() {
-        await handleSave(() => {
+        await handleSubmit(() => {
           nextTick(() => {
             // 重置表单
             resetFields();
-            id.value = null;
-            version.value = null;
-
             add().then(async (data) => {
-              await setFieldsValue({
-                ...data,
-              });
+              await setFieldsValue(data);
             });
             changeLoading(false);
           });
         });
       }
 
-      return { registerDrawer, registerForm, handleSubmit, handleSaveAndAdd };
+      return { registerDrawer, registerForm, handleSave, handleSaveAndAdd };
     },
   });
 </script>

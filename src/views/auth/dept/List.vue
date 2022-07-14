@@ -35,11 +35,18 @@
 
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'action'">
-          <a-button-add-sub auth="sys:dept:save" :id="record.id" @click="handleCreate" />
-          <a-divider type="vertical" />
-          <a-button-edit auth="sys:dept:save" :id="record.id" @click="handleEdit" />
-          <a-divider type="vertical" />
-          <a-button-remove auth="sys:dept:remove" :id="record.id" :api="remove" @success="reload" />
+          <div class="basic-table-action center">
+            <a-button-add-sub auth="sys:dept:save" :id="record.id" @click="handleCreate" />
+            <a-divider type="vertical" />
+            <a-button-edit auth="sys:dept:save" :id="record.id" @click="handleEdit" />
+            <a-divider type="vertical" />
+            <a-button-remove
+              auth="sys:dept:remove"
+              :id="record.id"
+              :api="remove"
+              @success="reload"
+            />
+          </div>
         </template>
       </template>
     </BasicTable>
@@ -132,11 +139,11 @@
           openDrawer(true, data);
         });
       };
-      const handleEdit = (id: string) => {
+      function handleEdit(id: string) {
         get(id).then((data) => {
           openDrawer(true, data);
         });
-      };
+      }
 
       return {
         checkedKeys,

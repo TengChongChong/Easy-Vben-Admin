@@ -1,6 +1,6 @@
 <template>
   <div class="generator-form">
-    <a-card style="margin-bottom: 1rem">
+    <a-card v-show="generatorImport" style="margin-bottom: 1rem">
       <template #title>
         导入
         <small>
@@ -62,7 +62,7 @@
       </div>
     </a-card>
 
-    <a-card>
+    <a-card v-show="generatorExport">
       <template #title>
         导出
         <small>
@@ -146,18 +146,20 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, onMounted, ref, unref, watch } from 'vue';
+  import { computed, defineComponent, onMounted, ref, unref, watch } from 'vue';
   import { Icon } from '/@/components/Icon';
   import {
     ImportCellConfig,
     GeneratorConfig,
     TableCellConfig,
+    BasicsConfigModel,
   } from '/@/views/generator/ts/generator.data';
   import { useModal } from '/@/components/Modal';
   import ImportConfigModal from '/@/views/generator/modal/ImportConfigModal.vue';
   import ExportConfigModal from '/@/views/generator/modal/ExportConfigModal.vue';
   import Sortable from 'sortablejs';
   import { isNullAndUnDef } from '/@/utils/is';
+  import { needGeneratorExport, needGeneratorImport } from '/@/views/generator/ts/util';
 
   export default defineComponent({
     components: { ImportConfigModal, ExportConfigModal, Icon },
@@ -191,7 +193,6 @@
             importConfig.value.splice(newIndex, 0, currentTab);
           },
         });
-
         Sortable.create(document.querySelectorAll('.config-items-export')?.[0] as HTMLElement, {
           animation: 500,
           delay: 400,
@@ -288,6 +289,13 @@
         });
       }
 
+      const generatorImport = computed(() => {
+        return needGeneratorImport(props.generatorConfig?.basicsConfig as BasicsConfigModel);
+      });
+      const generatorExport = computed(() => {
+        return needGeneratorExport(props.generatorConfig?.basicsConfig as BasicsConfigModel);
+      });
+
       function handleStepPrev() {
         emit('prev');
       }
@@ -301,6 +309,8 @@
       return {
         importConfig,
         exportConfig,
+        generatorImport,
+        generatorExport,
         isQuery,
         updateImportConfig,
         registerImportConfig,

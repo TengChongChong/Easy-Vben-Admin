@@ -1,10 +1,9 @@
+import { SampleWorkFlow } from '/@/api/sample/model/sampleWorkFlowModel';
 import { Page } from '/@/api/model/pageModel';
 import { defHttp } from '/@/utils/http/axios';
-import { SelectModel } from '/@/api/model/selectModel';
-import { SysDataSource } from '/@/api/sys/model/sysDataSourceModel';
 
 // base url
-const BASE_URL = '/api/auth/sys/data/source';
+const BASE_URL = '/api/auth/sample/work/flow';
 
 /**
  * 查询
@@ -12,8 +11,8 @@ const BASE_URL = '/api/auth/sys/data/source';
  * @param params 查询条件
  * @param pager 分页
  */
-export function select(params: SysDataSource, pager: Page<SysDataSource>) {
-  return defHttp.get<Page<SysDataSource>>({
+export function select(params: SampleWorkFlow, pager: Page<SampleWorkFlow>) {
+  return defHttp.get<Page<SampleWorkFlow>>({
     url: BASE_URL,
     params: Object.assign(params, pager),
   });
@@ -25,7 +24,7 @@ export function select(params: SysDataSource, pager: Page<SysDataSource>) {
  * @param id id
  */
 export function get(id: string) {
-  return defHttp.get<SysDataSource>({
+  return defHttp.get<SampleWorkFlow>({
     url: `${BASE_URL}/${id}`,
   });
 }
@@ -34,7 +33,7 @@ export function get(id: string) {
  * 新增
  */
 export function add() {
-  return defHttp.get<SysDataSource>({
+  return defHttp.get<SampleWorkFlow>({
     url: `${BASE_URL}/add`,
   });
 }
@@ -55,18 +54,21 @@ export function remove(ids: string) {
  *
  * @param params 表单数据
  */
-export function save(params: SysDataSource) {
-  return defHttp.post<SysDataSource>({
+export function save(params: SampleWorkFlow) {
+  return defHttp.post<SampleWorkFlow>({
     url: BASE_URL,
     data: params,
   });
 }
 
 /**
- * 获取数据源
+ * 导出数据
+ *
+ * @param params 查询条件
  */
-export function selectOptions() {
-  return defHttp.get<SelectModel[]>({
-    url: `${BASE_URL}/select/options`,
+export function exportData(params: SampleWorkFlow) {
+  return defHttp.get<string>({
+    url: `${BASE_URL}/export/data`,
+    data: params,
   });
 }

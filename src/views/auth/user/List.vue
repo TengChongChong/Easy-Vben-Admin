@@ -30,32 +30,34 @@
             </template>
 
             <template v-if="column.key === 'action'">
-              <Authority value="sys:user:save">
-                <a-tooltip>
-                  <template #title>重置密码</template>
-                  <a-popconfirm
-                    title="确定要重置为默认密码吗？"
-                    ok-text="是"
-                    cancel-text="否"
-                    @confirm="handleResetPassword(record.id)"
-                  >
-                    <a-button type="link" danger size="small">
-                      <template #icon>
-                        <Icon icon="ant-design:redo-outlined" />
-                      </template>
-                    </a-button>
-                  </a-popconfirm>
-                </a-tooltip>
-              </Authority>
-              <a-divider type="vertical" />
-              <a-button-edit auth="sys:user:save" :id="record.id" @click="handleEdit" />
-              <a-divider type="vertical" />
-              <a-button-remove
-                auth="sys:user:remove"
-                :id="record.id"
-                :api="remove"
-                @success="reload"
-              />
+              <div class="basic-table-action center">
+                <Authority value="sys:user:save">
+                  <a-tooltip>
+                    <template #title>重置密码</template>
+                    <a-popconfirm
+                      title="确定要重置为默认密码吗？"
+                      ok-text="是"
+                      cancel-text="否"
+                      @confirm="handleResetPassword(record.id)"
+                    >
+                      <a-button type="link" danger size="small">
+                        <template #icon>
+                          <Icon icon="ant-design:redo-outlined" />
+                        </template>
+                      </a-button>
+                    </a-popconfirm>
+                  </a-tooltip>
+                </Authority>
+                <a-divider type="vertical" />
+                <a-button-edit auth="sys:user:save" :id="record.id" @click="handleEdit" />
+                <a-divider type="vertical" />
+                <a-button-remove
+                  auth="sys:user:remove"
+                  :id="record.id"
+                  :api="remove"
+                  @success="reload"
+                />
+              </div>
             </template>
           </template>
         </BasicTable>
@@ -131,16 +133,16 @@
       /**
        * 新增
        */
-      const handleCreate = () => {
+      function handleCreate() {
         add(searchInfo.deptId).then((data) => {
           openDrawer(true, data);
         });
-      };
-      const handleEdit = (id: string) => {
+      }
+      function handleEdit(id: string) {
         get(id).then((data) => {
           openDrawer(true, data);
         });
-      };
+      }
       const handleResetPassword = (id: string) => {
         resetPassword(id).then((password) => {
           Modal.success({

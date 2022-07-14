@@ -25,7 +25,9 @@
           {{ record.nickname }}
         </template>
         <template v-if="column.key === 'action'">
-          <a-button-remove :id="record.id" :api="removeByIds" @success="reload" />
+          <div class="basic-table-action center">
+            <a-button-remove :id="record.id" :api="removeByIds" @success="reload" />
+          </div>
         </template>
       </template>
     </BasicTable>

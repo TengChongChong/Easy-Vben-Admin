@@ -3,12 +3,11 @@
     v-bind="$attrs"
     @register="registerDrawer"
     showFooter
-    title="定时任务"
+    title="流程示例"
     width="30%"
     @ok="handleSave"
   >
     <BasicForm @register="registerForm" />
-
     <template #appendFooter>
       <a-button type="primary" @click="handleSaveAndAdd">
         <Icon icon="ant-design:plus-outlined" />
@@ -19,16 +18,13 @@
 </template>
 <script lang="ts">
   import { defineComponent, nextTick } from 'vue';
-  import { BasicForm, useForm } from '/@/components/Form/index';
+  import { BasicForm, useForm } from '/@/components/Form';
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
-
-  import { save, add } from '/@/api/scheduler/schedulerJob';
   import { Icon } from '/@/components/Icon';
-  import { RoleEnum } from '/@/enums/roleEnum';
-  import { SchedulerJob } from '/@/api/scheduler/model/SchedulerJobModel';
-
+  import { add, save } from '/@/api/sample/work/sampleWorkFlow';
+  import { SampleWorkFlow } from '/@/api/sample/model/sampleWorkFlowModel';
   export default defineComponent({
-    name: 'SchedulerJobInput',
+    name: 'SampleWorkFlowInput',
     components: { Icon, BasicForm, BasicDrawer },
     emits: ['success', 'register'],
     setup(_, { emit }) {
@@ -37,66 +33,39 @@
           { field: 'id', label: 'id', component: 'Input', ifShow: false },
           { field: 'version', label: 'version', component: 'Input', ifShow: false },
           {
-            field: 'name',
-            label: '名称',
-            component: 'Input',
+            field: 'leaveType',
+            label: '请假类型',
             required: true,
-            rules: [{ max: 32, message: '名称不能超过32个字符', trigger: 'blur' }],
-          },
-          {
-            field: 'code',
-            label: '代码',
-            component: 'Input',
-            required: true,
-            rules: [{ max: 32, message: '代码不能超过32个字符', trigger: 'blur' }],
-          },
-          {
-            field: 'cron',
-            label: 'cron',
-            component: 'Input',
-            required: true,
-            rules: [{ max: 64, message: '代码不能超过64个字符', trigger: 'blur' }],
-          },
-          {
-            field: 'bean',
-            label: '类',
-            component: 'Input',
-            required: true,
-            rules: [{ max: 32, message: '类不能超过32个字符', trigger: 'blur' }],
-          },
-          {
-            field: 'method',
-            label: '方法',
-            component: 'Input',
-            required: true,
-            rules: [{ max: 32, message: '方法不能超过32个字符', trigger: 'blur' }],
-          },
-          {
-            field: 'sys',
-            label: '是否系统',
-            required: true,
-            auth: RoleEnum.SYS_ADMIN,
-            component: 'DictRadio',
+            component: 'DictSelect',
             componentProps: {
-              dictType: 'whether',
+              dictType: 'leaveType',
             },
             itemProps: { validateTrigger: 'blur' },
           },
           {
-            field: 'status',
-            label: '状态',
+            field: 'startDate',
+            label: '开始时间',
             required: true,
-            component: 'DictRadio',
+            component: 'DatePicker',
             componentProps: {
-              dictType: 'schedulerJobStatus',
+              showTime: true,
             },
-            itemProps: { validateTrigger: 'blur' },
           },
           {
-            field: 'remarks',
-            label: '备注',
+            field: 'endDate',
+            label: '结束时间',
+            required: true,
+            component: 'DatePicker',
+            componentProps: {
+              showTime: true,
+            },
+          },
+          {
+            field: 'reason',
+            label: '原因',
+            required: true,
             component: 'InputTextArea',
-            rules: [{ max: 900, message: '备注不能超过900个字符', trigger: 'blur' }],
+            rules: [{ max: 512, message: '原因不能超过512个字符', trigger: 'blur' }],
           },
         ],
         showActionButtonGroup: false,
@@ -111,11 +80,11 @@
         changeLoading(false);
       });
 
-      async function handleSubmit(callback: (_: SchedulerJob) => any) {
+      async function handleSubmit(callback: (_: SampleWorkFlow) => any) {
         try {
           changeLoading(true);
           await validate();
-          await save(getFieldsValue() as SchedulerJob).then((res) => {
+          await save(getFieldsValue()).then((res) => {
             emit('success');
             callback(res);
           });
@@ -135,13 +104,12 @@
       async function handleSaveAndAdd() {
         await handleSubmit(() => {
           nextTick(() => {
-            // 重置表单
-            resetFields();
-            add().then((data) => {
-              setFieldsValue({ ...data });
+            add().then(async (data) => {
+              // 重置表单
+              await resetFields();
+              await setFieldsValue(data);
+              changeLoading(false);
             });
-
-            changeLoading(false);
           });
         });
       }

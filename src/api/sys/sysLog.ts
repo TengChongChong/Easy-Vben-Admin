@@ -3,7 +3,7 @@ import { defHttp } from '/@/utils/http/axios';
 import { SysLog } from '/@/api/sys/model/sysLogModel';
 
 // base url
-const BASE_URL = '/api/auth/sys/log/';
+const BASE_URL = '/api/auth/sys/log';
 
 /**
  * 查询
@@ -25,6 +25,6 @@ export function select(params: SysLog, pager: Page<SysLog>) {
  */
 export function get(id: string) {
   return defHttp.get<SysLog>({
-    url: `${BASE_URL}${id}`,
+    url: `${BASE_URL}/${id}`,
   });
 }

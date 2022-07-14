@@ -5,7 +5,7 @@
     showFooter
     title="系统参数"
     width="30%"
-    @ok="handleSubmit"
+    @ok="handleSave"
   >
     <BasicForm @register="registerForm" />
 
@@ -18,7 +18,7 @@
   </BasicDrawer>
 </template>
 <script lang="ts">
-  import { defineComponent, nextTick, ref } from 'vue';
+  import { defineComponent, nextTick } from 'vue';
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
 
@@ -32,12 +32,13 @@
     components: { Icon, BasicForm, BasicDrawer },
     emits: ['success', 'register'],
     setup(_, { emit }) {
-      const id = ref();
-      const version = ref();
-
-      const [registerForm, { resetFields, setFieldsValue, validate, updateSchema }] = useForm({
-        labelWidth: 100,
+      const [
+        registerForm,
+        { resetFields, setFieldsValue, validate, updateSchema, getFieldsValue },
+      ] = useForm({
         schemas: [
+          { field: 'id', label: 'id', component: 'Input', ifShow: false },
+          { field: 'version', label: 'version', component: 'Input', ifShow: false },
           {
             field: 'type',
             label: '类型',
@@ -48,6 +49,7 @@
                 setInputComponent(value);
               },
             },
+            required: true,
             itemProps: { validateTrigger: 'blur' },
           },
           {
@@ -90,13 +92,8 @@
         changeLoading(true);
         // 重置表单
         await resetFields();
-        id.value = data?.id;
-        version.value = data?.version || 0;
-
         setInputComponent(data?.type);
-        await setFieldsValue({
-          ...data,
-        });
+        await setFieldsValue(data);
         changeLoading(false);
       });
 
@@ -131,11 +128,11 @@
         }
       }
 
-      async function handleSave(callback: (_: SysConfig) => any) {
+      async function handleSubmit(callback: (_: SysConfig) => any) {
         try {
           changeLoading(true);
-          const values = await validate();
-          await save({ ...values, id: id.value, version: version.value }).then((res) => {
+          await validate();
+          await save(getFieldsValue() as SysConfig).then((res) => {
             emit('success');
             callback(res);
           });
@@ -145,21 +142,18 @@
         }
       }
 
-      async function handleSubmit() {
-        await handleSave((_) => {
+      async function handleSave() {
+        await handleSubmit((_) => {
           changeLoading(false);
           closeDrawer();
         });
       }
 
       async function handleSaveAndAdd() {
-        await handleSave((res) => {
+        await handleSubmit((res) => {
           nextTick(() => {
             // 重置表单
             resetFields();
-            id.value = null;
-            version.value = null;
-
             setFieldsValue({
               type: res.type,
               sys: res.sys,
@@ -170,7 +164,7 @@
         });
       }
 
-      return { registerDrawer, registerForm, handleSubmit, handleSaveAndAdd };
+      return { registerDrawer, registerForm, handleSave, handleSaveAndAdd };
     },
   });
 </script>

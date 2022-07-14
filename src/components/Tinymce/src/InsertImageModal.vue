@@ -28,10 +28,9 @@
     setup(_, { emit }) {
       const token = getToken();
       const globSetting = useGlobSetting();
+      const { uploadUrl } = globSetting;
 
       let uploading = false;
-
-      const { uploadUrl } = useGlobSetting();
 
       const [register, { closeModal }] = useModalInner();
 

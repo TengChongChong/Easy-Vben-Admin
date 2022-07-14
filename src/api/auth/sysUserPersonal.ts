@@ -2,14 +2,14 @@ import { defHttp } from '/@/utils/http/axios';
 import { SysUser } from '/@/api/auth/model/sysUserModel';
 
 // base url
-const BASE_URL = '/api/auth/sys/user/personal/center/';
+const BASE_URL = '/api/auth/sys/user/personal/center';
 
 /**
  * 当前用户
  */
 export function currentUser() {
   return defHttp.get<SysUser>({
-    url: `${BASE_URL}current/user`,
+    url: `${BASE_URL}/current/user`,
   });
 }
 
@@ -21,7 +21,7 @@ export function currentUser() {
  */
 export function changePassword(oldPassword: string, password: string) {
   return defHttp.post<boolean>({
-    url: `${BASE_URL}change/password`,
+    url: `${BASE_URL}/change/password`,
     data: {
       oldPassword,
       password,
@@ -36,7 +36,7 @@ export function changePassword(oldPassword: string, password: string) {
  */
 export function saveUserAvatar(path: string) {
   return defHttp.post<string>({
-    url: `${BASE_URL}user/avatar`,
+    url: `${BASE_URL}/user/avatar`,
     data: {
       path,
     },
@@ -50,7 +50,7 @@ export function saveUserAvatar(path: string) {
  */
 export function saveUserInfo(params: SysUser) {
   return defHttp.post<SysUser>({
-    url: `${BASE_URL}user/info`,
+    url: `${BASE_URL}/user/info`,
     data: params,
   });
 }
@@ -62,7 +62,7 @@ export function saveUserInfo(params: SysUser) {
  */
 export function applicationBindingEmail(email: string) {
   return defHttp.post<boolean>({
-    url: `${BASE_URL}email`,
+    url: `${BASE_URL}/email`,
     data: {
       email,
     },
@@ -77,7 +77,7 @@ export function applicationBindingEmail(email: string) {
  */
 export function bindingPhone(phone: string, captcha: string) {
   return defHttp.post<boolean>({
-    url: `${BASE_URL}phone`,
+    url: `${BASE_URL}/phone`,
     data: {
       phone,
       captcha,

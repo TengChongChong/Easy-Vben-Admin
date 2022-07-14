@@ -64,6 +64,8 @@ export const columns: BasicColumn[] = [
 
 // 表单
 export const formSchema: FormSchema[] = [
+  { field: 'id', label: 'id', component: 'Input', ifShow: false },
+  { field: 'version', label: 'version', component: 'Input', ifShow: false },
   {
     field: 'type',
     label: '类型',

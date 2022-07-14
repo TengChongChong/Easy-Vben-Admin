@@ -17,7 +17,7 @@
   </BasicDrawer>
 </template>
 <script lang="ts">
-  import { defineComponent, nextTick, ref } from 'vue';
+  import { defineComponent, nextTick } from 'vue';
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
   import { add, save } from '/@/api/sample/slave/sampleSlaveGeneral';
@@ -29,12 +29,10 @@
     components: { Icon, BasicForm, BasicDrawer },
     emits: ['success', 'register'],
     setup(_, { emit }) {
-      const id = ref();
-      const version = ref();
-
-      const [registerForm, { resetFields, setFieldsValue, validate }] = useForm({
-        labelWidth: 100,
+      const [registerForm, { resetFields, setFieldsValue, validate, getFieldsValue }] = useForm({
         schemas: [
+          { field: 'id', label: 'id', component: 'Input', ifShow: false },
+          { field: 'version', label: 'version', component: 'Input', ifShow: false },
           {
             field: 'name',
             label: '姓名',
@@ -89,20 +87,15 @@
         changeLoading(true);
         // 重置表单
         await resetFields();
-        id.value = data?.id;
-        version.value = data?.version || 0;
-
-        await setFieldsValue({
-          ...data,
-        });
+        await setFieldsValue(data);
         changeLoading(false);
       });
 
       async function handleSave(callback: (_: SampleSlaveGeneral) => any) {
         try {
           changeLoading(true);
-          const values = await validate();
-          await save({ ...values, id: id.value, version: version.value }).then((res) => {
+          await validate();
+          await save(getFieldsValue()).then((res) => {
             emit('success');
             callback(res);
           });
@@ -125,11 +118,7 @@
             add().then(async (data) => {
               // 重置表单
               await resetFields();
-              id.value = null;
-              version.value = null;
-              await setFieldsValue({
-                ...data,
-              });
+              await setFieldsValue(data);
               changeLoading(false);
             });
           });

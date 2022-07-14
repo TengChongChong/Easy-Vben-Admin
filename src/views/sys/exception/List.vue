@@ -16,14 +16,16 @@
 
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'action'">
-          <a-button-info :path="`/sys/exception/info/${record.id}`" />
-          <a-divider type="vertical" />
-          <a-button-remove
-            auth="sys:exception:remove"
-            :id="record.id"
-            :api="remove"
-            @success="reload"
-          />
+          <div class="basic-table-action center">
+            <a-button-info :path="`/sys/exception/info/${record.id}`" />
+            <a-divider type="vertical" />
+            <a-button-remove
+              auth="sys:exception:remove"
+              :id="record.id"
+              :api="remove"
+              @success="reload"
+            />
+          </div>
         </template>
       </template>
     </BasicTable>

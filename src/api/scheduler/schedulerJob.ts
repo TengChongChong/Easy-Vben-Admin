@@ -3,7 +3,7 @@ import { defHttp } from '/@/utils/http/axios';
 import { SchedulerJob } from '/@/api/scheduler/model/SchedulerJobModel';
 
 // base url
-const BASE_URL = '/api/auth/scheduler/job/';
+const BASE_URL = '/api/auth/scheduler/job';
 
 /**
  * 查询
@@ -25,7 +25,7 @@ export function select(params: SchedulerJob, pager: Page<SchedulerJob>) {
  */
 export function get(id: string) {
   return defHttp.get<SchedulerJob>({
-    url: `${BASE_URL}${id}`,
+    url: `${BASE_URL}/${id}`,
   });
 }
 
@@ -34,7 +34,7 @@ export function get(id: string) {
  */
 export function add() {
   return defHttp.get<SchedulerJob>({
-    url: `${BASE_URL}add`,
+    url: `${BASE_URL}/add`,
   });
 }
 
@@ -45,7 +45,7 @@ export function add() {
  */
 export function remove(ids: string) {
   return defHttp.delete<boolean>({
-    url: `${BASE_URL}${ids}`,
+    url: `${BASE_URL}/${ids}`,
   });
 }
 
@@ -68,7 +68,7 @@ export function save(params: SchedulerJob) {
  */
 export function start(id) {
   return defHttp.post<boolean>({
-    url: `${BASE_URL}start/${id}`,
+    url: `${BASE_URL}/start/${id}`,
   });
 }
 
@@ -79,7 +79,7 @@ export function start(id) {
  */
 export function pause(id) {
   return defHttp.post<boolean>({
-    url: `${BASE_URL}pause/${id}`,
+    url: `${BASE_URL}/pause/${id}`,
   });
 }
 
@@ -88,7 +88,7 @@ export function pause(id) {
  */
 export function startAll() {
   return defHttp.post<boolean>({
-    url: `${BASE_URL}start/all`,
+    url: `${BASE_URL}/start/all`,
   });
 }
 
@@ -97,7 +97,7 @@ export function startAll() {
  */
 export function pauseAll() {
   return defHttp.post<boolean>({
-    url: `${BASE_URL}pause/all`,
+    url: `${BASE_URL}/pause/all`,
   });
 }
 
@@ -108,6 +108,6 @@ export function pauseAll() {
  */
 export function immediateExecution(id) {
   return defHttp.post<boolean>({
-    url: `${BASE_URL}immediate/execution/${id}`,
+    url: `${BASE_URL}/immediate/execution/${id}`,
   });
 }

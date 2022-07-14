@@ -3,7 +3,7 @@ import { defHttp } from '/@/utils/http/axios';
 import { SysMessage } from '/@/api/sys/model/sysMessageModel';
 
 // base url
-const BASE_URL = '/api/auth/sys/message/';
+const BASE_URL = '/api/auth/sys/message';
 
 /**
  * 查询
@@ -26,7 +26,7 @@ export function select(params: SysMessage, pager: Page<SysMessage>) {
  */
 export function selectReceive(params: SysMessage, pager: Page<SysMessage>) {
   return defHttp.get<Page<SysMessage>>({
-    url: `${BASE_URL}receive`,
+    url: `${BASE_URL}/receive`,
     params: Object.assign(params, pager),
   });
 }
@@ -38,7 +38,7 @@ export function selectReceive(params: SysMessage, pager: Page<SysMessage>) {
  */
 export function get(id: string) {
   return defHttp.get<SysMessage>({
-    url: `${BASE_URL}${id}`,
+    url: `${BASE_URL}/${id}`,
   });
 }
 
@@ -50,7 +50,7 @@ export function get(id: string) {
  */
 export function info(id: Nullable<string>, messageId: string) {
   return defHttp.get<SysMessage>({
-    url: `${BASE_URL}info`,
+    url: `${BASE_URL}/info`,
     params: {
       id,
       messageId,
@@ -63,7 +63,7 @@ export function info(id: Nullable<string>, messageId: string) {
  */
 export function add() {
   return defHttp.get<SysMessage>({
-    url: `${BASE_URL}add`,
+    url: `${BASE_URL}/add`,
   });
 }
 
@@ -74,7 +74,7 @@ export function add() {
  */
 export function remove(ids: string) {
   return defHttp.delete<boolean>({
-    url: `${BASE_URL}${ids}`,
+    url: `${BASE_URL}/${ids}`,
   });
 }
 
@@ -96,7 +96,7 @@ export function save(params: SysMessage) {
  */
 export function send(ids) {
   return defHttp.post<boolean>({
-    url: `${BASE_URL}send`,
+    url: `${BASE_URL}/send`,
     data: { ids },
   });
 }
@@ -108,6 +108,6 @@ export function send(ids) {
  */
 export function selectUnreadCount() {
   return defHttp.get<number>({
-    url: `${BASE_URL}unread/count`,
+    url: `${BASE_URL}/unread/count`,
   });
 }

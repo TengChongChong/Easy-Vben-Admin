@@ -2,7 +2,11 @@
  * 文件
  */
 export interface FileModel {
-  // 名称
+  /**
+   * 显示名称
+   */
+  displayName: string;
+  // 文件名称
   name: string;
   // 路径
   path: string;

@@ -4,7 +4,7 @@ import { SysRole } from '/@/api/auth/model/sysRoleModel';
 import { Page } from '/@/api/model/pageModel';
 
 // base url
-const BASE_URL = '/api/auth/sys/role/';
+const BASE_URL = '/api/auth/sys/role';
 
 /**
  * 查询
@@ -24,7 +24,7 @@ export function select(params: SysRole, pager: Page<SysRole>) {
  */
 export function selectAll() {
   return defHttp.get<TreeNodeModel[]>({
-    url: `${BASE_URL}all`,
+    url: `${BASE_URL}/all`,
   });
 }
 
@@ -35,7 +35,7 @@ export function selectAll() {
  */
 export function get(id: string) {
   return defHttp.get<SysRole>({
-    url: `${BASE_URL}${id}`,
+    url: `${BASE_URL}/${id}`,
   });
 }
 
@@ -44,7 +44,7 @@ export function get(id: string) {
  */
 export function add() {
   return defHttp.get<SysRole>({
-    url: `${BASE_URL}add`,
+    url: `${BASE_URL}/add`,
   });
 }
 
@@ -55,7 +55,7 @@ export function add() {
  */
 export function remove(ids: string) {
   return defHttp.delete<boolean>({
-    url: `${BASE_URL}${ids}`,
+    url: `${BASE_URL}/${ids}`,
   });
 }
 
@@ -79,6 +79,6 @@ export function save(params: SysRole) {
  */
 export function setStatus(ids: string, status: string) {
   return defHttp.post<boolean>({
-    url: `${BASE_URL}${ids}/status/${status}`,
+    url: `${BASE_URL}/${ids}/status/${status}`,
   });
 }

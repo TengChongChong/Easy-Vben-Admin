@@ -4,14 +4,14 @@ import { TableInfo } from '/@/api/generator/model/generatorModel';
 import { GeneratorConfig } from '/@/views/generator/ts/generator.data';
 
 // base url
-const BASE_URL = '/api/auth/generator/';
+const BASE_URL = '/api/auth/generator';
 
 /**
  * 获取表
  */
 export function selectTable(params) {
   return defHttp.get<SelectModel[]>({
-    url: `${BASE_URL}table`,
+    url: `${BASE_URL}/table`,
     params,
   });
 }
@@ -24,7 +24,7 @@ export function selectTable(params) {
  */
 export function getTableInfo(dataSource: string, tableName: string) {
   return defHttp.get<TableInfo>({
-    url: `${BASE_URL}table/info`,
+    url: `${BASE_URL}/table/info`,
     params: {
       dataSource,
       tableName,
@@ -37,7 +37,7 @@ export function getTableInfo(dataSource: string, tableName: string) {
  */
 export function selectModules() {
   return defHttp.get<SelectModel[]>({
-    url: `${BASE_URL}modules`,
+    url: `${BASE_URL}/modules`,
   });
 }
 

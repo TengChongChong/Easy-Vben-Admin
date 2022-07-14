@@ -4,7 +4,7 @@ import { defHttp } from '/@/utils/http/axios';
 import { SelectModel } from '/@/api/model/selectModel';
 
 // base url
-const BASE_URL = '/api/auth/sys/dict/type/';
+const BASE_URL = '/api/auth/sys/dict/type';
 
 /**
  * 查询
@@ -24,7 +24,7 @@ export function select(params: SysDictType, pager: Page<SysDictType>) {
  */
 export function selectAll() {
   return defHttp.get<SelectModel[]>({
-    url: `${BASE_URL}all`,
+    url: `${BASE_URL}/all`,
   });
 }
 
@@ -35,7 +35,7 @@ export function selectAll() {
  */
 export function get(id: string) {
   return defHttp.get<SysDictType>({
-    url: `${BASE_URL}${id}`,
+    url: `${BASE_URL}/${id}`,
   });
 }
 
@@ -44,7 +44,7 @@ export function get(id: string) {
  */
 export function add() {
   return defHttp.get<SysDictType>({
-    url: `${BASE_URL}add`,
+    url: `${BASE_URL}/add`,
   });
 }
 
@@ -55,7 +55,7 @@ export function add() {
  */
 export function remove(ids: string) {
   return defHttp.delete<boolean>({
-    url: `${BASE_URL}${ids}`,
+    url: `${BASE_URL}/${ids}`,
   });
 }
 

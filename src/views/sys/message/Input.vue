@@ -44,14 +44,13 @@
       id: propTypes.string,
     },
     setup(props) {
-      const id = ref();
-      const version = ref();
       const saveBtnLoading = ref<boolean>(false);
       const { createMessage } = useMessage();
 
-      const [registerForm, { resetFields, setFieldsValue, validate }] = useForm({
-        labelWidth: 100,
+      const [registerForm, { resetFields, setFieldsValue, validate, getFieldsValue }] = useForm({
         schemas: [
+          { field: 'id', label: 'id', component: 'Input', ifShow: false },
+          { field: 'version', label: 'version', component: 'Input', ifShow: false },
           {
             field: 'receivers',
             label: '收信人',
@@ -128,22 +127,14 @@
         }
         // 重置表单
         await resetFields();
-        id.value = data?.id;
-        version.value = data?.version || 0;
-
-        await setFieldsValue({
-          ...data,
-        });
+        await setFieldsValue(data);
       }
 
       async function handleSave(callback: (_: SysMessage) => any) {
         try {
           saveBtnLoading.value = true;
-          const values = await validate();
-          await save({ ...values, id: id.value, version: version.value }).then(async (res) => {
-            id.value = res?.id;
-            version.value = res?.version || 0;
-
+          await validate();
+          await save(getFieldsValue()).then(async (res) => {
             await setFieldsValue({
               content: res.content,
             });
@@ -181,11 +172,7 @@
             add().then(async (data) => {
               // 重置表单
               await resetFields();
-              id.value = null;
-              version.value = null;
-              await setFieldsValue({
-                ...data,
-              });
+              await setFieldsValue(data);
               saveBtnLoading.value = false;
             });
           });

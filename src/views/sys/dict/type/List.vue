@@ -17,19 +17,21 @@
 
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'action'">
-          <a-button-edit auth="sys:dict:type:save" :id="record.id" @click="handleEdit" />
-          <a-divider type="vertical" />
-          <a-button-remove
-            auth="sys:dict:type:remove"
-            :id="record.id"
-            :api="remove"
-            @success="reload"
-          />
+          <div class="basic-table-action center">
+            <a-button-edit auth="sys:dict:type:save" :id="record.id" @click="handleEdit" />
+            <a-divider type="vertical" />
+            <a-button-remove
+              auth="sys:dict:type:remove"
+              :id="record.id"
+              :api="remove"
+              @success="reload"
+            />
+          </div>
         </template>
       </template>
     </BasicTable>
     <!-- 表单 -->
-    <SysDictTypeInput @register="registerDrawer" @success="reload" />
+    <SysDictTypeInput @register="registerModal" @success="reload" />
   </PageWrapper>
 </template>
 <script lang="ts">
@@ -37,13 +39,13 @@
   import { BasicTable, useTable } from '/@/components/Table';
   import { select, add, get, remove } from '/@/api/sys/sysDictType';
   import { columns, searchFormSchema } from '/@/views/sys/dict/type/dict-type.data';
-  import { useDrawer } from '/@/components/Drawer';
   import SysDictTypeInput from '/@/views/sys/dict/type/Input.vue';
   import AButtonAdd from '/@/components/Button/src/ButtonAdd.vue';
   import AButtonEdit from '/@/components/Button/src/ButtonEdit.vue';
   import AButtonRemove from '/@/components/Button/src/ButtonRemove.vue';
   import AButtonRemoveBatch from '/@/components/Button/src/ButtonRemoveBatch.vue';
   import { PageWrapper } from '/@/components/Page';
+  import { useModal } from '/@/components/Modal';
   export default defineComponent({
     name: 'SysDictTypeList',
     components: {
@@ -59,7 +61,7 @@
       // 表格选中数据
       const checkedKeys = ref<Array<string>>([]);
 
-      const [registerDrawer, { openDrawer }] = useDrawer();
+      const [registerModal, { openModal }] = useModal();
       /**
        * 初始化表格
        */
@@ -78,16 +80,16 @@
         },
       });
 
-      const handleCreate = () => {
+      function handleCreate() {
         add().then((data) => {
-          openDrawer(true, data);
+          openModal(true, data);
         });
-      };
-      const handleEdit = (id: string) => {
+      }
+      function handleEdit(id: string) {
         get(id).then((data) => {
-          openDrawer(true, data);
+          openModal(true, data);
         });
-      };
+      }
 
       return {
         checkedKeys,
@@ -95,7 +97,7 @@
           checkedKeys.value = selectedRowKeys;
         },
         remove,
-        registerDrawer,
+        registerModal,
         registerTable,
         reload,
         handleCreate,

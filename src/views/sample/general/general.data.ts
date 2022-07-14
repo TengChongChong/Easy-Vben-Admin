@@ -1,5 +1,4 @@
 import { BasicColumn, FormSchema } from '/@/components/Table';
-import dayjs from 'dayjs';
 
 /**
  * 查询条件
@@ -19,26 +18,6 @@ export const searchFormSchema: FormSchema[] = [
     field: 'address',
     label: '地址',
     component: 'Input',
-  },
-  {
-    field: 'editUser',
-    label: '编辑人',
-    component: 'Input',
-  },
-  {
-    field: '[startEditDate, endEditDate]',
-    label: '编辑时间',
-    component: 'RangePicker',
-    componentProps: {
-      allowEmpty: [true, true],
-      showTime: true,
-      ranges: {
-        今天: [dayjs().startOf('day'), dayjs().endOf('day')],
-        本周: [dayjs().startOf('week'), dayjs().endOf('week')],
-        本月: [dayjs().startOf('month'), dayjs().endOf('month')],
-      },
-    },
-    colProps: { xxl: 12, xl: 16, md: 24 },
   },
 ];
 

@@ -33,7 +33,6 @@
       const userStore = useUserStore();
       const { createMessage } = useMessage();
       const [registerForm, { validate, setFieldsValue }] = useForm({
-        labelWidth: 100,
         schemas: [
           {
             field: 'avatar',
@@ -89,9 +88,7 @@
       async function handleSave() {
         try {
           const values = await validate();
-          await saveUserInfo({
-            ...values,
-          }).then(() => {
+          await saveUserInfo(values).then(() => {
             createMessage.success('保存成功');
             userStore.refreshCurrentUserAction();
           });

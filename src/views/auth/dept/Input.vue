@@ -5,7 +5,7 @@
     showFooter
     title="部门"
     width="30%"
-    @ok="handleSubmit"
+    @ok="handleSave"
   >
     <BasicForm @register="registerForm" />
 
@@ -18,7 +18,7 @@
   </BasicDrawer>
 </template>
 <script lang="ts">
-  import { defineComponent, nextTick, ref } from 'vue';
+  import { defineComponent, nextTick } from 'vue';
   import { BasicForm, useForm } from '/@/components/Form';
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
 
@@ -35,11 +35,13 @@
     components: { Icon, BasicForm, BasicDrawer },
     emits: ['success', 'register'],
     setup(_, { emit }) {
-      const id = ref();
-      const version = ref();
-      const [registerForm, { resetFields, setFieldsValue, validate, updateSchema }] = useForm({
-        labelWidth: 100,
+      const [
+        registerForm,
+        { resetFields, setFieldsValue, validate, updateSchema, getFieldsValue },
+      ] = useForm({
         schemas: [
+          { field: 'id', label: 'id', component: 'Input', ifShow: false },
+          { field: 'version', label: 'version', component: 'Input', ifShow: false },
           {
             field: 'parentId',
             label: '上级部门',
@@ -139,13 +141,9 @@
         changeLoading(true);
         // 重置表单
         await resetFields();
-        id.value = data?.id;
-        version.value = data?.version || 0;
         await updateParent();
 
-        await setFieldsValue({
-          ...data,
-        });
+        await setFieldsValue(data);
         changeLoading(false);
       });
 
@@ -158,11 +156,11 @@
         });
       }
 
-      async function handleSave(callback: (_: SysDept) => any) {
+      async function handleSubmit(callback: (_: SysDept) => any) {
         try {
           changeLoading(true);
-          const values = await validate();
-          await save({ ...values, id: id.value, version: version.value }).then((res) => {
+          await validate();
+          await save(getFieldsValue()).then((res) => {
             emit('success');
             callback(res);
           });
@@ -173,24 +171,20 @@
         }
       }
 
-      async function handleSubmit() {
-        await handleSave((_) => {
+      async function handleSave() {
+        await handleSubmit((_) => {
           closeDrawer();
         });
       }
 
       async function handleSaveAndAdd() {
-        await handleSave((res) => {
+        await handleSubmit((res) => {
           nextTick(() => {
             add(res.parentId, res.typeCode).then(async (data) => {
               // 重置表单
               await resetFields();
               await updateParent();
-              id.value = null;
-              version.value = null;
-              await setFieldsValue({
-                ...data,
-              });
+              await setFieldsValue(data);
             });
           });
         });
@@ -199,7 +193,7 @@
       return {
         registerDrawer,
         registerForm,
-        handleSubmit,
+        handleSave,
         handleSaveAndAdd,
       };
     },

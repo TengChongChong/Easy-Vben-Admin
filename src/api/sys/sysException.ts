@@ -3,7 +3,7 @@ import { defHttp } from '/@/utils/http/axios';
 import { SysException } from '/@/api/sys/model/sysExceptionModel';
 
 // base url
-const BASE_URL = '/api/auth/sys/exception/';
+const BASE_URL = '/api/auth/sys/exception';
 
 /**
  * 查询
@@ -25,7 +25,7 @@ export function select(params: SysException, pager: Page<SysException>) {
  */
 export function get(id: string) {
   return defHttp.get<SysException>({
-    url: `${BASE_URL}${id}`,
+    url: `${BASE_URL}/${id}`,
   });
 }
 /**
@@ -35,6 +35,6 @@ export function get(id: string) {
  */
 export function remove(ids: string) {
   return defHttp.delete<boolean>({
-    url: `${BASE_URL}${ids}`,
+    url: `${BASE_URL}/${ids}`,
   });
 }

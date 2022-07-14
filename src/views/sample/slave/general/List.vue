@@ -17,14 +17,16 @@
 
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'action'">
-          <a-button-edit auth="sample:slave:general:save" :id="record.id" @click="handleEdit" />
-          <a-divider type="vertical" />
-          <a-button-remove
-            auth="sample:slave:general:remove"
-            :id="record.id"
-            :api="remove"
-            @success="reload"
-          />
+          <div class="basic-table-action center">
+            <a-button-edit auth="sample:slave:general:save" :id="record.id" @click="handleEdit" />
+            <a-divider type="vertical" />
+            <a-button-remove
+              auth="sample:slave:general:remove"
+              :id="record.id"
+              :api="remove"
+              @success="reload"
+            />
+          </div>
         </template>
       </template>
     </BasicTable>
@@ -79,17 +81,17 @@
         },
       });
 
-      const handleCreate = () => {
+      function handleCreate() {
         add().then((data) => {
           openDrawer(true, data);
         });
-      };
+      }
 
-      const handleEdit = (id: string) => {
+      function handleEdit(id: string) {
         get(id).then((data) => {
           openDrawer(true, data);
         });
-      };
+      }
 
       return {
         checkedKeys,

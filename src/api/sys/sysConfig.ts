@@ -3,7 +3,7 @@ import { defHttp } from '/@/utils/http/axios';
 import { SysConfig } from '/@/api/sys/model/sysConfigModel';
 
 // base url
-const BASE_URL = '/api/auth/sys/config/';
+const BASE_URL = '/api/auth/sys/config';
 
 /**
  * 查询
@@ -25,7 +25,7 @@ export function select(params: SysConfig, pager: Page<SysConfig>) {
  */
 export function get(id: string) {
   return defHttp.get<SysConfig>({
-    url: `${BASE_URL}${id}`,
+    url: `${BASE_URL}/${id}`,
   });
 }
 
@@ -47,7 +47,7 @@ export function getByKey(key: string) {
  */
 export function remove(ids: string) {
   return defHttp.delete<boolean>({
-    url: `${BASE_URL}${ids}`,
+    url: `${BASE_URL}/${ids}`,
   });
 }
 
@@ -68,6 +68,6 @@ export function save(params: SysConfig) {
  */
 export function refresh() {
   return defHttp.post<boolean>({
-    url: `${BASE_URL}refresh`,
+    url: `${BASE_URL}/refresh`,
   });
 }

@@ -3,7 +3,7 @@ import { Page } from '/@/api/model/pageModel';
 import { defHttp } from '/@/utils/http/axios';
 
 // base url
-const BASE_URL = '/api/auth/sample/slave/general/';
+const BASE_URL = '/api/auth/sample/slave/general';
 
 /**
  * 查询
@@ -25,7 +25,7 @@ export function select(params: SampleSlaveGeneral, pager: Page<SampleSlaveGenera
  */
 export function get(id: string) {
   return defHttp.get<SampleSlaveGeneral>({
-    url: `${BASE_URL}${id}`,
+    url: `${BASE_URL}/${id}`,
   });
 }
 
@@ -34,7 +34,7 @@ export function get(id: string) {
  */
 export function add() {
   return defHttp.get<SampleSlaveGeneral>({
-    url: `${BASE_URL}add`,
+    url: `${BASE_URL}/add`,
   });
 }
 
@@ -45,7 +45,7 @@ export function add() {
  */
 export function remove(ids: string) {
   return defHttp.delete<boolean>({
-    url: `${BASE_URL}${ids}`,
+    url: `${BASE_URL}/${ids}`,
   });
 }
 

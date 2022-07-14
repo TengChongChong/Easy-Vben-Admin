@@ -3,7 +3,7 @@ import { SysDept } from '/@/api/auth/model/sysDeptModel';
 import { TreeNodeModel } from '/@/api/model/treeModel';
 
 // base url
-const BASE_URL = '/api/auth/sys/dept/';
+const BASE_URL = '/api/auth/sys/dept';
 
 /**
  * 查询
@@ -22,7 +22,7 @@ export function select(params: SysDept) {
  */
 export function selectAll() {
   return defHttp.get<TreeNodeModel[]>({
-    url: `${BASE_URL}all`,
+    url: `${BASE_URL}/all`,
   });
 }
 
@@ -33,7 +33,7 @@ export function selectAll() {
  */
 export function get(id: string) {
   return defHttp.get<SysDept>({
-    url: `${BASE_URL}${id}`,
+    url: `${BASE_URL}/${id}`,
   });
 }
 
@@ -45,7 +45,7 @@ export function get(id: string) {
  */
 export function add(id: string | undefined, typeCode: string | undefined) {
   return defHttp.get<SysDept>({
-    url: `${BASE_URL}add/${id || ''}`,
+    url: `${BASE_URL}/add/${id || ''}`,
     params: {
       typeCode,
     },
@@ -59,7 +59,7 @@ export function add(id: string | undefined, typeCode: string | undefined) {
  */
 export function remove(ids: string) {
   return defHttp.delete<boolean>({
-    url: `${BASE_URL}${ids}`,
+    url: `${BASE_URL}/${ids}`,
   });
 }
 
@@ -82,7 +82,7 @@ export function save(params: SysDept) {
  */
 export function saveOrder(params: SysDept[]) {
   return defHttp.post<SysDept>({
-    url: `${BASE_URL}order`,
+    url: `${BASE_URL}/order`,
     data: params,
   });
 }
@@ -95,6 +95,6 @@ export function saveOrder(params: SysDept[]) {
  */
 export function setStatus(ids: string, status: string) {
   return defHttp.post<boolean>({
-    url: `${BASE_URL}${ids}/status/${status}`,
+    url: `${BASE_URL}/${ids}/status/${status}`,
   });
 }

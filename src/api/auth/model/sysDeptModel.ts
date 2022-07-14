@@ -5,17 +5,17 @@ import { BasicModel } from '/@/api/model/baseModel';
  */
 export interface SysDept extends BasicModel {
   // 全称
-  name: string;
+  name?: string;
   // 简称
-  simpleName: string;
+  simpleName?: string;
   // 部门类型编码
-  typeCode: string;
+  typeCode?: string;
   //部门代码
-  code: string;
+  code?: string;
   // 备注
-  remarks: string;
+  remarks?: string;
   // 排序值
-  orderNo: number;
+  orderNo?: number;
   // 部门类型名称
-  typeName: string;
+  typeName?: string;
 }

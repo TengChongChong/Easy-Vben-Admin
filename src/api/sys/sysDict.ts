@@ -4,7 +4,7 @@ import { defHttp } from '/@/utils/http/axios';
 import { SelectModel } from '/@/api/model/selectModel';
 
 // base url
-const BASE_URL = '/api/auth/sys/dict/';
+const BASE_URL = '/api/auth/sys/dict';
 
 /**
  * 查询
@@ -24,7 +24,7 @@ export function select(params: SysDict, pager: Page<SysDict>) {
  */
 export function selectAll() {
   return defHttp.get<SysDict[]>({
-    url: `${BASE_URL}all`,
+    url: `${BASE_URL}/all`,
   });
 }
 
@@ -35,7 +35,7 @@ export function selectAll() {
  */
 export function selectByDictType(params) {
   return defHttp.get<SelectModel[]>({
-    url: `${BASE_URL}dict-type`,
+    url: `${BASE_URL}/dict-type`,
     params,
   });
 }
@@ -47,7 +47,7 @@ export function selectByDictType(params) {
  */
 export function get(id: string) {
   return defHttp.get<SysDict>({
-    url: `${BASE_URL}${id}`,
+    url: `${BASE_URL}/${id}`,
   });
 }
 
@@ -59,7 +59,7 @@ export function get(id: string) {
  */
 export function add(id: string | undefined, dictType: string | undefined) {
   return defHttp.get<SysDict>({
-    url: `${BASE_URL}add/${id || ''}`,
+    url: `${BASE_URL}/add/${id || ''}`,
     params: {
       dictType,
     },
@@ -73,7 +73,7 @@ export function add(id: string | undefined, dictType: string | undefined) {
  */
 export function remove(ids: string) {
   return defHttp.delete<boolean>({
-    url: `${BASE_URL}${ids}`,
+    url: `${BASE_URL}/${ids}`,
   });
 }
 
@@ -94,6 +94,6 @@ export function save(params: SysDict) {
  */
 export function refresh() {
   return defHttp.post<boolean>({
-    url: `${BASE_URL}refresh`,
+    url: `${BASE_URL}/refresh`,
   });
 }

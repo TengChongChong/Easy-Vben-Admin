@@ -5,7 +5,7 @@
     showFooter
     title="代码生成示例"
     width="30%"
-    @ok="handleSubmit"
+    @ok="handleSave"
   >
     <BasicForm @register="registerForm" />
     <template #appendFooter>
@@ -17,27 +17,25 @@
   </BasicDrawer>
 </template>
 <script lang="ts">
-  import { defineComponent, nextTick, ref } from 'vue';
-  import { BasicForm, useForm } from '/@/components/Form/index';
+  import { defineComponent, nextTick } from 'vue';
+  import { BasicForm, useForm } from '/@/components/Form';
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
-  import { add, save } from '/@/api/sample/sampleGeneral';
   import { Icon } from '/@/components/Icon';
+  import { add, save } from '/@/api/sample/sampleGeneral';
   import { SampleGeneral } from '/@/api/sample/model/sampleGeneralModel';
-
   export default defineComponent({
     name: 'SampleGeneralInput',
     components: { Icon, BasicForm, BasicDrawer },
     emits: ['success', 'register'],
     setup(_, { emit }) {
-      const id = ref();
-      const version = ref();
-
-      const [registerForm, { resetFields, setFieldsValue, validate }] = useForm({
-        labelWidth: 100,
+      const [registerForm, { resetFields, setFieldsValue, validate, getFieldsValue }] = useForm({
         schemas: [
+          { field: 'id', label: 'id', component: 'Input', ifShow: false },
+          { field: 'version', label: 'version', component: 'Input', ifShow: false },
           {
             field: 'name',
             label: '姓名',
+            required: true,
             component: 'Input',
             rules: [{ max: 32, message: '姓名不能超过32个字符', trigger: 'blur' }],
           },
@@ -89,20 +87,15 @@
         changeLoading(true);
         // 重置表单
         await resetFields();
-        id.value = data?.id;
-        version.value = data?.version || 0;
-
-        await setFieldsValue({
-          ...data,
-        });
+        await setFieldsValue(data);
         changeLoading(false);
       });
 
-      async function handleSave(callback: (_: SampleGeneral) => any) {
+      async function handleSubmit(callback: (_: SampleGeneral) => any) {
         try {
           changeLoading(true);
-          const values = await validate();
-          await save({ ...values, id: id.value, version: version.value }).then((res) => {
+          await validate();
+          await save(getFieldsValue() as SampleGeneral).then((res) => {
             emit('success');
             callback(res);
           });
@@ -112,31 +105,27 @@
         }
       }
 
-      async function handleSubmit() {
-        await handleSave((_) => {
+      async function handleSave() {
+        await handleSubmit((_) => {
           changeLoading(false);
           closeDrawer();
         });
       }
 
       async function handleSaveAndAdd() {
-        await handleSave(() => {
+        await handleSubmit(() => {
           nextTick(() => {
             add().then(async (data) => {
               // 重置表单
               await resetFields();
-              id.value = null;
-              version.value = null;
-              await setFieldsValue({
-                ...data,
-              });
+              await setFieldsValue(data);
               changeLoading(false);
             });
           });
         });
       }
 
-      return { registerDrawer, registerForm, handleSubmit, handleSaveAndAdd };
+      return { registerDrawer, registerForm, handleSave, handleSaveAndAdd };
     },
   });
 </script>

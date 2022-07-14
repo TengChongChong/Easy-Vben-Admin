@@ -150,7 +150,8 @@
 <style lang="less">
   @prefix-cls: ~'@{namespace}-basic-table-action';
 
-  .@{prefix-cls} {
+  .@{prefix-cls},
+  .basic-table-action {
     display: flex;
     align-items: center;
 
@@ -182,6 +183,15 @@
     button.ant-btn-circle {
       span {
         margin: auto !important;
+      }
+    }
+
+    button.ant-btn-icon-only {
+      width: auto;
+      padding: 0 7px;
+
+      .ant-btn-sm > * {
+        font-size: 16px;
       }
     }
 
