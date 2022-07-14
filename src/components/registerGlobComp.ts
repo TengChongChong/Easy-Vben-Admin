@@ -18,6 +18,7 @@ import {
   Tabs,
   Tag,
   Tree,
+  Timeline,
   Tooltip,
   Typography,
   Popconfirm,
@@ -29,6 +30,7 @@ import {
   Row,
   Result,
   Select,
+  Skeleton,
   Spin,
   Col,
 } from 'ant-design-vue';
@@ -52,6 +54,7 @@ export function registerGlobComp(app: App) {
     .use(Tabs)
     .use(Tag)
     .use(Tree)
+    .use(Timeline)
     .use(Tooltip)
     .use(Typography)
     .use(Popconfirm)
@@ -63,6 +66,7 @@ export function registerGlobComp(app: App) {
     .use(Row)
     .use(Result)
     .use(Select)
+    .use(Skeleton)
     .use(Spin)
     .use(Col);
 }
