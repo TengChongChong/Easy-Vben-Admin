@@ -93,7 +93,22 @@ export const SYS_FUNCTION: AppRouteRecordRaw = {
       component: () => import('/@/views/auth/personal/center/View.vue'),
       meta: {
         title: '个人中心',
-        icon: 'ant-design:user-outlined',
+      },
+    },
+    {
+      path: '/sys/message/view/:key',
+      name: 'SysMessageView',
+      component: () => import('/@/views/sys/message/View.vue'),
+      meta: {
+        title: '消息',
+      },
+    },
+    {
+      path: '/sys/import/excel/data/view/:importCode',
+      name: 'SysImportExcelDataView',
+      component: () => import('/@/views/sys/import/excel/data/View.vue'),
+      meta: {
+        title: '导入数据',
       },
     },
   ],
