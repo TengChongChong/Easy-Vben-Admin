@@ -21,7 +21,8 @@ export function createPlaceholderMessage(component: ComponentType) {
     component.includes('Cascader') ||
     component.includes('Checkbox') ||
     component.includes('Radio') ||
-    component.includes('Switch')
+    component.includes('Switch') ||
+    component.includes('Upload')
   ) {
     // return `请选择${label}`;
     return t('common.chooseText');

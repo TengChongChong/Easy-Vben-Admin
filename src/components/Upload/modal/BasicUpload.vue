@@ -2,6 +2,9 @@
   <div>
     <Space>
       <a-button type="primary" @click="openUploadModal" preIcon="carbon:cloud-upload">
+        <template #icon>
+          <Icon icon="ant-design:upload-outlined" />
+        </template>
         {{ t('component.upload.upload') }}
       </a-button>
       <Tooltip placement="bottom" v-if="showPreview">
@@ -11,10 +14,13 @@
             {{ fileList.length }}
           </template>
         </template>
-        <a-button @click="openPreviewModal">
-          <Icon icon="bi:eye" />
+        <a-button @click="openPreviewModal" v-if="fileList.length">
+          <template #icon>
+            <Icon icon="bi:eye" />
+          </template>
+
           <template v-if="fileList.length && showPreviewNumber">
-            {{ fileList.length }}
+            已上传 {{ fileList.length }}
           </template>
         </a-button>
       </Tooltip>
@@ -40,15 +46,15 @@
   import { Icon } from '/@/components/Icon';
   import { Tooltip, Space } from 'ant-design-vue';
   import { useModal } from '/@/components/Modal';
-  import { uploadContainerProps } from './props';
   import { omit } from 'lodash-es';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { isArray } from '/@/utils/is';
   import UploadModal from './UploadModal.vue';
   import UploadPreviewModal from './UploadPreviewModal.vue';
+  import { uploadContainerProps } from '/@/components/Upload/modal/props';
 
   export default defineComponent({
-    name: 'BasicUpload',
+    name: 'UploadModal',
     components: { UploadModal, Space, UploadPreviewModal, Icon, Tooltip },
     props: uploadContainerProps,
     emits: ['change', 'delete', 'preview-delete', 'update:value'],
@@ -58,7 +64,7 @@
       // 上传modal
       const [registerUploadModal, { openModal: openUploadModal }] = useModal();
 
-      //   预览modal
+      // 预览modal
       const [registerPreviewModal, { openModal: openPreviewModal }] = useModal();
 
       const fileList = ref<string[]>([]);

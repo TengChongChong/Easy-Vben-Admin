@@ -31,10 +31,12 @@
         :accept="getStringAccept"
         :multiple="multiple"
         :before-upload="beforeUpload"
-        :show-upload-list="false"
         class="upload-modal-toolbar__btn"
       >
         <a-button type="primary">
+          <template #icon>
+            <Icon icon="ant-design:plus-outlined" />
+          </template>
           {{ t('component.upload.choose') }}
         </a-button>
       </Upload>
@@ -43,27 +45,26 @@
   </BasicModal>
 </template>
 <script lang="ts">
-  import { defineComponent, reactive, ref, toRefs, unref, computed, PropType } from 'vue';
-  import { Upload, Alert } from 'ant-design-vue';
+  import { computed, defineComponent, PropType, reactive, ref, toRefs, unref } from 'vue';
+  import { Alert, Upload } from 'ant-design-vue';
   import { BasicModal, useModalInner } from '/@/components/Modal';
-  //   import { BasicTable, useTable } from '/@/components/Table';
   // hooks
-  import { useUploadType } from './useUpload';
+  import { useUploadType } from '../useUpload';
   import { useMessage } from '/@/hooks/web/useMessage';
-  //   types
+  // types
   import { FileItem, UploadResultStatus } from './typing';
-  import { basicProps } from './props';
-  import { createTableColumns, createActionColumn } from './data';
+  import { createActionColumn, createTableColumns } from './data';
+  import { basicProps } from '/@/components/Upload/props';
   // utils
-  import { checkImgType, getBase64WithFile } from './helper';
+  import { checkImgType, getBase64WithFile } from '../helper';
   import { buildUUID } from '/@/utils/uuid';
-  import { isFunction } from '/@/utils/is';
-  import { warn } from '/@/utils/log';
   import FileList from './FileList.vue';
   import { useI18n } from '/@/hooks/web/useI18n';
+  import { upload } from '/@/api/file/upload';
+  import { Icon } from '/@/components/Icon';
 
   export default defineComponent({
-    components: { BasicModal, Upload, Alert, FileList },
+    components: { BasicModal, Upload, Alert, FileList, Icon },
     props: {
       ...basicProps,
       previewFileList: {
@@ -77,7 +78,7 @@
         fileList: [],
       });
 
-      //   是否正在上传
+      // 是否正在上传
       const isUploadingRef = ref(false);
       const fileListRef = ref<FileItem[]>([]);
       const { accept, helpText, maxNumber, maxSize } = toRefs(props);
@@ -141,8 +142,6 @@
         };
         // 生成图片缩略图
         if (checkImgType(file)) {
-          // beforeUpload，如果异步会调用自带上传方法
-          // file.thumbUrl = await getBase64(file);
           getBase64WithFile(file).then(({ result: thumbUrl }) => {
             fileListRef.value = [
               ...unref(fileListRef),
@@ -174,13 +173,13 @@
       // }
 
       async function uploadApiByItem(item: FileItem) {
-        const { api } = props;
-        if (!api || !isFunction(api)) {
-          return warn('upload api must exist and be a function');
+        let { api } = props;
+        if (!api) {
+          api = upload;
         }
         try {
           item.status = UploadResultStatus.UPLOADING;
-          const { data } = await props.api?.(
+          const { data } = await api(
             {
               data: {
                 ...(props.uploadParams || {}),
@@ -190,8 +189,7 @@
               filename: props.filename,
             },
             function onUploadProgress(progressEvent: ProgressEvent) {
-              const complete = ((progressEvent.loaded / progressEvent.total) * 100) | 0;
-              item.percent = complete;
+              item.percent = ((progressEvent.loaded / progressEvent.total) * 100) | 0;
             },
           );
           item.status = UploadResultStatus.SUCCESS;
@@ -236,7 +234,7 @@
         }
       }
 
-      //   点击保存
+      // 点击保存
       function handleOk() {
         const { maxNumber } = props;
 
@@ -283,7 +281,6 @@
         getStringAccept,
         getOkButtonProps,
         beforeUpload,
-        // registerTable,
         fileListRef,
         state,
         isUploadingRef,

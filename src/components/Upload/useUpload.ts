@@ -8,11 +8,13 @@ export function useUploadType({
   maxSizeRef,
 }: {
   acceptRef: Ref<string[]>;
-  helpTextRef: Ref<string>;
+  helpTextRef: Ref<string> | null;
   maxNumberRef: Ref<number>;
   maxSizeRef: Ref<number>;
 }) {
-  // 文件类型限制
+  /**
+   * 文件类型限制
+   */
   const getAccept = computed(() => {
     const accept = unref(acceptRef);
     if (accept && accept.length > 0) {
@@ -20,6 +22,7 @@ export function useUploadType({
     }
     return [];
   });
+
   const getStringAccept = computed(() => {
     return unref(getAccept)
       .map((item) => {
@@ -32,7 +35,9 @@ export function useUploadType({
       .join(',');
   });
 
-  // 支持jpg、jpeg、png格式，不超过2M，最多可选择10张图片，。
+  /**
+   * 获取帮助提示（支持{0}格式，单个文件不超过{0}MB，最多只能上传{0}个文件。）
+   */
   const getHelpText = computed(() => {
     const helpText = unref(helpTextRef);
     if (helpText) {

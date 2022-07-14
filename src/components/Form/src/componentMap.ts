@@ -32,7 +32,7 @@ import DictSelect from './components/DictSelect.vue';
 import DictRadio from './components/DictRadio.vue';
 import DictCheckbox from './components/DictCheckbox.vue';
 import UserSelect from '/@/components/User/UserSelect.vue';
-import { BasicUpload } from '/@/components/Upload';
+import BasicUpload from '/@/components/Upload/basic/BasicUpload.vue';
 import { StrengthMeter } from '/@/components/StrengthMeter';
 import { IconPicker } from '/@/components/Icon';
 import { CountdownInput } from '/@/components/CountDown';
@@ -72,7 +72,6 @@ componentMap.set('StrengthMeter', StrengthMeter);
 componentMap.set('IconPicker', IconPicker);
 componentMap.set('InputCountDown', CountdownInput);
 
-componentMap.set('Upload', BasicUpload);
 componentMap.set('Divider', Divider);
 
 componentMap.set('DictCascader', DictCascader);
@@ -81,6 +80,8 @@ componentMap.set('DictRadio', DictRadio);
 componentMap.set('DictCheckbox', DictCheckbox);
 
 componentMap.set('UserSelect', UserSelect);
+
+componentMap.set('Upload', BasicUpload);
 
 export function add(compName: ComponentType, component: Component) {
   componentMap.set(compName, component);
