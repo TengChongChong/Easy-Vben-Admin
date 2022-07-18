@@ -13,14 +13,21 @@
                 </template>
               </a-button>
             </a-tooltip>
-            <a-tooltip v-if="'claimed' === page">
-              <template #title>办理</template>
-              <a-button type="link" size="small" @click="handleTask(record.id)">
-                <template #icon>
-                  <Icon icon="ant-design:form-outlined" />
-                </template>
-              </a-button>
-            </a-tooltip>
+            <template v-if="'claimed' === page">
+              <a-tooltip>
+                <template #title>办理</template>
+                <a-button type="link" size="small" @click="handleTask(record.id)">
+                  <template #icon>
+                    <Icon icon="ant-design:form-outlined" />
+                  </template>
+                </a-button>
+              </a-tooltip>
+              <a-divider type="vertical" />
+              <a-button-progress
+                :execution-id="record.executionId"
+                :process-instance-id="record.processInstanceId"
+              />
+            </template>
           </div>
         </template>
       </template>
@@ -40,10 +47,12 @@
   import { message } from 'ant-design-vue';
   import { useDrawer } from '/@/components/Drawer';
   import ActivitiTaskInput from './Input.vue';
+  import AButtonProgress from '/@/components/Button/src/workflow/ButtonProgress.vue';
 
   export default defineComponent({
     name: 'ActivitiTaskList',
     components: {
+      AButtonProgress,
       ActivitiTaskInput,
       PageWrapper,
       BasicTable,

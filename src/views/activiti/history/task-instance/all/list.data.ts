@@ -48,7 +48,6 @@ export const columns: BasicColumn[] = [
     dataIndex: 'processSuspensionState',
     sortField: 't.process_suspension_state',
     format: 'dict|suspensionState',
-    filters: 'dict|suspensionState',
     sorter: true,
     width: 100,
   },

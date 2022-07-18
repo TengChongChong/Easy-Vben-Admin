@@ -5,52 +5,41 @@
         <a-list-item class="list-item">
           <a-list-item-meta>
             <template #title>
-              <div
-                @click="handleOpenInfoModel(item.id, item.messageId)"
-                class="title"
-                :title="item.title"
-              >
-                {{ item.title }}
+              <div @click="handleOpenDrawer(item.id)" class="title" :title="item.businessTitle">
+                <a-tag color="green">{{ item.processDefinitionName }}</a-tag>
+                {{ item.businessTitle }}
               </div>
             </template>
 
-            <template #avatar>
-              <a-avatar :size="50" v-if="item.avatar" :src="apiUrl + item.avatar" />
-              <a-avatar :size="50" v-if="!item.avatar">
-                {{ item.nickname?.substring(0, 1) }}
-              </a-avatar>
-            </template>
-
             <template #description>
-              <dict-tag dictType="messageType" :value="item.type" />
-              {{ formatToNow(item.sendDate) }}
+              {{ item.applyUser }}
+              <a-divider type="vertical" />
+              {{ formatToNow(item.createTime) }}
             </template>
           </a-list-item-meta>
         </a-list-item>
       </template>
     </a-list>
-    <InfoModal @register="registerModal" />
+    <ActivitiTaskInput @register="registerDrawer" @success="handleSuccess" />
   </div>
 </template>
 <script lang="ts">
   import { computed, defineComponent, PropType, ref } from 'vue';
   import { SysMessage } from '/@/api/sys/model/sysMessageModel';
   import { useGlobSetting } from '/@/hooks/setting';
-  import DictTag from '/@/components/Dict/DictTag.vue';
   import { formatToNow } from '/@/utils/dateUtil';
-  import { info } from '/@/api/sys/sysMessage';
-  import { useModal } from '/@/components/Modal';
-  import InfoModal from '/@/views/sys/message/InfoModal.vue';
+  import ActivitiTaskInput from '/@/views/activiti/task/Input.vue';
+  import { useDrawer } from '/@/components/Drawer';
 
   export default defineComponent({
-    components: { InfoModal, DictTag },
+    components: { ActivitiTaskInput },
     props: {
       list: {
         type: Array as PropType<SysMessage[]>,
         default: () => [],
       },
     },
-    emits: ['read'],
+    emits: ['hide', 'success'],
     setup(props, { emit }) {
       const globSetting = useGlobSetting();
       const apiUrl = ref(globSetting.apiUrl);
@@ -59,16 +48,18 @@
         return props.list;
       });
 
-      const [registerModal, { openModal: openInfoModal }] = useModal();
+      const [registerDrawer, { openDrawer }] = useDrawer();
 
-      function handleOpenInfoModel(id: string, messageId: string) {
-        info(id, messageId).then((res) => {
-          openInfoModal(true, res);
-          emit('read');
-        });
+      function handleOpenDrawer(id: string) {
+        emit('hide');
+        openDrawer(true, id);
       }
 
-      return { formatToNow, apiUrl, getData, registerModal, handleOpenInfoModel };
+      function handleSuccess() {
+        emit('success');
+      }
+
+      return { formatToNow, apiUrl, getData, registerDrawer, handleOpenDrawer, handleSuccess };
     },
   });
 </script>

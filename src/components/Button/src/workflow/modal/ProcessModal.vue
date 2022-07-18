@@ -9,20 +9,27 @@
     <img class="process-img" alt="" :src="imgSrc" />
     <a-divider>流程记录</a-divider>
     <a-timeline>
-      <a-timeline-item v-for="item in activitiTaskList" :key="item.id">
-        <template #dot>
-          <Icon v-if="item.activityType === 'startEvent'" icon="ant-design:play-circle-outlined" />
-          <Icon v-if="item.activityType === 'userTask'" icon="ant-design:user-outlined" />
-          <Icon v-if="item.activityType === 'endEvent'" icon="ant-design:check-outlined" />
-        </template>
-        {{ item.activityName }}
-        {{
-          item.assignee ? `[${item.assignee}]` : item.activityType === 'userTask' ? '未签收' : ''
-        }}
-        <a-tag color="blue">
-          {{ formatToNow(item.startTime) }}
-        </a-tag>
-      </a-timeline-item>
+      <template v-for="item in activitiTaskList" :key="item.id">
+        <a-timeline-item
+          v-if="['startEvent', 'userTask', 'endEvent'].indexOf(item.activityType) > -1"
+        >
+          <template #dot>
+            <Icon
+              v-if="item.activityType === 'startEvent'"
+              icon="ant-design:play-circle-outlined"
+            />
+            <Icon v-if="item.activityType === 'userTask'" icon="ant-design:user-outlined" />
+            <Icon v-if="item.activityType === 'endEvent'" icon="ant-design:check-outlined" />
+          </template>
+          {{ item.activityName }}
+          {{
+            item.assignee ? `[${item.assignee}]` : item.activityType === 'userTask' ? '未签收' : ''
+          }}
+          <a-tag color="blue">
+            {{ formatToNow(item.startTime) }}
+          </a-tag>
+        </a-timeline-item>
+      </template>
     </a-timeline>
   </BasicModal>
 </template>
