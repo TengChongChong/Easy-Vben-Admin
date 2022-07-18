@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="py-20 mx-auto" style="width: 500px">
+    <div class="pt-18 pb-20 mx-auto" style="width: 500px">
       <a-list>
         <a-list-item>
           <a-list-item-meta description="下载导入模板，按照模板中要求填写数据">

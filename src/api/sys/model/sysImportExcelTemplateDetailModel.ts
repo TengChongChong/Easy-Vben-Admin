@@ -31,14 +31,3 @@ export interface SysImportExcelTemplateDetail extends BasicModel {
   // 是否唯一
   only?: boolean;
 }
-
-export interface TableHeadColumn {
-  // 字段名称
-  field: string;
-  // 标题
-  title: string;
-  // 字典类型
-  dictType: string;
-  // 排序方式(desc/asc)
-  sortable: string;
-}

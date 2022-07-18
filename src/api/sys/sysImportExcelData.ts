@@ -7,7 +7,7 @@ const BASE_URL = '/api/auth/sys/import/excel/data';
 /**
  * 导入汇总，用于显示导入到临时表后的汇总信息
  */
-interface SysImportSummary {
+export interface SysImportSummary {
   total: number;
   success: number;
   fail: number;
