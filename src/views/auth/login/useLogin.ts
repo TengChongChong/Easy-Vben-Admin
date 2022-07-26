@@ -37,28 +37,16 @@ export function useFormValid<T extends Object = any>(formRef: Ref<any>) {
   return { validForm };
 }
 
-export function useFormRules(formData?: Recordable) {
+export function useFormRules() {
   const { t } = useI18n();
 
   const getAccountFormRule = computed(() => createRule(t('sys.login.accountPlaceholder')));
   const getPasswordFormRule = computed(() => createRule(t('sys.login.passwordPlaceholder')));
-  const getSmsFormRule = computed(() => createRule(t('sys.login.smsPlaceholder')));
+  const getCodeFormRule = computed(() => createRule(t('sys.login.smsPlaceholder')));
   const getMobileFormRule = computed(() => createRule(t('sys.login.mobilePlaceholder')));
 
   const validatePolicy = async (_: Rule, value: boolean) => {
     return !value ? Promise.reject(t('sys.login.policyPlaceholder')) : Promise.resolve();
-  };
-
-  const validateConfirmPassword = (password: string) => {
-    return async (_: Rule, value: string) => {
-      if (!value) {
-        return Promise.reject(t('sys.login.passwordPlaceholder'));
-      }
-      if (value !== password) {
-        return Promise.reject(t('sys.login.diffPwd'));
-      }
-      return Promise.resolve();
-    };
   };
 
   /**
@@ -67,24 +55,20 @@ export function useFormRules(formData?: Recordable) {
    * todo: 这里使用Rule会报错，暂时修改为any
    */
   const getFormRules = computed((): { [k: string]: any } => {
-    const accountFormRule = unref(getAccountFormRule);
+    const usernameFormRule = unref(getAccountFormRule);
     const passwordFormRule = unref(getPasswordFormRule);
-    const smsFormRule = unref(getSmsFormRule);
+    const codeFormRule = unref(getCodeFormRule);
     const mobileFormRule = unref(getMobileFormRule);
 
     const mobileRule = {
-      sms: smsFormRule,
+      code: codeFormRule,
       mobile: mobileFormRule,
     };
     switch (unref(currentState)) {
-      // 注册
       case LoginStateEnum.REGISTER:
         return {
-          account: accountFormRule,
+          username: usernameFormRule,
           password: passwordFormRule,
-          confirmPassword: [
-            { validator: validateConfirmPassword(formData?.password), trigger: 'change' },
-          ],
           policy: [{ validator: validatePolicy, trigger: 'change' }],
           ...mobileRule,
         };
@@ -92,18 +76,20 @@ export function useFormRules(formData?: Recordable) {
       // 重置密码
       case LoginStateEnum.RESET_PASSWORD:
         return {
-          account: accountFormRule,
-          ...mobileRule,
+          username: usernameFormRule,
+          mobile: { required: true, message: '请输入找回方式', trigger: 'change' },
+          code: codeFormRule,
+          password: passwordFormRule,
         };
 
       // 手机号登录
       case LoginStateEnum.MOBILE:
         return mobileRule;
 
-      // 用户名密码登录
+      // 账号密码登录
       default:
         return {
-          account: accountFormRule,
+          username: usernameFormRule,
           password: passwordFormRule,
         };
     }

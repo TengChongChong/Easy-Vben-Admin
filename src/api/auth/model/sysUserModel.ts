@@ -55,8 +55,6 @@ export interface LoginParams {
   password: string;
   // 记住我
   rememberMe?: boolean;
-  // 验证码id
-  codeId?: string;
-  // 验证码
-  verificationCode?: string;
+  // 服务端二次验证验证码
+  captchaVerification?: string;
 }

@@ -53,35 +53,3 @@ export const basicProps = {
     default: {},
   },
 };
-
-export const rotateProps = {
-  ...basicProps,
-  src: {
-    type: String as PropType<string>,
-  },
-
-  imgWidth: {
-    type: Number as PropType<number>,
-    default: 260,
-  },
-
-  imgWrapStyle: {
-    type: Object as PropType<any>,
-    default: {},
-  },
-
-  minDegree: {
-    type: Number as PropType<number>,
-    default: 90,
-  },
-
-  maxDegree: {
-    type: Number as PropType<number>,
-    default: 270,
-  },
-
-  diffDegree: {
-    type: Number as PropType<number>,
-    default: 20,
-  },
-};

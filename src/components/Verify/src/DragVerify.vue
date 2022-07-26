@@ -8,7 +8,7 @@
   import { CheckOutlined, DoubleRightOutlined } from '@ant-design/icons-vue';
 
   export default defineComponent({
-    name: 'BaseDargVerify',
+    name: 'BaseDragVerify',
     props: basicProps,
     emits: ['success', 'update:value', 'change', 'start', 'move', 'end'],
     setup(props, { emit, slots, expose }) {
@@ -162,17 +162,6 @@
           if (moveX < offset) {
             if (!props.isSlot) {
               resume();
-            } else {
-              setTimeout(() => {
-                if (!props.value) {
-                  resume();
-                } else {
-                  const contentEl = unref(contentElRef);
-                  if (contentEl) {
-                    contentEl.style.width = `${parseInt(barEl.style.width)}px`;
-                  }
-                }
-              }, 0);
             }
           } else {
             actionEl.style.left = `${widthNum - actionWidth}px`;
@@ -220,7 +209,7 @@
 
       return () => {
         const renderBar = () => {
-          const cls = [`darg-verify-bar`];
+          const cls = [`drag-verify-bar`];
           if (state.toLeft) {
             cls.push('to-left');
           }
@@ -228,7 +217,7 @@
         };
 
         const renderContent = () => {
-          const cls = [`darg-verify-content`];
+          const cls = [`drag-verify-content`];
           const { isPassing } = state;
           const { text, successText } = props;
 
@@ -242,7 +231,7 @@
         };
 
         const renderAction = () => {
-          const cls = [`darg-verify-action`];
+          const cls = [`drag-verify-action`];
           const { toLeft, isPassing } = state;
           if (toLeft) {
             cls.push('to-left');
@@ -257,9 +246,9 @@
             >
               {getSlot(slots, 'actionIcon', isPassing) ||
                 (isPassing ? (
-                  <CheckOutlined class={`darg-verify-action__icon`} />
+                  <CheckOutlined class={`drag-verify-action__icon`} />
                 ) : (
-                  <DoubleRightOutlined class={`darg-verify-action__icon`} />
+                  <DoubleRightOutlined class={`drag-verify-action__icon`} />
                 ))}
             </div>
           );
@@ -267,7 +256,7 @@
 
         return (
           <div
-            class="darg-verify"
+            class="drag-verify"
             ref={wrapElRef}
             style={unref(getWrapStyleRef)}
             onMousemove={handleDragMoving}
@@ -288,7 +277,7 @@
 <style lang="less">
   @radius: 4px;
 
-  .darg-verify {
+  .drag-verify {
     position: relative;
     overflow: hidden;
     text-align: center;
@@ -313,19 +302,7 @@
       position: absolute;
       top: 0;
       font-size: 12px;
-      text-size-adjust: none;
-      background-color: -webkit-gradient(
-        linear,
-        left top,
-        right top,
-        color-stop(0, #333),
-        color-stop(0.4, #333),
-        color-stop(0.5, #fff),
-        color-stop(0.6, #333),
-        color-stop(1, #333)
-      );
       animation: slidetounlock 3s infinite;
-      background-clip: text;
       user-select: none;
 
       &.success {
