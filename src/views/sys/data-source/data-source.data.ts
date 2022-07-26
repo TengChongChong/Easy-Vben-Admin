@@ -16,7 +16,7 @@ export const searchFormSchema: FormSchema[] = [
   },
   {
     field: 'username',
-    label: '用户名',
+    label: '账号',
     component: 'Input',
   },
   {
@@ -47,7 +47,7 @@ export const columns: BasicColumn[] = [
     width: 520,
   },
   {
-    title: '用户名',
+    title: '账号',
     dataIndex: 'username',
     sorter: true,
     width: 160,

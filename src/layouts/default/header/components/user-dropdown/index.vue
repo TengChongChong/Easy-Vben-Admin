@@ -22,7 +22,7 @@
         <MenuItem
           key="doc"
           :text="t('layout.header.dropdownItemDoc')"
-          icon="ion:document-text-outline"
+          icon="ant-design:file-text-outline"
           v-if="getShowDoc"
         />
         <MenuDivider v-if="getShowDoc" />
@@ -32,13 +32,13 @@
           v-if="getUseLockPage"
           key="lock"
           :text="t('layout.header.tooltipLock')"
-          icon="ion:lock-closed-outline"
+          icon="ant-design:lock-outlined"
         />
         <MenuDivider />
         <MenuItem
           key="logout"
           :text="t('layout.header.dropdownItemLoginOut')"
-          icon="ion:power-outline"
+          icon="ant-design:logout-outlined"
         />
       </Menu>
     </template>
@@ -142,8 +142,7 @@
 
   .@{prefix-cls} {
     height: @header-height;
-    padding: 0 0 0 10px;
-    padding-right: 10px;
+    padding: 0 10px;
     overflow: hidden;
     font-size: 12px;
     cursor: pointer;

@@ -27,7 +27,7 @@
   </BasicForm>
 </template>
 <script lang="ts">
-  import { defineComponent, h, nextTick, ref, watch } from 'vue';
+  import { defineComponent, h, ref, watch } from 'vue';
   import { BasicForm, useForm } from '/@/components/Form';
   import { add, get, save, send } from '/@/api/sys/sysMessage';
   import { SysMessage } from '/@/api/sys/model/sysMessageModel';
@@ -168,13 +168,11 @@
 
       async function handleSaveAndAdd() {
         await handleSave(() => {
-          nextTick(() => {
-            add().then(async (data) => {
-              // 重置表单
-              await resetFields();
-              await setFieldsValue(data);
-              saveBtnLoading.value = false;
-            });
+          add().then(async (data) => {
+            // 重置表单
+            await resetFields();
+            await setFieldsValue(data);
+            saveBtnLoading.value = false;
           });
         });
       }

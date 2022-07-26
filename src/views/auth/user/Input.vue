@@ -31,7 +31,7 @@
   </BasicDrawer>
 </template>
 <script lang="ts">
-  import { defineComponent, nextTick, ref, unref } from 'vue';
+  import { defineComponent, ref, unref } from 'vue';
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
   import { BasicTree } from '/@/components/Tree';
@@ -68,7 +68,7 @@
           },
           {
             field: 'username',
-            label: '用户名',
+            label: '账号',
             component: 'Input',
             required: true,
             rules: [{ max: 32, message: '名称不能超过32个字符', trigger: 'blur' }],
@@ -203,13 +203,11 @@
 
       async function handleSaveAndAdd() {
         await handleSubmit((res) => {
-          nextTick(() => {
-            add(res.deptId!).then(async (data) => {
-              // 重置表单
-              await resetFields();
-              await setFieldsValue(data);
-              changeLoading(false);
-            });
+          add(res.deptId!).then(async (data) => {
+            // 重置表单
+            await resetFields();
+            await setFieldsValue(data);
+            changeLoading(false);
           });
         });
       }

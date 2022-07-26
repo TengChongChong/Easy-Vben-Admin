@@ -2,7 +2,7 @@
   <PageWrapper dense>
     <a-row>
       <a-col :xxl="6" :xl="8" :lg="10" :md="12" :sm="24">
-        <div class="m-4 mr-0 overflow-hidden bg-white">
+        <div class="m-4 md:mr-0 mb-0 overflow-hidden bg-white">
           <DeptTree @select="handleSelect" />
         </div>
       </a-col>

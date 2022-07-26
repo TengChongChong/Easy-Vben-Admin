@@ -88,7 +88,7 @@
           schemas: searchFormSchema,
         },
         actionColumn: {
-          width: 140,
+          width: 100,
           title: '操作',
           key: 'action',
         },

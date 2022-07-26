@@ -31,7 +31,7 @@
   </BasicDrawer>
 </template>
 <script lang="ts">
-  import { defineComponent, nextTick, ref, unref } from 'vue';
+  import { defineComponent, ref, unref } from 'vue';
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
 
@@ -166,13 +166,11 @@
 
       async function handleSaveAndAdd() {
         await handleSubmit(() => {
-          nextTick(() => {
-            add().then(async (data) => {
-              // 重置表单
-              await resetFields();
-              await setFieldsValue(data);
-              changeLoading(false);
-            });
+          add().then(async (data) => {
+            // 重置表单
+            await resetFields();
+            await setFieldsValue(data);
+            changeLoading(false);
           });
         });
       }

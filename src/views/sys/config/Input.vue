@@ -18,7 +18,7 @@
   </BasicDrawer>
 </template>
 <script lang="ts">
-  import { defineComponent, nextTick } from 'vue';
+  import { defineComponent } from 'vue';
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
 
@@ -45,8 +45,8 @@
             component: 'DictRadio',
             componentProps: {
               dictType: 'dataType',
-              onChange: (value) => {
-                setInputComponent(value);
+              onChange: async (value) => {
+                await setInputComponent(value);
               },
             },
             required: true,
@@ -92,32 +92,42 @@
         changeLoading(true);
         // 重置表单
         await resetFields();
-        setInputComponent(data?.type);
+        await setInputComponent(data?.type);
         await setFieldsValue(data);
         changeLoading(false);
       });
 
-      function setInputComponent(type) {
+      async function setInputComponent(type) {
         switch (type) {
           case 'text':
-            updateSchema({
+            await updateSchema({
               field: 'value',
               component: 'Input',
               rules: [{ max: 255, message: 'value不能超过255个字符', trigger: 'blur' }],
             });
             break;
           case 'number':
-            updateSchema({
+            await updateSchema({
               field: 'value',
               component: 'InputNumber',
               rules: [
-                { type: 'number', max: 99999999, message: 'value不能大于999', trigger: 'blur' },
-                { type: 'number', min: -99999999, message: 'value不能小于0', trigger: 'blur' },
+                {
+                  type: 'number',
+                  max: 99999999,
+                  message: 'value不能大于99999999',
+                  trigger: 'blur',
+                },
+                {
+                  type: 'number',
+                  min: -99999999,
+                  message: 'value不能小于-99999999',
+                  trigger: 'blur',
+                },
               ],
             });
             break;
           case 'boolean':
-            updateSchema({
+            await updateSchema({
               field: 'value',
               component: 'DictRadio',
               componentProps: {
@@ -151,16 +161,14 @@
 
       async function handleSaveAndAdd() {
         await handleSubmit((res) => {
-          nextTick(() => {
-            // 重置表单
-            resetFields();
-            setFieldsValue({
-              type: res.type,
-              sys: res.sys,
-            });
-
-            changeLoading(false);
+          // 重置表单
+          resetFields();
+          setFieldsValue({
+            type: res.type,
+            sys: res.sys,
           });
+
+          changeLoading(false);
         });
       }
 

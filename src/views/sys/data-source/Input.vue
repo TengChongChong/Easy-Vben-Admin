@@ -18,7 +18,7 @@
   </BasicDrawer>
 </template>
 <script lang="ts">
-  import { defineComponent, nextTick } from 'vue';
+  import { defineComponent } from 'vue';
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
 
@@ -51,10 +51,10 @@
           },
           {
             field: 'username',
-            label: '用户名',
+            label: '账号',
             component: 'Input',
             required: true,
-            rules: [{ max: 128, message: '用户名不能超过128个字符', trigger: 'blur' }],
+            rules: [{ max: 128, message: '账号不能超过128个字符', trigger: 'blur' }],
             colProps: { xl: 12, lg: 24 },
           },
           {
@@ -120,14 +120,12 @@
 
       async function handleSaveAndAdd() {
         await handleSubmit(() => {
-          nextTick(() => {
-            // 重置表单
-            resetFields();
-            add().then(async (data) => {
-              await setFieldsValue(data);
-            });
-            changeLoading(false);
+          // 重置表单
+          resetFields();
+          add().then(async (data) => {
+            await setFieldsValue(data);
           });
+          changeLoading(false);
         });
       }
 

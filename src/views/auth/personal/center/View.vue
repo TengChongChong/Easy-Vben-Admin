@@ -16,7 +16,7 @@
               <a-col :span="14">
                 <div class="user-details">
                   <div class="user-nickname">{{ sysUser.nickname }}</div>
-                  <div class="user-dept-name">{{ sysUser.dept.name }}</div>
+                  <div class="user-dept-name">{{ sysUser.dept?.name }}</div>
                   <div class="user-tag">
                     <dict-tag dict-type="sex" :value="sysUser.sex" :icon="true" />
                     <a-tag v-if="sysUser.birthday">{{ getAge }} 岁</a-tag>

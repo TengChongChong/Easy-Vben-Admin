@@ -10,7 +10,7 @@ import { setStatus } from '/@/api/auth/sysUser';
 export const searchFormSchema: FormSchema[] = [
   {
     field: 'username',
-    label: '用户名',
+    label: '账号',
     component: 'Input',
   },
   {
@@ -28,7 +28,7 @@ export const searchFormSchema: FormSchema[] = [
 // 表格列数据
 export const columns: BasicColumn[] = [
   {
-    title: '用户名',
+    title: '账号',
     dataIndex: 'username',
     sorter: true,
     fixed: 'left',

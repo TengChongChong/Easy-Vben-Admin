@@ -1,25 +1,41 @@
 <template>
   <BasicModal @register="register" @ok="handleSave" title="修改密码">
     <a-alert
-      :type="passwordScore < 2 ? 'warning' : 'success'"
-      :message="passwordScore < 2 ? '密码强度不能低于3级' : '密码符合要求'"
+      :type="passwordScore < passwordSecurityLevel ? 'warning' : 'success'"
+      :message="
+        passwordScore < passwordSecurityLevel
+          ? `密码强度不能低于${passwordSecurityLevel}级`
+          : '密码符合要求'
+      "
       banner
     />
     <BasicForm @register="registerForm" :model="model" />
   </BasicModal>
 </template>
 <script lang="ts">
-  import { defineComponent, ref } from 'vue';
+  import { defineComponent, onMounted, ref } from 'vue';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { changePassword } from '/@/api/auth/sysUserPersonal';
   import { encryptByMd5 } from '/@/utils/cipher';
   import { useMessage } from '/@/hooks/web/useMessage';
+  import { getByKey } from '/@/api/sys/sysConfig';
   export default defineComponent({
     components: { BasicModal, BasicForm },
     setup() {
       const model = ref({});
+      // 后台配置的密码等级
+      const passwordSecurityLevel = ref<number>(3);
+
       const passwordScore = ref<number>(-1);
+
+      onMounted(() => {
+        getByKey('passwordSecurityLevel').then((res) => {
+          if (res && res.value) {
+            passwordSecurityLevel.value = Number(res.value);
+          }
+        });
+      });
 
       const { createMessage } = useMessage();
       const [registerForm, { validate, resetFields }] = useForm({
@@ -38,7 +54,7 @@
             componentProps: {
               placeholder: '新密码',
               onScoreChange: (score) => {
-                passwordScore.value = score;
+                passwordScore.value = score + 1;
               },
             },
             rules: [
@@ -47,28 +63,6 @@
                 message: '请输入新密码',
               },
             ],
-          },
-          {
-            field: 'confirmPassword',
-            label: '确认密码',
-            component: 'InputPassword',
-
-            dynamicRules: ({ values }) => {
-              return [
-                {
-                  required: true,
-                  validator: (_, value) => {
-                    if (!value) {
-                      return Promise.reject('密码不能为空');
-                    }
-                    if (value !== values.passwordNew) {
-                      return Promise.reject('两次输入的密码不一致!');
-                    }
-                    return Promise.resolve();
-                  },
-                },
-              ];
-            },
           },
         ],
         showActionButtonGroup: false,
@@ -80,8 +74,8 @@
       });
 
       async function handleSave() {
-        if (passwordScore.value < 2) {
-          createMessage.warn('密码强度不能低于3级');
+        if (passwordScore.value < passwordSecurityLevel.value) {
+          createMessage.warn(`密码强度不能低于${passwordSecurityLevel.value}级`);
           return;
         }
         try {
@@ -100,7 +94,7 @@
         }
       }
 
-      return { model, passwordScore, register, registerForm, handleSave };
+      return { model, passwordScore, passwordSecurityLevel, register, registerForm, handleSave };
     },
   });
 </script>

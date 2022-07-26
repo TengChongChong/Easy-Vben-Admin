@@ -1,55 +1,48 @@
 <template>
   <template v-if="getShow">
     <LoginFormTitle class="enter-x" />
-    <Form class="p-4 enter-x" :model="formData" :rules="getFormRules" ref="formRef">
-      <FormItem name="account" class="enter-x">
-        <Input
+    <a-form class="p-4 enter-x" :model="formData" :rules="getFormRules" ref="formRef">
+      <a-form-item name="username" class="enter-x">
+        <a-input
           class="fix-auto-fill"
           size="large"
-          v-model:value="formData.account"
+          v-model:value="formData.username"
           :placeholder="t('sys.login.userName')"
         />
-      </FormItem>
-      <FormItem name="mobile" class="enter-x">
-        <Input
+      </a-form-item>
+      <a-form-item name="mobile" class="enter-x">
+        <a-input
           size="large"
           v-model:value="formData.mobile"
           :placeholder="t('sys.login.mobile')"
           class="fix-auto-fill"
         />
-      </FormItem>
-      <FormItem name="sms" class="enter-x">
+      </a-form-item>
+      <a-form-item name="sms" class="enter-x">
         <CountdownInput
           size="large"
           class="fix-auto-fill"
           v-model:value="formData.sms"
           :placeholder="t('sys.login.smsCode')"
         />
-      </FormItem>
-      <FormItem name="password" class="enter-x">
+      </a-form-item>
+      <a-form-item name="password" class="enter-x">
         <StrengthMeter
           size="large"
+          autocomplete="new-password"
           v-model:value="formData.password"
           :placeholder="t('sys.login.password')"
         />
-      </FormItem>
-      <FormItem name="confirmPassword" class="enter-x">
-        <InputPassword
-          size="large"
-          visibilityToggle
-          v-model:value="formData.confirmPassword"
-          :placeholder="t('sys.login.confirmPassword')"
-        />
-      </FormItem>
+      </a-form-item>
 
-      <FormItem class="enter-x" name="policy">
+      <a-form-item class="enter-x" name="policy">
         <!-- No logic, you need to deal with it yourself -->
-        <Checkbox v-model:checked="formData.policy" size="small">
+        <a-checkbox v-model:checked="formData.policy" size="small">
           {{ t('sys.login.policy') }}
-        </Checkbox>
-      </FormItem>
+        </a-checkbox>
+      </a-form-item>
 
-      <Button
+      <a-button
         type="primary"
         class="enter-x"
         size="large"
@@ -58,24 +51,21 @@
         :loading="loading"
       >
         {{ t('sys.login.registerButton') }}
-      </Button>
-      <Button size="large" block class="mt-4 enter-x" @click="handleBackLogin">
+      </a-button>
+      <a-button size="large" block class="mt-4 enter-x" @click="handleBackLogin">
         {{ t('sys.login.backSignIn') }}
-      </Button>
-    </Form>
+      </a-button>
+    </a-form>
   </template>
 </template>
 <script lang="ts" setup>
   import { reactive, ref, unref, computed } from 'vue';
   import LoginFormTitle from './LoginFormTitle.vue';
-  import { Form, Input, Button, Checkbox } from 'ant-design-vue';
   import { StrengthMeter } from '/@/components/StrengthMeter';
   import { CountdownInput } from '/@/components/CountDown';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { useLoginState, useFormRules, useFormValid, LoginStateEnum } from './useLogin';
 
-  const FormItem = Form.Item;
-  const InputPassword = Input.Password;
   const { t } = useI18n();
   const { handleBackLogin, getLoginState } = useLoginState();
 
@@ -83,15 +73,14 @@
   const loading = ref(false);
 
   const formData = reactive({
-    account: '',
+    username: '',
     password: '',
-    confirmPassword: '',
     mobile: '',
     sms: '',
     policy: false,
   });
 
-  const { getFormRules } = useFormRules(formData);
+  const { getFormRules } = useFormRules();
   const { validForm } = useFormValid(formRef);
 
   const getShow = computed(() => unref(getLoginState) === LoginStateEnum.REGISTER);

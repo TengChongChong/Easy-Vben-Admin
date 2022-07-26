@@ -29,13 +29,13 @@ export const columns: BasicColumn[] = [
     dataIndex: 'sysKey',
     sorter: true,
     fixed: 'left',
-    width: 150,
+    width: 240,
   },
   {
     title: 'value',
     dataIndex: 'value',
     sorter: true,
-    width: 200,
+    width: 240,
   },
   {
     title: '类型',

@@ -77,9 +77,12 @@
             setProps({ schemas });
           }
 
-          businessDetailsComponent.value = defineAsyncComponent(
-            () => import(`/@/views${res.variables.businessDetailsPath}`),
-          );
+          // @ts-ignore
+          const path = `/@/views${res.variables.businessDetailsPath}`;
+
+          businessDetailsComponent.value = defineAsyncComponent(() => {
+            return import(/* @vite-ignore */ path);
+          });
         });
       });
 
@@ -191,7 +194,5 @@
         text-align: right;
       }
     }
-  }
-  .task-form {
   }
 </style>

@@ -15,7 +15,7 @@
   const { prefixCls } = useDesign('st-login');
   const userStore = useUserStore();
   const permissionStore = usePermissionStore();
-  const userId = ref<Nullable<number | string>>(0);
+  const userId = ref<Nullable<string>>();
 
   onMounted(() => {
     // 记录当前的UserId
@@ -24,7 +24,7 @@
   });
 
   onBeforeUnmount(() => {
-    if (userId.value && userId.value !== userStore.getCurrentUser.id) {
+    if (userId.value && userId.value !== userStore.getCurrentUser?.id) {
       // 登录的不是同一个用户，刷新整个页面以便丢弃之前用户的页面状态
       document.location.reload();
     } else if (permissionStore.getLastBuildMenuTime === 0) {

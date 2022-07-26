@@ -18,7 +18,7 @@
   </BasicModal>
 </template>
 <script lang="ts">
-  import { defineComponent, nextTick, ref } from 'vue';
+  import { defineComponent, ref } from 'vue';
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { BasicModal, useModalInner } from '/@/components/Modal';
 
@@ -74,18 +74,16 @@
 
       async function handleSaveAndAdd() {
         await handleSubmit((res) => {
-          nextTick(() => {
-            add().then(async (data) => {
-              // 重置表单
-              await resetFields();
+          add().then(async (data) => {
+            // 重置表单
+            await resetFields();
 
-              await setFieldsValue({
-                ...data,
-                sys: res.sys,
-              });
-              changeLoading(false);
-              saveBtnLoading.value = false;
+            await setFieldsValue({
+              ...data,
+              sys: res.sys,
             });
+            changeLoading(false);
+            saveBtnLoading.value = false;
           });
         });
       }

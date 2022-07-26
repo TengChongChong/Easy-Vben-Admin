@@ -8,7 +8,7 @@ import Base64 from 'crypto-js/enc-base64';
 
 export interface EncryptionParams {
   key: string;
-  iv: string;
+  iv?: string;
 }
 
 export class AesEncryption {

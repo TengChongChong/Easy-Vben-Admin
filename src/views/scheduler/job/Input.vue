@@ -18,7 +18,7 @@
   </BasicDrawer>
 </template>
 <script lang="ts">
-  import { defineComponent, nextTick } from 'vue';
+  import { defineComponent } from 'vue';
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
 
@@ -134,15 +134,13 @@
 
       async function handleSaveAndAdd() {
         await handleSubmit(() => {
-          nextTick(() => {
-            // 重置表单
-            resetFields();
-            add().then((data) => {
-              setFieldsValue({ ...data });
-            });
-
-            changeLoading(false);
+          // 重置表单
+          resetFields();
+          add().then((data) => {
+            setFieldsValue({ ...data });
           });
+
+          changeLoading(false);
         });
       }
 
