@@ -7,6 +7,7 @@ import {
   Badge,
   Checkbox,
   Descriptions,
+  Empty,
   Layout,
   List,
   Card,
@@ -19,6 +20,7 @@ import {
   Tag,
   Tree,
   Timeline,
+  Form,
   Tooltip,
   Typography,
   Popconfirm,
@@ -42,6 +44,7 @@ export function registerGlobComp(app: App) {
     .use(Button)
     .use(Badge)
     .use(Descriptions)
+    .use(Empty)
     .use(Layout)
     .use(List)
     .use(Card)
@@ -56,6 +59,7 @@ export function registerGlobComp(app: App) {
     .use(Tree)
     .use(Timeline)
     .use(Tooltip)
+    .use(Form)
     .use(Typography)
     .use(Popconfirm)
     .use(Popover)
