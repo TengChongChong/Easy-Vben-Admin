@@ -98,7 +98,7 @@ export default {
     password: 'Password',
     confirmPassword: 'Confirm Password',
     email: 'Email',
-    smsCode: 'SMS code',
+    smsCode: 'code',
     mobile: 'Mobile',
   },
 };
