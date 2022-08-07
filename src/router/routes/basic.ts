@@ -6,6 +6,7 @@ import {
   EXCEPTION_COMPONENT,
   PAGE_NOT_FOUND_NAME,
 } from '/@/router/constant';
+import { ExceptionEnum } from '/@/enums/exceptionEnum';
 
 // 404 on a page
 export const PAGE_NOT_FOUND_ROUTE: AppRouteRecordRaw = {
@@ -48,30 +49,6 @@ export const REDIRECT_ROUTE: AppRouteRecordRaw = {
       meta: {
         title: REDIRECT_NAME,
         hideBreadcrumb: true,
-      },
-    },
-  ],
-};
-
-export const ERROR_LOG_ROUTE: AppRouteRecordRaw = {
-  path: '/error-log',
-  name: 'ErrorLog',
-  component: LAYOUT,
-  redirect: '/error-log/list',
-  meta: {
-    title: 'ErrorLog',
-    hideBreadcrumb: true,
-    hideChildrenInMenu: true,
-  },
-  children: [
-    {
-      path: 'list',
-      name: 'ErrorLogList',
-      component: () => import('/@/views/sys/error-log/index.vue'),
-      meta: {
-        title: t('routes.basic.errorLogList'),
-        hideBreadcrumb: true,
-        currentActiveMenu: '/error-log',
       },
     },
   ],
@@ -121,5 +98,69 @@ export const MAIL_VERIFIES: AppRouteRecordRaw = {
   component: () => import('/@/views/auth/personal/center/MailVerifies.vue'),
   meta: {
     title: '邮箱验证',
+    ignoreAuth: true,
   },
 };
+
+export const EXCEPTION_PAGE: AppRouteRecordRaw[] = [
+  {
+    path: '/exception/403',
+    name: 'PageNotAccess',
+    component: EXCEPTION_COMPONENT,
+    props: {
+      status: ExceptionEnum.PAGE_NOT_ACCESS,
+    },
+    meta: {
+      title: '403',
+      ignoreAuth: true,
+    },
+  },
+  {
+    path: '/exception/404',
+    name: 'AssetsNotFound',
+    component: EXCEPTION_COMPONENT,
+    props: {
+      status: ExceptionEnum.PAGE_NOT_FOUND,
+    },
+    meta: {
+      title: '404',
+      ignoreAuth: true,
+    },
+  },
+  {
+    path: '/exception/500',
+    name: 'ServiceError',
+    component: EXCEPTION_COMPONENT,
+    props: {
+      status: ExceptionEnum.ERROR,
+    },
+    meta: {
+      title: '500',
+      ignoreAuth: true,
+    },
+  },
+  {
+    path: '/exception/net-work-error',
+    name: 'NetWorkError',
+    component: EXCEPTION_COMPONENT,
+    props: {
+      status: ExceptionEnum.NET_WORK_ERROR,
+    },
+    meta: {
+      title: t('routes.demo.page.netWorkError'),
+      ignoreAuth: true,
+    },
+  },
+  {
+    path: '/exception/not-data',
+    name: 'NotData',
+    component: EXCEPTION_COMPONENT,
+    props: {
+      status: ExceptionEnum.PAGE_NOT_DATA,
+    },
+    meta: {
+      title: t('routes.demo.page.notData'),
+      ignoreAuth: true,
+    },
+  },
+];

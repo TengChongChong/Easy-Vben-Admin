@@ -13,7 +13,7 @@ const LOGIN_PATH = PageEnum.BASE_LOGIN;
 /**
  * 无需登录即可访问的页面，path或name
  */
-const whitePathList: string[] = [LOGIN_PATH, 'AuthPersonalSettingMailVerifies'];
+const whitePathList: string[] = [LOGIN_PATH];
 
 export function createPermissionGuard(router: Router) {
   const userStore = useUserStoreWithOut();
@@ -23,7 +23,11 @@ export function createPermissionGuard(router: Router) {
     const token = userStore.getToken;
 
     // 白名单
-    if (whitePathList.includes(to.path) || whitePathList.includes(to.name as string)) {
+    if (
+      whitePathList.includes(to.path) ||
+      whitePathList.includes(to.name as string) ||
+      to.meta.ignoreAuth
+    ) {
       if (to.path === LOGIN_PATH && token) {
         const isSessionTimeout = userStore.getSessionTimeout;
         try {
