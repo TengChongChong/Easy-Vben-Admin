@@ -21,7 +21,7 @@
   }
 
   export default defineComponent({
-    name: 'ErrorPage',
+    name: 'ExceptionPage',
     props: {
       // 状态码
       status: {

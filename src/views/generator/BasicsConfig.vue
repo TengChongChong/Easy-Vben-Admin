@@ -51,7 +51,7 @@
     TEMPLATE,
   } from '/@/views/generator/ts/generator.data';
   import { Icon } from '/@/components/Icon';
-  import { BasicForm, useForm } from '/@/components/Form/index';
+  import { BasicForm, useForm } from '/@/components/Form';
   import { selectOptions } from '/@/api/sys/sysDataSource';
   import { getTableInfo, selectModules, selectTable } from '/@/api/generator/generator';
   import { SelectModel } from '/@/api/model/selectModel';

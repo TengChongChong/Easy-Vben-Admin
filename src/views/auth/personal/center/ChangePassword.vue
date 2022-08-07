@@ -15,7 +15,7 @@
 <script lang="ts">
   import { defineComponent, onMounted, ref } from 'vue';
   import { BasicModal, useModalInner } from '/@/components/Modal';
-  import { BasicForm, useForm } from '/@/components/Form/index';
+  import { BasicForm, useForm } from '/@/components/Form';
   import { changePassword } from '/@/api/auth/sysUserPersonal';
   import { encryptByMd5 } from '/@/utils/cipher';
   import { useMessage } from '/@/hooks/web/useMessage';

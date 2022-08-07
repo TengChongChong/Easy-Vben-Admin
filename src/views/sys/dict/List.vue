@@ -50,9 +50,10 @@
             </a-tooltip>
 
             <a-divider type="vertical" />
-            <a-button-edit auth="sys:dict:save" :id="record.id" @click="handleEdit" />
+            <a-button-edit small auth="sys:dict:save" :id="record.id" @click="handleEdit" />
             <a-divider type="vertical" />
             <a-button-remove
+              small
               auth="sys:dict:remove"
               :id="record.id"
               :api="remove"
@@ -72,14 +73,16 @@
   import { select, add, get, remove, refresh } from '/@/api/sys/sysDict';
   import { columns } from '/@/views/sys/dict/dict.data';
   import { useDrawer } from '/@/components/Drawer';
-  import AButtonAdd from '/@/components/Button/src/ButtonAdd.vue';
-  import AButtonEdit from '/@/components/Button/src/ButtonEdit.vue';
-  import AButtonRemove from '/@/components/Button/src/ButtonRemove.vue';
-  import AButtonRemoveBatch from '/@/components/Button/src/ButtonRemoveBatch.vue';
+  import {
+    AButtonAdd,
+    AButtonEdit,
+    AButtonRemove,
+    AButtonRemoveBatch,
+    AButtonLink,
+  } from '/@/components/Button';
   import SysDictInput from '/@/views/sys/dict/Input.vue';
   import { Icon } from '/@/components/Icon';
   import { useMessage } from '/@/hooks/web/useMessage';
-  import AButtonLink from '/@/components/Button/src/ButtonLink.vue';
   import { useDictStore } from '/@/store/modules/dict';
   import { Authority } from '/@/components/Authority';
   import { PageWrapper } from '/@/components/Page';

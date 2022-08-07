@@ -24,9 +24,10 @@
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'action'">
           <div class="basic-table-action center">
-            <a-button-edit auth="sys:config:save" :id="record.id" @click="handleEdit" />
+            <a-button-edit small auth="sys:config:save" :id="record.id" @click="handleEdit" />
             <a-divider type="vertical" />
             <a-button-remove
+              small
               auth="sys:config:remove"
               :id="record.id"
               :api="remove"
@@ -46,10 +47,7 @@
   import { select, get, remove, refresh } from '/@/api/sys/sysConfig';
   import { columns, searchFormSchema } from '/@/views/sys/config/config.data';
   import { useDrawer } from '/@/components/Drawer';
-  import AButtonAdd from '/@/components/Button/src/ButtonAdd.vue';
-  import AButtonEdit from '/@/components/Button/src/ButtonEdit.vue';
-  import AButtonRemove from '/@/components/Button/src/ButtonRemove.vue';
-  import AButtonRemoveBatch from '/@/components/Button/src/ButtonRemoveBatch.vue';
+  import { AButtonAdd, AButtonEdit, AButtonRemove, AButtonRemoveBatch } from '/@/components/Button';
   import SysConfigInput from '/@/views/sys/config/Input.vue';
   import { Icon } from '/@/components/Icon';
   import { useMessage } from '/@/hooks/web/useMessage';

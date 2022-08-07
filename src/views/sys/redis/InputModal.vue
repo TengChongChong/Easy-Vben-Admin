@@ -4,12 +4,7 @@
       <Description @register="registerDescItem" />
     </div>
     <template #footer>
-      <a-button @click="closeModal">
-        <template #icon>
-          <Icon icon="ant-design:close-outlined" />
-        </template>
-        关闭
-      </a-button>
+      <a-button-cancel text="关闭" @click="closeModal" />
 
       <Authority value="sys:redis:remove">
         <a-popconfirm title="确定要删除吗？" ok-text="是" cancel-text="否" @confirm="handleRemove">
@@ -33,6 +28,7 @@
   import { isObject } from '/@/utils/is';
   import Icon from '/@/components/Icon';
   import { remove } from '/@/api/sys/sysRedis';
+  import { AButtonCancel } from '/@/components/Button';
 
   const schemas: DescItem[] = [
     {
@@ -57,7 +53,7 @@
     },
   ];
   export default defineComponent({
-    components: { Icon, BasicModal, Description, Authority },
+    components: { AButtonCancel, Icon, BasicModal, Description, Authority },
     props: {
       userData: { type: Object },
     },

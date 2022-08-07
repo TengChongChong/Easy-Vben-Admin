@@ -23,7 +23,7 @@
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
   import { Icon } from '/@/components/Icon';
   import { save } from '/@/api/sys/sysImportExcelTemplate';
-  import { SysImportExcelTemplateModel } from '/@/api/sys/model/sysImportExcelTemplateModel';
+  import { SysImportExcelTemplate } from '/@/api/sys/model/sysImportExcelTemplateModel';
   import { selectTable } from '/@/api/generator/generator';
   import { SelectModel } from '/@/api/model/selectModel';
 
@@ -35,8 +35,8 @@
       let tableArray: SelectModel[] = [];
       const [registerForm, { resetFields, setFieldsValue, validate, getFieldsValue }] = useForm({
         schemas: [
-          { field: 'id', label: 'id', component: 'Input', ifShow: false },
-          { field: 'version', label: 'version', component: 'Input', ifShow: false },
+          { field: 'id', label: 'id', component: 'Input', show: false },
+          { field: 'version', label: 'version', component: 'Input', show: false },
           {
             field: 'importTable',
             label: '表',
@@ -155,11 +155,11 @@
         return modelName;
       }
 
-      async function handleSubmit(callback: (_: SysImportExcelTemplateModel) => any) {
+      async function handleSubmit(callback: (_: SysImportExcelTemplate) => any) {
         try {
           changeLoading(true);
           await validate();
-          await save(getFieldsValue() as SysImportExcelTemplateModel).then((res) => {
+          await save(getFieldsValue() as SysImportExcelTemplate).then((res) => {
             emit('success');
             callback(res);
           });

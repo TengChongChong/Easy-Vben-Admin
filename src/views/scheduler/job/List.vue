@@ -62,9 +62,10 @@
               </a-tooltip>
             </Authority>
             <a-divider type="vertical" />
-            <a-button-edit auth="scheduler:job:save" :id="record.id" @click="handleEdit" />
+            <a-button-edit small auth="scheduler:job:save" :id="record.id" @click="handleEdit" />
             <a-divider type="vertical" />
             <a-button-remove
+              small
               auth="scheduler:job:remove"
               :id="record.id"
               :api="remove"
@@ -102,10 +103,7 @@
   } from '/@/api/scheduler/schedulerJob';
   import { columns, searchFormSchema } from '/@/views/scheduler/job/job.data';
   import { useDrawer } from '/@/components/Drawer';
-  import AButtonAdd from '/@/components/Button/src/ButtonAdd.vue';
-  import AButtonEdit from '/@/components/Button/src/ButtonEdit.vue';
-  import AButtonRemove from '/@/components/Button/src/ButtonRemove.vue';
-  import AButtonRemoveBatch from '/@/components/Button/src/ButtonRemoveBatch.vue';
+  import { AButtonAdd, AButtonEdit, AButtonRemove, AButtonRemoveBatch } from '/@/components/Button';
   import SchedulerJobInput from '/@/views/scheduler/job/Input.vue';
   import { Icon } from '/@/components/Icon';
   import { useMessage } from '/@/hooks/web/useMessage';

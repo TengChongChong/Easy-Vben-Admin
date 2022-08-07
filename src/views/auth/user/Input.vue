@@ -23,28 +23,25 @@
     </BasicForm>
 
     <template #appendFooter>
-      <a-button type="primary" @click="handleSaveAndAdd">
-        <Icon icon="ant-design:plus-outlined" />
-        保存并新增
-      </a-button>
+      <a-button-save @click="handleSaveAndAdd" text="保存并新增" />
     </template>
   </BasicDrawer>
 </template>
 <script lang="ts">
   import { defineComponent, ref, unref } from 'vue';
-  import { BasicForm, useForm } from '/@/components/Form/index';
+  import { BasicForm, useForm } from '/@/components/Form';
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
   import { BasicTree } from '/@/components/Tree';
   import { add, save } from '/@/api/auth/sysUser';
-  import { Icon } from '/@/components/Icon';
   import { SysUser } from '/@/api/auth/model/sysUserModel';
   import { TreeActionType, TreeItem } from '/@/components/Tree/src/tree';
   import { convertCheckedKeys, listToTree } from '/@/utils/helper/treeHelper';
   import { selectAll as selectAllRole } from '/@/api/auth/sysRole';
+  import { AButtonSave } from '/@/components/Button';
 
   export default defineComponent({
     name: 'SysUserInput',
-    components: { Icon, BasicForm, BasicDrawer, BasicTree },
+    components: { AButtonSave, BasicForm, BasicDrawer, BasicTree },
     emits: ['success', 'register'],
     setup(_, { emit }) {
       const deptId = ref();
@@ -57,8 +54,8 @@
         { resetFields, setFieldsValue, validate, updateSchema, getFieldsValue },
       ] = useForm({
         schemas: [
-          { field: 'id', label: 'id', component: 'Input', ifShow: false },
-          { field: 'version', label: 'version', component: 'Input', ifShow: false },
+          { field: 'id', label: 'id', component: 'Input', show: false },
+          { field: 'version', label: 'version', component: 'Input', show: false },
           {
             field: 'nickname',
             label: '昵称',
@@ -151,7 +148,7 @@
         allSelectedNodes.value = data.roleIdList;
         data.roleIdList = convertCheckedKeys(unref(treeData), data.roleIdList);
 
-        if (id.value) {
+        if (data.value) {
           // 不允许在此页面修改密码
           await updateSchema({
             field: 'password',

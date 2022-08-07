@@ -34,9 +34,9 @@
               </a-popconfirm>
             </a-tooltip>
             <a-divider type="vertical" />
-            <a-button-edit :id="record.id" @click="handleEdit" />
+            <a-button-edit small :id="record.id" @click="handleEdit" />
             <a-divider type="vertical" />
-            <a-button-remove :id="record.id" :api="remove" @success="reload" />
+            <a-button-remove small :id="record.id" :api="remove" @success="reload" />
           </div>
         </template>
       </template>
@@ -50,9 +50,7 @@
   import { BasicTable, useTable } from '/@/components/Table';
   import { SysMessageStatus } from '/@/views/sys/message/message.data';
   import { Icon } from '/@/components/Icon';
-  import AButtonRemove from '/@/components/Button/src/ButtonRemove.vue';
-  import AButtonRemoveBatch from '/@/components/Button/src/ButtonRemoveBatch.vue';
-  import AButtonEdit from '/@/components/Button/src/ButtonEdit.vue';
+  import { AButtonRemove, AButtonRemoveBatch, AButtonEdit } from '/@/components/Button';
   import { select, send, remove, info } from '/@/api/sys/sysMessage';
   import { propTypes } from '/@/utils/propTypes';
   import dayjs from 'dayjs';

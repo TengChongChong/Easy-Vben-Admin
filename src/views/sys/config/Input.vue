@@ -10,26 +10,23 @@
     <BasicForm @register="registerForm" />
 
     <template #appendFooter>
-      <a-button type="primary" @click="handleSaveAndAdd">
-        <Icon icon="ant-design:plus-outlined" />
-        保存并新增
-      </a-button>
+      <a-button-save @click="handleSaveAndAdd" text="保存并新增" />
     </template>
   </BasicDrawer>
 </template>
 <script lang="ts">
   import { defineComponent } from 'vue';
-  import { BasicForm, useForm } from '/@/components/Form/index';
+  import { BasicForm, useForm } from '/@/components/Form';
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
 
   import { save } from '/@/api/sys/sysConfig';
-  import { Icon } from '/@/components/Icon';
   import { SysConfig } from '/@/api/sys/model/sysConfigModel';
   import { RoleEnum } from '/@/enums/roleEnum';
+  import { AButtonSave } from '/@/components/Button';
 
   export default defineComponent({
     name: 'SysConfigInput',
-    components: { Icon, BasicForm, BasicDrawer },
+    components: { AButtonSave, BasicForm, BasicDrawer },
     emits: ['success', 'register'],
     setup(_, { emit }) {
       const [
@@ -37,8 +34,8 @@
         { resetFields, setFieldsValue, validate, updateSchema, getFieldsValue },
       ] = useForm({
         schemas: [
-          { field: 'id', label: 'id', component: 'Input', ifShow: false },
-          { field: 'version', label: 'version', component: 'Input', ifShow: false },
+          { field: 'id', label: 'id', component: 'Input', show: false },
+          { field: 'version', label: 'version', component: 'Input', show: false },
           {
             field: 'type',
             label: '类型',

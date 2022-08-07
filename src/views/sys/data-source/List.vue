@@ -18,9 +18,10 @@
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'action'">
           <div class="basic-table-action center">
-            <a-button-edit auth="sys:data:source:save" :id="record.id" @click="handleEdit" />
+            <a-button-edit small auth="sys:data:source:save" :id="record.id" @click="handleEdit" />
             <a-divider type="vertical" />
             <a-button-remove
+              small
               auth="sys:data:source:remove"
               :id="record.id"
               :api="remove"
@@ -40,10 +41,7 @@
   import { select, get, remove, add } from '/@/api/sys/sysDataSource';
   import { columns, searchFormSchema } from '/@/views/sys/data-source/data-source.data';
   import { useDrawer } from '/@/components/Drawer';
-  import AButtonAdd from '/@/components/Button/src/ButtonAdd.vue';
-  import AButtonEdit from '/@/components/Button/src/ButtonEdit.vue';
-  import AButtonRemove from '/@/components/Button/src/ButtonRemove.vue';
-  import AButtonRemoveBatch from '/@/components/Button/src/ButtonRemoveBatch.vue';
+  import { AButtonAdd, AButtonEdit, AButtonRemove, AButtonRemoveBatch } from '/@/components/Button';
   import SysDataSourceInput from '/@/views/sys/data-source/Input.vue';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { PageWrapper } from '/@/components/Page';

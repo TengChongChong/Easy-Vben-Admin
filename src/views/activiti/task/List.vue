@@ -24,6 +24,7 @@
               </a-tooltip>
               <a-divider type="vertical" />
               <a-button-progress
+                small
                 :execution-id="record.executionId"
                 :process-instance-id="record.processInstanceId"
               />
@@ -47,7 +48,7 @@
   import { message } from 'ant-design-vue';
   import { useDrawer } from '/@/components/Drawer';
   import ActivitiTaskInput from './Input.vue';
-  import AButtonProgress from '/@/components/Button/src/workflow/ButtonProgress.vue';
+  import { AButtonProgress } from '/@/components/Button';
 
   export default defineComponent({
     name: 'ActivitiTaskList',

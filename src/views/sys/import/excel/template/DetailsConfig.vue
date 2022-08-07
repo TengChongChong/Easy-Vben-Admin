@@ -103,7 +103,7 @@
 <script lang="ts">
   import { defineComponent, ref, unref } from 'vue';
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
-  import { SysImportExcelTemplateModel } from '/@/api/sys/model/sysImportExcelTemplateModel';
+  import { SysImportExcelTemplate } from '/@/api/sys/model/sysImportExcelTemplateModel';
   import { getTableInfo, selectTable } from '/@/api/generator/generator';
   import { SysImportExcelTemplateDetail } from '/@/api/sys/model/sysImportExcelTemplateDetailModel';
   import { saveData, selectDetails } from '/@/api/sys/sysImportExcelTemplateDetail';
@@ -123,7 +123,7 @@
     setup() {
       const [registerModal, { openModal }] = useModal();
 
-      const sysImportExcelTemplate = ref<SysImportExcelTemplateModel>({});
+      const sysImportExcelTemplate = ref<SysImportExcelTemplate>({});
       const sysImportExcelTemplateDetailList = ref<SysImportExcelTemplateDetail[]>([]);
       const tableArray = ref<SelectModel[]>([]);
       const dictTypeArray = ref<SelectModel[]>([]);

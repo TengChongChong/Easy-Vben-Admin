@@ -4,16 +4,13 @@
     @register="registerDrawer"
     showFooter
     title="菜单"
-    width="30%"
+    width="45%"
     @ok="handleSave"
   >
     <BasicForm @register="registerForm" />
 
     <template #appendFooter>
-      <a-button type="primary" @click="handleSaveAndAdd">
-        <Icon icon="ant-design:plus-outlined" />
-        保存并新增
-      </a-button>
+      <a-button-save @click="handleSaveAndAdd" text="保存并新增" />
     </template>
   </BasicDrawer>
 </template>
@@ -23,15 +20,15 @@
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
 
   import { add, save, selectAll } from '/@/api/auth/sysPermission';
-  import { Icon } from '/@/components/Icon';
   import { isArray } from '/@/utils/is';
   import { SysPermission } from '/@/api/auth/model/sysPermissionModel';
   import { listToTree } from '/@/utils/helper/treeHelper';
   import { TreeNode } from '/@/api/model/treeModel';
+  import { AButtonSave } from '/@/components/Button';
 
   export default defineComponent({
     name: 'AuthPermissionInput',
-    components: { Icon, BasicForm, BasicDrawer },
+    components: { AButtonSave, BasicForm, BasicDrawer },
     emits: ['success', 'register'],
     setup(_, { emit }) {
       const [
@@ -39,8 +36,8 @@
         { resetFields, setFieldsValue, validate, updateSchema, getFieldsValue },
       ] = useForm({
         schemas: [
-          { field: 'id', label: 'id', component: 'Input', ifShow: false },
-          { field: 'version', label: 'version', component: 'Input', ifShow: false },
+          { field: 'id', label: 'id', component: 'Input', show: false },
+          { field: 'version', label: 'version', component: 'Input', show: false },
           {
             field: 'type',
             label: '类型',
@@ -86,20 +83,20 @@
             component: 'Input',
             helpMessage: 'Controller中定义的权限标识',
             rules: [{ max: 64, message: '编码不能超过64个字符', trigger: 'blur' }],
-            ifShow: ({ values }) => values.external !== '1',
+            show: ({ values }) => values.external !== '1',
           },
           {
             field: 'icon',
             label: '图标',
             component: 'IconPicker',
-            ifShow: ({ values }) => values.type !== 'button',
+            show: ({ values }) => values.type !== 'button',
           },
           {
             field: 'path',
             label: 'Path',
             component: 'Input',
             rules: [{ max: 255, message: '编码不能超过255个字符', trigger: 'blur' }],
-            ifShow: ({ values }) => values.type === 'menu',
+            show: ({ values }) => values.type === 'menu',
           },
           {
             field: 'component',
@@ -109,7 +106,7 @@
               prefix: '/views',
             },
             rules: [{ max: 255, message: '编码不能超过255个字符', trigger: 'blur' }],
-            ifShow: ({ values }) => values.type === 'menu' && values.external !== '1',
+            show: ({ values }) => values.type === 'menu' && values.external !== '1',
           },
           {
             field: 'name',
@@ -117,7 +114,7 @@
             component: 'Input',
             helpMessage: '如不填写将根据组件路径转为首字母大写驼峰规则自动生成',
             rules: [{ max: 64, message: '编码不能超过64个字符', trigger: 'blur' }],
-            ifShow: ({ values }) => values.type === 'menu' && values.external !== '1',
+            show: ({ values }) => values.type === 'menu' && values.external !== '1',
           },
           {
             field: 'orderNo',
@@ -148,7 +145,7 @@
               dictType: 'external',
             },
             itemProps: { validateTrigger: 'blur' },
-            ifShow: ({ values }) => values.type === 'menu',
+            show: ({ values }) => values.type === 'menu',
           },
           {
             field: 'openMode',
@@ -159,7 +156,7 @@
               dictType: 'openMode',
             },
             itemProps: { validateTrigger: 'blur' },
-            ifShow: ({ values }) => values.type === 'menu',
+            show: ({ values }) => values.type === 'menu',
           },
           {
             field: 'status',

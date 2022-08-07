@@ -2,35 +2,29 @@
   <BasicModal v-bind="$attrs" @register="registerModel" title="流程转模型">
     <BasicForm @register="registerForm" />
     <template #footer>
-      <a-button @click="closeModal">
-        <Icon icon="ant-design:close-outlined" />
-        关闭
-      </a-button>
-      <a-button :loading="saveBtnLoading" type="primary" @click="handleSave">
-        <Icon icon="ant-design:plus-outlined" />
-        保存
-      </a-button>
+      <a-button-cancel text="关闭" @click="closeModal" />
+      <a-button-save :loading="saveBtnLoading" @click="handleSave" />
     </template>
   </BasicModal>
 </template>
 <script lang="ts">
   import { defineComponent, ref } from 'vue';
-  import { BasicForm, useForm } from '/@/components/Form/index';
+  import { BasicForm, useForm } from '/@/components/Form';
   import { convertToModel } from '/@/api/activiti/activitiProcess';
-  import { Icon } from '/@/components/Icon';
   import { BasicModal, useModalInner } from '/@/components/Modal';
+  import { AButtonCancel, AButtonSave } from '/@/components/Button';
 
   export default defineComponent({
     name: 'ActivitiProcessInput',
-    components: { BasicModal, Icon, BasicForm },
+    components: { BasicModal, BasicForm, AButtonCancel, AButtonSave },
     emits: ['success', 'register'],
     setup(_, { emit }) {
       const saveBtnLoading = ref<boolean>(false);
 
       const [registerForm, { resetFields, setFieldsValue, validate }] = useForm({
         schemas: [
-          { field: 'id', label: 'id', component: 'Input', ifShow: false },
-          { field: 'version', label: 'version', component: 'Input', ifShow: false },
+          { field: 'id', label: 'id', component: 'Input', show: false },
+          { field: 'version', label: 'version', component: 'Input', show: false },
           {
             field: 'key',
             label: '标识',

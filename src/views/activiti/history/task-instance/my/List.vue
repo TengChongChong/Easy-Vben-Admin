@@ -19,12 +19,14 @@
         <template v-if="column.key === 'action'">
           <div class="basic-table-action center">
             <a-button-progress
+              small
               :execution-id="record.executionId"
               :process-instance-id="record.processInstanceId"
             />
             <template v-if="record.deleteReason == null && record.endTime == null">
               <a-divider type="vertical" />
               <a-button-revoke
+                small
                 :process-instance-id="record.processInstanceId"
                 :reason="true"
                 @success="reload"
@@ -42,10 +44,9 @@
   import { columns } from '/@/views/activiti/history/task-instance/all/list.data';
   import { PageWrapper } from '/@/components/Page';
   import { selectMy } from '/@/api/activiti/activitiHistoryTaskInstance';
-  import AButtonProgress from '/@/components/Button/src/workflow/ButtonProgress.vue';
+  import { AButtonProgress, AButtonRevoke } from '/@/components/Button';
   import DictTag from '/@/components/Dict/DictTag.vue';
   import { TaskStatus } from '/@/views/activiti/history/task-instance/participate/list.data';
-  import AButtonRevoke from '/@/components/Button/src/workflow/ButtonRevoke.vue';
   export default defineComponent({
     name: 'ActivitiHistoryTaskInstanceMyList',
     components: {

@@ -58,8 +58,8 @@
         { resetFields, setFieldsValue, validate, updateSchema, getFieldsValue },
       ] = useForm({
         schemas: [
-          { field: 'id', label: 'id', component: 'Input', ifShow: false },
-          { field: 'version', label: 'version', component: 'Input', ifShow: false },
+          { field: 'id', label: 'id', component: 'Input', show: false },
+          { field: 'version', label: 'version', component: 'Input', show: false },
           {
             field: 'parentId',
             label: '上级',

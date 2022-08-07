@@ -13,9 +13,9 @@
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'action'">
           <div class="basic-table-action center">
-            <a-button-edit :id="record.id" @click="handleEdit" />
+            <a-button-edit small :id="record.id" @click="handleEdit" />
             <a-divider type="vertical" />
-            <a-button-remove :id="record.id" :api="remove" @success="reload" />
+            <a-button-remove small :id="record.id" :api="remove" @success="reload" />
             <a-divider type="vertical" />
             <a-tooltip>
               <template #title>导入配置</template>
@@ -50,10 +50,7 @@
   import { searchFormSchema, columns } from '/@/views/sys/import/excel/template/template.data';
   import { Icon } from '/@/components/Icon';
   import { useDrawer } from '/@/components/Drawer';
-  import AButtonAdd from '/@/components/Button/src/ButtonAdd.vue';
-  import AButtonRemove from '/@/components/Button/src/ButtonRemove.vue';
-  import AButtonRemoveBatch from '/@/components/Button/src/ButtonRemoveBatch.vue';
-  import AButtonEdit from '/@/components/Button/src/ButtonEdit.vue';
+  import { AButtonAdd, AButtonRemove, AButtonRemoveBatch, AButtonEdit } from '/@/components/Button';
   import { remove, select, get, downloadTemplate } from '/@/api/sys/sysImportExcelTemplate';
   import SysImportExcelTemplateInput from '/@/views/sys/import/excel/template/Input.vue';
   import SysImportExcelTemplateDetailsConfig from '/@/views/sys/import/excel/template/DetailsConfig.vue';

@@ -2,41 +2,32 @@
   <BasicModal v-bind="$attrs" @register="registerModel" title="流程模型">
     <BasicForm @register="registerForm" />
     <template #footer>
-      <a-button @click="closeModal">
-        <Icon icon="ant-design:close-outlined" />
-        关闭
-      </a-button>
-      <a-button :loading="saveBtnLoading" type="primary" @click="handleSave">
-        <Icon icon="ant-design:plus-outlined" />
-        保存
-      </a-button>
-      <a-button :loading="saveBtnLoading" type="primary" @click="handleSaveAndAdd">
-        <Icon icon="ant-design:plus-outlined" />
-        保存并新增
-      </a-button>
+      <a-button-cancel text="关闭" @click="closeModal" />
+      <a-button-save :loading="saveBtnLoading" @click="handleSave" />
+      <a-button-save :loading="saveBtnLoading" @click="handleSaveAndAdd" text="保存并新增" />
     </template>
   </BasicModal>
 </template>
 <script lang="ts">
   import { defineComponent, nextTick, ref } from 'vue';
-  import { BasicForm, useForm } from '/@/components/Form/index';
+  import { BasicForm, useForm } from '/@/components/Form';
   import { save } from '/@/api/activiti/activitiModel';
-  import { Icon } from '/@/components/Icon';
   import { isNotBlank } from '/@/utils/is';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { ActivitiModel } from '/@/api/activiti/model/activitiModelModel';
+  import { AButtonCancel, AButtonSave } from '/@/components/Button';
 
   export default defineComponent({
     name: 'ActivitiModelInput',
-    components: { BasicModal, Icon, BasicForm },
+    components: { BasicModal, BasicForm, AButtonCancel, AButtonSave },
     emits: ['success', 'register'],
     setup(_, { emit }) {
       const saveBtnLoading = ref<boolean>(false);
 
       const [registerForm, { resetFields, getFieldsValue, setFieldsValue, validate }] = useForm({
         schemas: [
-          { field: 'id', label: 'id', component: 'Input', ifShow: false },
-          { field: 'version', label: 'version', component: 'Input', ifShow: false },
+          { field: 'id', label: 'id', component: 'Input', show: false },
+          { field: 'version', label: 'version', component: 'Input', show: false },
           {
             field: 'key',
             label: '标识',

@@ -79,6 +79,7 @@
               <a-divider type="vertical" />
             </Authority>
             <a-button-remove
+              small
               auth="activiti:process:remove"
               :id="record.deploymentId"
               :api="remove"
@@ -99,8 +100,7 @@
   import { BasicTable, useTable } from '/@/components/Table';
   import { remove, select, suspend, activation } from '/@/api/activiti/activitiProcess';
   import { searchFormSchema, columns } from '/@/views/activiti/process/process.data';
-  import AButtonRemove from '/@/components/Button/src/ButtonRemove.vue';
-  import AButtonRemoveBatch from '/@/components/Button/src/ButtonRemoveBatch.vue';
+  import { AButtonRemove, AButtonRemoveBatch } from '/@/components/Button';
   import ActivitiProcessInput from '/@/views/activiti/process/Input.vue';
   import ActivitiProcessModal from '/@/views/activiti/process/ProcessModal.vue';
   import { Authority } from '/@/components/Authority';

@@ -49,9 +49,10 @@
                   </a-tooltip>
                 </Authority>
                 <a-divider type="vertical" />
-                <a-button-edit auth="sys:user:save" :id="record.id" @click="handleEdit" />
+                <a-button-edit small auth="sys:user:save" :id="record.id" @click="handleEdit" />
                 <a-divider type="vertical" />
                 <a-button-remove
+                  small
                   auth="sys:user:remove"
                   :id="record.id"
                   :api="remove"
@@ -73,10 +74,7 @@
   import { select, add, get, remove, resetPassword } from '/@/api/auth/sysUser';
   import { columns, searchFormSchema } from '/@/views/auth/user/user.data';
   import { useDrawer } from '/@/components/Drawer';
-  import AButtonAdd from '/@/components/Button/src/ButtonAdd.vue';
-  import AButtonEdit from '/@/components/Button/src/ButtonEdit.vue';
-  import AButtonRemove from '/@/components/Button/src/ButtonRemove.vue';
-  import AButtonRemoveBatch from '/@/components/Button/src/ButtonRemoveBatch.vue';
+  import { AButtonAdd, AButtonEdit, AButtonRemove, AButtonRemoveBatch } from '/@/components/Button';
   import SysUserInput from '/@/views/auth/user/Input.vue';
   import { PageWrapper } from '/@/components/Page';
   import DeptTree from '/@/components/Dept/DeptTree.vue';

@@ -62,6 +62,9 @@
 
       let taskId: Nullable<string> = null;
 
+      // 引入Info组件，用于显示业务表单
+      const modules = import.meta.glob('../../**/Info.vue');
+
       const [registerDrawer, { changeLoading, closeDrawer }] = useDrawerInner(async (id) => {
         taskId = id;
         businessDetailsComponent.value = null;
@@ -77,12 +80,10 @@
             setProps({ schemas });
           }
 
-          // @ts-ignore
-          const path = `/@/views${res.variables.businessDetailsPath}`;
-
-          businessDetailsComponent.value = defineAsyncComponent(() => {
-            return import(/* @vite-ignore */ path);
-          });
+          businessDetailsComponent.value = defineAsyncComponent(
+            // @ts-ignore
+            modules[`../..${res.variables.businessDetailsPath}`],
+          );
         });
       });
 
@@ -189,6 +190,7 @@
       .ant-descriptions-view:first-child {
         border-top: 0;
       }
+
       .ant-descriptions-item-label {
         width: 140px;
         text-align: right;

@@ -10,10 +10,7 @@
     <BasicForm @register="registerForm" />
 
     <template #appendFooter>
-      <a-button type="primary" @click="handleSaveAndAdd">
-        <Icon icon="ant-design:plus-outlined" />
-        保存并新增
-      </a-button>
+      <a-button-save @click="handleSaveAndAdd" text="保存并新增" />
     </template>
   </BasicDrawer>
 </template>
@@ -23,15 +20,15 @@
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
 
   import { add, save } from '/@/api/sys/sysDict';
-  import { Icon } from '/@/components/Icon';
   import { selectAll } from '/@/api/sys/sysDictType';
   import { SysDict } from '/@/api/sys/model/sysDictModel';
   import { isArray, isString } from '/@/utils/is';
   import { useDictStore } from '/@/store/modules/dict';
+  import { AButtonSave } from '/@/components/Button';
 
   export default defineComponent({
     name: 'SysDictInput',
-    components: { Icon, BasicForm, BasicDrawer },
+    components: { AButtonSave, BasicForm, BasicDrawer },
     emits: ['success', 'register'],
     setup(_, { emit }) {
       const dictStore = useDictStore();
@@ -41,8 +38,8 @@
         { resetFields, setFieldsValue, validate, updateSchema, getFieldsValue },
       ] = useForm({
         schemas: [
-          { field: 'id', label: 'id', component: 'Input', ifShow: false },
-          { field: 'version', label: 'version', component: 'Input', ifShow: false },
+          { field: 'id', label: 'id', component: 'Input', show: false },
+          { field: 'version', label: 'version', component: 'Input', show: false },
           {
             field: 'dictType',
             label: '类型',

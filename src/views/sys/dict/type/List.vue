@@ -18,9 +18,10 @@
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'action'">
           <div class="basic-table-action center">
-            <a-button-edit auth="sys:dict:type:save" :id="record.id" @click="handleEdit" />
+            <a-button-edit small auth="sys:dict:type:save" :id="record.id" @click="handleEdit" />
             <a-divider type="vertical" />
             <a-button-remove
+              small
               auth="sys:dict:type:remove"
               :id="record.id"
               :api="remove"
@@ -40,10 +41,7 @@
   import { select, add, get, remove } from '/@/api/sys/sysDictType';
   import { columns, searchFormSchema } from '/@/views/sys/dict/type/dict-type.data';
   import SysDictTypeInput from '/@/views/sys/dict/type/Input.vue';
-  import AButtonAdd from '/@/components/Button/src/ButtonAdd.vue';
-  import AButtonEdit from '/@/components/Button/src/ButtonEdit.vue';
-  import AButtonRemove from '/@/components/Button/src/ButtonRemove.vue';
-  import AButtonRemoveBatch from '/@/components/Button/src/ButtonRemoveBatch.vue';
+  import { AButtonAdd, AButtonEdit, AButtonRemove, AButtonRemoveBatch } from '/@/components/Button';
   import { PageWrapper } from '/@/components/Page';
   import { useModal } from '/@/components/Modal';
   export default defineComponent({

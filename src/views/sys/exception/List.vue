@@ -17,9 +17,10 @@
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'action'">
           <div class="basic-table-action center">
-            <a-button-info :path="`/sys/exception/info/${record.id}`" />
+            <a-button-info small :path="`/sys/exception/info/${record.id}`" />
             <a-divider type="vertical" />
             <a-button-remove
+              small
               auth="sys:exception:remove"
               :id="record.id"
               :api="remove"
@@ -36,10 +37,8 @@
   import { BasicTable, useTable } from '/@/components/Table';
   import { select, remove } from '/@/api/sys/sysException';
   import { columns, searchFormSchema } from '/@/views/sys/exception/exception.data';
-  import AButtonRemove from '/@/components/Button/src/ButtonRemove.vue';
-  import AButtonRemoveBatch from '/@/components/Button/src/ButtonRemoveBatch.vue';
+  import { AButtonRemove, AButtonRemoveBatch, AButtonInfo } from '/@/components/Button';
   import { PageWrapper } from '/@/components/Page';
-  import AButtonInfo from '/@/components/Button/src/ButtonInfo.vue';
 
   export default defineComponent({
     name: 'SysExceptionList',

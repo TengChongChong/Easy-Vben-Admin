@@ -15,7 +15,7 @@
         </template>
         <template v-if="column.key === 'action'">
           <div class="basic-table-action center">
-            <a-button-remove :id="record.id" :api="remove" @success="removeCallback" />
+            <a-button-remove small :id="record.id" :api="remove" @success="removeCallback" />
           </div>
         </template>
       </template>
@@ -66,7 +66,7 @@
   import { BasicColumn, BasicTable, FormSchema, useTable } from '/@/components/Table';
   import { select, remove, cleanMyImport } from '/@/api/sys/sysImportExcelTemporary';
   import { SysImportExcelTemplateDetail } from '/@/api/sys/model/sysImportExcelTemplateDetailModel';
-  import AButtonRemove from '/@/components/Button/src/ButtonRemove.vue';
+  import { AButtonRemove } from '/@/components/Button';
   import {
     exportVerificationFailData,
     insertData,

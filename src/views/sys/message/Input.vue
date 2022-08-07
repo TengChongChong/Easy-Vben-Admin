@@ -3,24 +3,14 @@
     <template #formFooter>
       <div class="btn-group-tools w-full text-center">
         <a-button-save :loading="saveBtnLoading" @click="handleSubmit" />
-        <a-button type="primary" :loading="saveBtnLoading" @click="handleSaveAndAdd">
-          <template #icon>
-            <Icon icon="ant-design:plus-outlined" />
-          </template>
-          保存并新增
-        </a-button>
+        <a-button-save @click="handleSaveAndAdd" :loading="saveBtnLoading" text="保存并新增" />
         <a-popconfirm
           title="发送后无法修改或删除，确定要立即发送吗？"
           ok-text="是"
           cancel-text="否"
           @confirm="handleSaveAndSend"
         >
-          <a-button type="primary" :loading="saveBtnLoading">
-            <template #icon>
-              <Icon icon="ant-design:send-outlined" />
-            </template>
-            保存并发送
-          </a-button>
+          <a-button-save :loading="saveBtnLoading" text="保存并发送" />
         </a-popconfirm>
       </div>
     </template>
@@ -32,14 +22,13 @@
   import { add, get, save, send } from '/@/api/sys/sysMessage';
   import { SysMessage } from '/@/api/sys/model/sysMessageModel';
   import { propTypes } from '/@/utils/propTypes';
-  import AButtonSave from '/@/components/Button/src/ButtonSave.vue';
+  import { AButtonSave } from '/@/components/Button';
   import { Tinymce } from '/@/components/Tinymce';
-  import { Icon } from '/@/components/Icon';
   import { useMessage } from '/@/hooks/web/useMessage';
 
   export default defineComponent({
     name: 'SysMessageInput',
-    components: { AButtonSave, BasicForm, Icon },
+    components: { AButtonSave, BasicForm },
     props: {
       id: propTypes.string,
     },
@@ -49,8 +38,8 @@
 
       const [registerForm, { resetFields, setFieldsValue, validate, getFieldsValue }] = useForm({
         schemas: [
-          { field: 'id', label: 'id', component: 'Input', ifShow: false },
-          { field: 'version', label: 'version', component: 'Input', ifShow: false },
+          { field: 'id', label: 'id', component: 'Input', show: false },
+          { field: 'version', label: 'version', component: 'Input', show: false },
           {
             field: 'receivers',
             label: '收信人',

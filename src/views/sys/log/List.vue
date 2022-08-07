@@ -8,7 +8,7 @@
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'action'">
           <div class="basic-table-action center">
-            <a-button-info :path="`/sys/log/info/${record.id}`" />
+            <a-button-info small :path="`/sys/log/info/${record.id}`" />
           </div>
         </template>
       </template>
@@ -21,7 +21,7 @@
   import { select } from '/@/api/sys/sysLog';
   import { columns, searchFormSchema } from '/@/views/sys/log/log.data';
   import { PageWrapper } from '/@/components/Page';
-  import AButtonInfo from '/@/components/Button/src/ButtonInfo.vue';
+  import { AButtonInfo } from '/@/components/Button';
 
   export default defineComponent({
     name: 'SysLogList',

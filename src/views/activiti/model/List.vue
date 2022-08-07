@@ -52,6 +52,7 @@
             </a-tooltip>
             <a-divider type="vertical" />
             <a-button-remove
+              small
               auth="activiti:model:remove"
               :id="record.id"
               :api="remove"
@@ -70,9 +71,7 @@
   import { BasicTable, useTable } from '/@/components/Table';
   import { remove, select, exportXml, deploymentProcess } from '/@/api/activiti/activitiModel';
   import { searchFormSchema, columns } from '/@/views/activiti/model/model.data';
-  import AButtonAdd from '/@/components/Button/src/ButtonAdd.vue';
-  import AButtonRemove from '/@/components/Button/src/ButtonRemove.vue';
-  import AButtonRemoveBatch from '/@/components/Button/src/ButtonRemoveBatch.vue';
+  import { AButtonAdd, AButtonRemove, AButtonRemoveBatch } from '/@/components/Button';
   import ActivitiModelInput from '/@/views/activiti/model/Input.vue';
   import { Authority } from '/@/components/Authority';
   import { PageWrapper } from '/@/components/Page';

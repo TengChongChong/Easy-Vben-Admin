@@ -19,6 +19,7 @@
         <template v-if="column.key === 'action'">
           <div class="basic-table-action center">
             <a-button-progress
+              small
               :execution-id="record.executionId"
               :process-instance-id="record.processInstanceId"
             />
@@ -36,7 +37,7 @@
   import { selectParticipate } from '/@/api/activiti/activitiHistoryTaskInstance';
   import DictTag from '/@/components/Dict/DictTag.vue';
   import { TaskStatus } from '/@/views/activiti/history/task-instance/participate/list.data';
-  import AButtonProgress from '/@/components/Button/src/workflow/ButtonProgress.vue';
+  import { AButtonProgress } from '/@/components/Button';
   export default defineComponent({
     name: 'ActivitiHistoryTaskInstanceParticipateList',
     components: {

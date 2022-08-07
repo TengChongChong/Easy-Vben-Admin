@@ -26,7 +26,7 @@
         </template>
         <template v-if="column.key === 'action'">
           <div class="basic-table-action center">
-            <a-button-remove :id="record.id" :api="removeByIds" @success="reload" />
+            <a-button-remove small :id="record.id" :api="removeByIds" @success="reload" />
           </div>
         </template>
       </template>
@@ -37,8 +37,7 @@
 <script lang="ts">
   import { defineComponent, reactive, ref } from 'vue';
   import { BasicTable, useTable } from '/@/components/Table';
-  import AButtonRemove from '/@/components/Button/src/ButtonRemove.vue';
-  import AButtonRemoveBatch from '/@/components/Button/src/ButtonRemoveBatch.vue';
+  import { AButtonRemove, AButtonRemoveBatch } from '/@/components/Button';
   import { selectReceive, info } from '/@/api/sys/sysMessage';
   import { removeByIds } from '/@/api/sys/sysMessageDetail';
   import { propTypes } from '/@/utils/propTypes';

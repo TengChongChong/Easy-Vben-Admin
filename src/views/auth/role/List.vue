@@ -18,9 +18,10 @@
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'action'">
           <div class="basic-table-action center">
-            <a-button-edit auth="sys:role:save" :id="record.id" @click="handleEdit" />
+            <a-button-edit small auth="sys:role:save" :id="record.id" @click="handleEdit" />
             <a-divider type="vertical" />
             <a-button-remove
+              small
               auth="sys:role:remove"
               :id="record.id"
               :api="remove"
@@ -40,10 +41,7 @@
   import { select, add, get, remove } from '/@/api/auth/sysRole';
   import { columns, searchFormSchema } from '/@/views/auth/role/role.data';
   import { useDrawer } from '/@/components/Drawer';
-  import AButtonAdd from '/@/components/Button/src/ButtonAdd.vue';
-  import AButtonEdit from '/@/components/Button/src/ButtonEdit.vue';
-  import AButtonRemove from '/@/components/Button/src/ButtonRemove.vue';
-  import AButtonRemoveBatch from '/@/components/Button/src/ButtonRemoveBatch.vue';
+  import { AButtonAdd, AButtonEdit, AButtonRemove, AButtonRemoveBatch } from '/@/components/Button';
   import SysRoleInput from '/@/views/auth/role/Input.vue';
   import { PageWrapper } from '/@/components/Page';
 

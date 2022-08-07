@@ -15,7 +15,7 @@
   import { defineComponent, onMounted, PropType, watch } from 'vue';
   import BasicForm from '/@/components/Form/src/BasicForm.vue';
   import { useForm } from '/@/components/Form';
-  import AButtonSave from '/@/components/Button/src/ButtonSave.vue';
+  import { AButtonSave } from '/@/components/Button';
   import { SysUser } from '/@/api/auth/model/sysUserModel';
   import { useUserStore } from '/@/store/modules/user';
   import { saveUserInfo } from '/@/api/auth/sysUserPersonal';

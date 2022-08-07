@@ -30,11 +30,17 @@
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'action'">
           <div class="basic-table-action center">
-            <a-button-add-sub auth="sys:permission:save" :id="record.id" @click="handleCreate" />
+            <a-button-add-sub
+              small
+              auth="sys:permission:save"
+              :id="record.id"
+              @click="handleCreate"
+            />
             <a-divider type="vertical" />
-            <a-button-edit auth="sys:permission:save" :id="record.id" @click="handleEdit" />
+            <a-button-edit small auth="sys:permission:save" :id="record.id" @click="handleEdit" />
             <a-divider type="vertical" />
             <a-button-remove
+              small
               auth="sys:permission:remove"
               :id="record.id"
               :api="remove"
@@ -55,15 +61,17 @@
   import { select, add, get, remove } from '/@/api/auth/sysPermission';
   import { columns, searchFormSchema } from '/@/views/auth/permission/permission.data';
   import { useDrawer } from '/@/components/Drawer';
-  import AButtonAdd from '/@/components/Button/src/ButtonAdd.vue';
-  import AButtonEdit from '/@/components/Button/src/ButtonEdit.vue';
-  import AButtonRemove from '/@/components/Button/src/ButtonRemove.vue';
-  import AButtonRemoveBatch from '/@/components/Button/src/ButtonRemoveBatch.vue';
+  import {
+    AButtonAdd,
+    AButtonEdit,
+    AButtonRemove,
+    AButtonRemoveBatch,
+    AButtonAddSub,
+  } from '/@/components/Button';
   import { Icon } from '/@/components/Icon';
   import { clearTreeEmptyChildren, listToTree } from '/@/utils/helper/treeHelper';
   import SysPermissionInput from '/@/views/auth/permission/Input.vue';
   import SysPermissionOrder from '/@/views/auth/permission/Order.vue';
-  import AButtonAddSub from '/@/components/Button/src/ButtonAddSub.vue';
   import { Authority } from '/@/components/Authority';
   import { PageWrapper } from '/@/components/Page';
 
