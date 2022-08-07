@@ -1,15 +1,16 @@
-<div align="center"> <a href="https://github.com/anncwb/vue-vben-admin"> <img alt="VbenAdmin Logo" width="200" height="200" src="https://anncwb.github.io/anncwb/images/logo.png"> </a> <br> <br>
-
-[![license](https://img.shields.io/github/license/anncwb/vue-vben-admin.svg)](LICENSE)
-
-<h1>Easy-Vben-Admin</h1>
+<div align="center">
+  <a href="https://github.com/TengChongChong/Easy-Vben-Admin">
+    <img alt="Easy-Vben-Admin Logo" width="200" height="200" src="https://raw.githubusercontent.com/TengChongChong/Easy-Vben-Admin/main/src/assets/images/logo.png">
+  </a>
+  <br>
+  <h1>Easy-Vben-Admin</h1>
 </div>
 
 **中文** | [English](./README.md)
 
 ## 简介
 
-Vue Vben Admin 是一个免费开源的中后台模版。使用了最新的`vue3`,`vite2`,`TypeScript`等主流技术开发，开箱即用的中后台前端解决方案，也可用于学习参考。
+Easy-Vben-Admin 是一个免费开源的中后台模版。使用了最新的`vue3`,`vite2`,`TypeScript`等主流技术开发，开箱即用的中后台前端解决方案，也可用于学习参考。
 
 ## 特性
 
@@ -22,14 +23,13 @@ Vue Vben Admin 是一个免费开源的中后台模版。使用了最新的`vue3
 
 ## 预览
 
-- [vue-vben-admin](https://vvbin.cn/next/) - 完整版中文站点
-- [vue-vben-admin-gh-pages](https://anncwb.github.io/vue-vben-admin/) - 完整版 github 站点
+- [Easy-Vben-Admin](http://ev.easy-frame.top)
 
 测试账号: sysadmin/admin123
 
 ## 文档
 
-[文档地址](https://vvbin.cn/doc-next/)
+[文档地址](http://ev-doc.easy-frame.top)
 
 ## 准备
 
@@ -39,7 +39,7 @@ Vue Vben Admin 是一个免费开源的中后台模版。使用了最新的`vue3
 - [TypeScript](https://www.typescriptlang.org/) - 熟悉`TypeScript`基本语法
 - [Es6+](http://es6.ruanyifeng.com/) - 熟悉 es6 基本语法
 - [Vue-Router-Next](https://next.router.vuejs.org/) - 熟悉 vue-router 基本使用
-- [Ant-Design-Vue](https://2x.antdv.com/docs/vue/introduce-cn/) - ui 基本使用
+- [Ant-Design-Vue](https://www.antdv.com/components/overview-cn) - ui 基本使用
 
 ## 安装使用
 
@@ -81,7 +81,7 @@ pnpm build
 
 ## 如何贡献
 
-非常欢迎你的加入！[提一个 Issue](https://github.com/anncwb/vue-vben-admin/issues/new/choose) 或者提交一个 Pull Request。
+非常欢迎你的加入！[提一个 Issue](https://github.com/TengChongChong/Easy-Vben-Admin/issues) 或者提交一个 Pull Request。
 
 **Pull Request:**
 
@@ -127,4 +127,4 @@ pnpm build
 
 ## License
 
-[MIT © Easy-2022](./LICENSE)
+[MIT © EasyAdmin-2022](./LICENSE)
