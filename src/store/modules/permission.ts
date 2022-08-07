@@ -11,7 +11,7 @@ import {
   transformRouteToMenu,
 } from '/@/router/helper/menuHelper';
 
-import { ERROR_LOG_ROUTE, PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic';
+import { PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic';
 
 import { filter, listToTree } from '/@/utils/helper/treeHelper';
 
@@ -169,6 +169,7 @@ export const usePermissionStore = defineStore({
               },
             };
             if (routeRecord.path.indexOf(':')) {
+              // 动态参数
               routeRecord.meta.dynamicLevel = 3;
               routeRecord.meta.realPath = routeRecord.path.substring(
                 0,
@@ -256,7 +257,6 @@ export const usePermissionStore = defineStore({
       routeList = flatMultiLevelRoutes(routeList);
       routes = [PAGE_NOT_FOUND_ROUTE, ...routeList];
 
-      routes.push(ERROR_LOG_ROUTE);
       patchHomeAffix(routes);
       return routes;
     },
