@@ -249,7 +249,7 @@ export function convertCheckedKeys(treeData: TreeItem[], checkedKeys: string[]) 
       if (currentNode.children && currentNode.children.length) {
         const childrenArray = treeToList(currentNode.children);
         let hav = true;
-        for (let i = 0; i < childrenArray.length; i++) {
+        for (let i = 0; i < childrenArray.length && hav; i++) {
           if (checkedKeys.indexOf(childrenArray[i].key) === -1) {
             // 子节点未全部选中
             hav = false;
@@ -261,6 +261,7 @@ export function convertCheckedKeys(treeData: TreeItem[], checkedKeys: string[]) 
           checked.halfCheckedKeys.push(key);
         }
       } else {
+        // 没有子节点，全选状态
         checked.checked.push(key);
       }
     }
