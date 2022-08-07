@@ -1,5 +1,5 @@
 import type { Component } from 'vue';
-import type { ComponentType } from './types/index';
+import type { ComponentType } from './types';
 
 /**
  * Component list, register here to setting it in the form
@@ -32,7 +32,7 @@ import DictSelect from './components/DictSelect.vue';
 import DictRadio from './components/DictRadio.vue';
 import DictCheckbox from './components/DictCheckbox.vue';
 import UserSelect from '/@/components/User/UserSelect.vue';
-import BasicUpload from '/@/components/Upload/basic/BasicUpload.vue';
+import { BasicUpload } from '/@/components/Upload';
 import { StrengthMeter } from '/@/components/StrengthMeter';
 import { IconPicker } from '/@/components/Icon';
 import { CountdownInput } from '/@/components/CountDown';

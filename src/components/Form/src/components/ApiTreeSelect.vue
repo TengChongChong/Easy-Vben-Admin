@@ -133,7 +133,7 @@
         let pathArray: any[] = [];
         // value 有值
         if (isString(props.value) || isNumber(props.value)) {
-          pathArray = findPath(treeData.value, (n) => n.id === props.value);
+          pathArray = findPath(treeData.value, (n) => n.value === props.value);
         }
         if (pathArray && pathArray.length > 1) {
           // 去掉最后一级（当前节点不需要展开）

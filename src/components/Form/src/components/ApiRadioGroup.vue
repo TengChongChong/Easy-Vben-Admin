@@ -1,6 +1,3 @@
-<!--
- * @Description:It is troublesome to implement radio button group in the form. So it is extracted independently as a separate component
--->
 <template>
   <api-radio-group v-bind="attrs" v-model:value="state" button-style="solid" @change="handleChange">
     <template v-for="item in getOptions" :key="`${item.value}`">

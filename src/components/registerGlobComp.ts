@@ -31,6 +31,7 @@ import {
   Radio,
   Row,
   Result,
+  Space,
   Select,
   Skeleton,
   Spin,
@@ -69,6 +70,7 @@ export function registerGlobComp(app: App) {
     .use(Radio)
     .use(Row)
     .use(Result)
+    .use(Space)
     .use(Select)
     .use(Skeleton)
     .use(Spin)

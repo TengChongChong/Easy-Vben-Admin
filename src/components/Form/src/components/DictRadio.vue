@@ -1,5 +1,5 @@
 <template>
-  <a-radio-group v-bind="$attrs" v-model:value="value" @change="handleChange">
+  <a-radio-group v-bind="$attrs" v-model:value="currentValue" @change="handleChange">
     <a-radio-button v-for="item in getOptions" :key="`${item.value}`" :value="item.value">
       {{ item.label }}
     </a-radio-button>
@@ -19,7 +19,7 @@
     setup(props, { emit }) {
       const dictStore = useDictStore();
       const dictArray = ref<SysDict[]>([]);
-      const value = ref<string>();
+      const currentValue = ref<string>(props.value as string);
 
       const getOptions = computed(() => {
         let options: SelectModel[] = [];
@@ -43,7 +43,7 @@
         () => props.value,
         () => {
           // @ts-ignore
-          value.value = props.value;
+          currentValue.value = props.value;
         },
       );
 
@@ -54,11 +54,11 @@
       getDictArray();
 
       function handleChange() {
-        emit('change', unref(value));
-        emit('update:value', unref(value));
+        emit('change', unref(currentValue));
+        emit('update:value', unref(currentValue));
       }
 
-      return { value, getOptions, handleChange };
+      return { currentValue, getOptions, handleChange };
     },
   });
 </script>
