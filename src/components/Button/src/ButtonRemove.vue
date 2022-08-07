@@ -1,15 +1,21 @@
 <template>
   <Authority :value="auth">
-    <a-tooltip>
-      <template #title>{{ text }}</template>
-      <a-popconfirm title="确定要删除吗？" ok-text="是" cancel-text="否" @confirm="handleRemove">
+    <a-popconfirm title="确定要删除吗？" ok-text="是" cancel-text="否" @confirm="handleRemove">
+      <a-button v-if="!small" type="danger" :loading="loading">
+        <template #icon>
+          <Icon icon="ant-design:delete-outlined" />
+        </template>
+        {{ text }}
+      </a-button>
+      <a-tooltip v-else>
+        <template #title>{{ text }}</template>
         <a-button type="link" danger size="small" :loading="loading">
           <template #icon>
             <Icon icon="ant-design:delete-outlined" />
           </template>
         </a-button>
-      </a-popconfirm>
-    </a-tooltip>
+      </a-tooltip>
+    </a-popconfirm>
   </Authority>
 </template>
 
@@ -28,6 +34,7 @@
     components: { Authority, Icon },
     props: {
       auth: propTypes.string,
+      small: propTypes.bool,
       id: propTypes.string,
       text: propTypes.string.def(t('common.delText')),
       // 删除api

@@ -16,7 +16,7 @@
 <script lang="ts">
   import { defineComponent, ref } from 'vue';
   import { BasicModal, useModalInner } from '/@/components/Modal';
-  import { BasicForm, useForm } from '/@/components/Form/index';
+  import { BasicForm, useForm } from '/@/components/Form';
   import { Icon } from '/@/components/Icon';
   import { formatToNow } from '/@/utils/dateUtil';
   import { revoke } from '/@/api/activiti/activitiTask';

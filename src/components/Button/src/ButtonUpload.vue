@@ -1,10 +1,18 @@
 <template>
-  <a-button type="primary">
+  <a-button v-if="!small" type="primary">
     <template #icon>
       <Icon icon="ant-design:upload-outlined" />
     </template>
     {{ text }}
   </a-button>
+  <a-tooltip v-else>
+    <template #title>{{ text }}</template>
+    <a-button type="link" size="small">
+      <template #icon>
+        <Icon icon="ant-design:upload-outlined" />
+      </template>
+    </a-button>
+  </a-tooltip>
 </template>
 
 <script lang="ts">
@@ -16,6 +24,7 @@
     components: { Icon },
     props: {
       auth: propTypes.string,
+      small: propTypes.bool,
       text: propTypes.string.def('上传'),
     },
     setup() {},

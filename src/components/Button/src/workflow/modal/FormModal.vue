@@ -17,7 +17,7 @@
   import { defineComponent, ref } from 'vue';
   import { Icon } from '/@/components/Icon';
   import { BasicModal, useModalInner } from '/@/components/Modal';
-  import { BasicForm, FormSchema, useForm } from '/@/components/Form/index';
+  import { BasicForm, FormSchema, useForm } from '/@/components/Form';
   import {
     ActivitiFormProperty,
     ActivitiProcessDefinition,

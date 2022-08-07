@@ -1,6 +1,12 @@
 <template>
   <span>
-    <a-tooltip>
+    <a-button v-if="!small" @click="handleClick">
+      <template #icon>
+        <Icon icon="ant-design:apartment-outlined" />
+      </template>
+      {{ text }}
+    </a-button>
+    <a-tooltip v-else>
       <template #title>{{ text }}</template>
       <a-button type="link" size="small" @click="handleClick">
         <template #icon>
@@ -26,6 +32,7 @@
     name: 'AButtonProgress',
     components: { Icon, ProcessModal },
     props: {
+      small: propTypes.bool,
       // 按钮文字
       text: propTypes.string.def('查看进度'),
       // 下方两组参数二选一 `executionId+processInstanceId` 或 `businessKey`

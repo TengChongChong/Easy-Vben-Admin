@@ -1,6 +1,12 @@
 <template>
   <Authority :value="auth">
-    <a-tooltip>
+    <a-button v-if="!small" type="primary" :loading="loading" @click="handleClick">
+      <template #icon>
+        <Icon icon="ant-design:plus-outlined" />
+      </template>
+      {{ text }}
+    </a-button>
+    <a-tooltip v-else>
       <template #title>{{ text }}</template>
       <a-button type="link" :loading="loading" size="small" @click="handleClick">
         <template #icon>
@@ -24,6 +30,7 @@
       auth: propTypes.string,
       id: propTypes.string,
       path: propTypes.string,
+      small: propTypes.bool,
       loading: propTypes.bool.def(false),
       text: propTypes.string.def('新增下级'),
     },

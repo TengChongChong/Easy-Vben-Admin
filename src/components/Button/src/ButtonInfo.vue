@@ -1,6 +1,12 @@
 <template>
   <Authority :value="auth">
-    <a-tooltip>
+    <a-button v-if="!small" :loading="loading" @click="handleClick">
+      <template #icon>
+        <Icon icon="ant-design:search-outlined" />
+      </template>
+      {{ text }}
+    </a-button>
+    <a-tooltip v-else>
       <template #title>{{ text }}</template>
       <a-button type="link" :loading="loading" size="small" @click="handleClick">
         <template #icon>
@@ -22,6 +28,7 @@
     components: { Authority, Icon },
     props: {
       auth: propTypes.string,
+      small: propTypes.bool,
       id: propTypes.string,
       path: propTypes.string,
       loading: propTypes.bool.def(false),

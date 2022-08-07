@@ -1,11 +1,19 @@
 <template>
   <Authority :value="auth">
-    <a-button :type="type" :size="size" @click="handleClick">
+    <a-button v-if="!small" :type="type" @click="handleClick">
       <template v-if="icon" #icon>
         <Icon :icon="icon" />
       </template>
       {{ text }}
     </a-button>
+    <a-tooltip v-else>
+      <template #title>{{ text }}</template>
+      <a-button type="link" size="small" @click="handleClick">
+        <template #icon>
+          <Icon :icon="icon" />
+        </template>
+      </a-button>
+    </a-tooltip>
   </Authority>
 </template>
 
@@ -21,7 +29,7 @@
     components: { Authority, Icon },
     props: {
       type: propTypes.string,
-      size: propTypes.string,
+      small: propTypes.bool,
       auth: propTypes.string,
       icon: propTypes.string,
       path: propTypes.string.isRequired,

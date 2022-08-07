@@ -1,6 +1,12 @@
 <template>
   <span>
-    <a-tooltip>
+    <a-button v-if="!small" type="primary" :loading="loading" @click="handleClick">
+      <template #icon>
+        <Icon icon="ant-design:check-outlined" />
+      </template>
+      {{ text }}
+    </a-button>
+    <a-tooltip v-else>
       <template #title>{{ text }}</template>
       <a-button type="link" :loading="loading" size="small" @click="handleClick">
         <template #icon>
@@ -27,6 +33,7 @@
     name: 'AButtonStart',
     components: { Icon, FormModal },
     props: {
+      small: propTypes.bool,
       // 按钮文字
       text: propTypes.string.def('提交'),
       // 拓展参数

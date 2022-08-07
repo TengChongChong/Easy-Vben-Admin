@@ -1,11 +1,19 @@
 <template>
   <Authority :value="auth">
-    <a-button type="primary" @click="handleClick">
+    <a-button v-if="!small" type="primary" @click="handleClick">
       <template #icon>
         <Icon icon="ant-design:upload-outlined" />
       </template>
       {{ text }}
     </a-button>
+    <a-tooltip v-else>
+      <template #title>{{ text }}</template>
+      <a-button type="link" size="small" @click="handleClick">
+        <template #icon>
+          <Icon icon="ant-design:upload-outlined" />
+        </template>
+      </a-button>
+    </a-tooltip>
   </Authority>
 </template>
 
@@ -20,6 +28,7 @@
     components: { Authority, Icon },
     props: {
       auth: propTypes.string,
+      small: propTypes.bool,
       text: propTypes.string.def('导入'),
       importCode: propTypes.string,
     },
