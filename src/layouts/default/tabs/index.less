@@ -2,6 +2,8 @@
 
 html[data-theme='dark'] {
   .@{prefix-cls} {
+    box-shadow: 0 1px 4px rgb(0 0 0 / 45%);
+
     .ant-tabs-tab:not(.ant-tabs-tab-active):not(:hover) {
       &::before {
         background-color: @border-color-dark;
@@ -26,6 +28,7 @@ html[data-theme='light'] {
   line-height: @multiple-height;
   background-color: @component-background;
   border-bottom: 0;
+  box-shadow: 0 1px 4px rgb(0 21 41 / 8%);
 
   .ant-tabs-small {
     height: @multiple-height;
@@ -179,7 +182,7 @@ html[data-theme='light'] {
       color: @text-color-secondary;
       text-align: center;
       cursor: pointer;
-      border-left: 1px solid @border-color-light;
+      border-left: 1px solid #e5e7eb;
 
       &:hover {
         color: @text-color-base;
