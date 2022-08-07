@@ -128,9 +128,9 @@ const setting: ProjectConfig = {
     // 是否可以拖拽
     canDrag: true,
     // 是否显示刷新那妞
-    showRedo: true,
+    showRedo: false,
     // 是否显示折叠按钮
-    showFold: true,
+    showFold: false,
   },
 
   // 动画配置
