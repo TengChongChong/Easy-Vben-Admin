@@ -6,7 +6,7 @@ import purgeIcons from 'vite-plugin-purge-icons';
 import windiCSS from 'vite-plugin-windicss';
 import VitePluginCertificate from 'vite-plugin-mkcert';
 import vueSetupExtend from 'vite-plugin-vue-setup-extend';
-// import { configHtmlPlugin } from './html';
+import { configHtmlPlugin } from './html';
 import { configPwaConfig } from './pwa';
 import { configCompressPlugin } from './compress';
 import { configStyleImportPlugin } from './styleImport';
@@ -42,7 +42,7 @@ export function createVitePlugins(viteEnv: ViteEnv, isBuild: boolean) {
   VITE_LEGACY && isBuild && vitePlugins.push(legacy());
 
   // vite-plugin-html，开启会导致无法直接访问public目录下文件
-  // vitePlugins.push(configHtmlPlugin(viteEnv, isBuild));
+  vitePlugins.push(configHtmlPlugin(viteEnv, isBuild));
 
   // vite-plugin-svg-icons
   vitePlugins.push(configSvgIconsPlugin(isBuild));
