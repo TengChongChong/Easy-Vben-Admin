@@ -6,8 +6,6 @@
   <h1>Easy-Vben-Admin</h1>
 </div>
 
-**中文** | [English](./README.md)
-
 ## 简介
 
 Easy-Vben-Admin 是一个免费开源的中后台模版。使用了最新的`vue3`,`vite2`,`TypeScript`等主流技术开发，开箱即用的中后台前端解决方案，也可用于学习参考。
@@ -72,12 +70,12 @@ pnpm build
 
 ## 更新日志
 
-[CHANGELOG](./CHANGELOG.zh_CN.md)
+[CHANGELOG](./CHANGELOG.md)
 
 ## 项目地址
 
-- [Easy-Vben](https://github.com/TengChongChong/Easy-Vben) - 简化版
-- [Easy-Vben-Admin](https://github.com/TengChongChong/Easy-Vben-Admin) - 完整版
+- [Easy-Vben](https://github.com/TengChongChong/Easy-Vben) - 后端
+- [Easy-Vben-Admin](https://github.com/TengChongChong/Easy-Vben-Admin) - 前端
 
 ## 如何贡献
 
