@@ -1,5 +1,6 @@
 import { withInstall } from '/@/utils';
-import basicDragVerify from './src/DragVerify.vue';
+import slideVerifyModal from './src/SlideVerifyModal.vue';
 
-export const BasicDragVerify = withInstall(basicDragVerify);
+export const SlideVerifyModal = withInstall(slideVerifyModal);
+
 export * from './src/typing';

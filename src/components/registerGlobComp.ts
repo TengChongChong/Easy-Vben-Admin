@@ -19,6 +19,7 @@ import {
   Tabs,
   Tag,
   Tree,
+  TreeSelect,
   Timeline,
   Form,
   Tooltip,
@@ -58,6 +59,7 @@ export function registerGlobComp(app: App) {
     .use(Tabs)
     .use(Tag)
     .use(Tree)
+    .use(TreeSelect)
     .use(Timeline)
     .use(Tooltip)
     .use(Form)
