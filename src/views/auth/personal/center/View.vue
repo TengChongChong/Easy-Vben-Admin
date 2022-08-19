@@ -73,7 +73,7 @@
   import Binding from '/@/views/auth/personal/center/Binding.vue';
   import Security from '/@/views/auth/personal/center/Security.vue';
   import { useUserStore } from '/@/store/modules/user';
-  import DictTag from '/@/components/Dict/DictTag.vue';
+  import { DictTag } from '/@/components/Dict';
   import dayjs from 'dayjs';
   export default defineComponent({
     name: 'AuthPersonalCenterView',

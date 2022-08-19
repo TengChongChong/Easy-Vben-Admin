@@ -164,7 +164,7 @@
   import { useModal } from '/@/components/Modal';
   import QueryConfigModal from '/@/views/generator/modal/QueryConfigModal.vue';
   import TableConfigModal from '/@/views/generator/modal/TableConfigModal.vue';
-  import DictName from '/@/components/Dict/DictName.vue';
+  import { DictName } from '/@/components/Dict';
   import Sortable from 'sortablejs';
   import { isNullAndUnDef } from '/@/utils/is';
 
