@@ -16,15 +16,18 @@
 <script lang="ts">
   import { defineComponent, ref, computed, watch } from 'vue';
   import { useRuleFormItem } from '/@/hooks/component/useFormItem';
-  import { dictProps } from '/@/components/Dict/props';
   import { useDictStore } from '/@/store/modules/dict';
   import { SelectModel } from '/@/api/model/selectModel';
   import { SysDict } from '/@/api/sys/model/sysDictModel';
+  import { propTypes } from '/@/utils/propTypes';
 
   export default defineComponent({
     name: 'DictSelect',
     inheritAttrs: false,
-    props: dictProps,
+    props: {
+      dictType: propTypes.string,
+      value: propTypes.oneOfType([propTypes.string, propTypes.number, propTypes.array]),
+    },
     emits: ['options-change', 'change', 'update:value'],
     setup(props, { emit }) {
       const emitData = ref<any[]>([]);

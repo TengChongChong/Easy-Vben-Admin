@@ -114,8 +114,12 @@ export type ComponentType =
   | 'Slider'
   | 'Rate'
   | 'DictSelect'
+  | 'DictTreeSelect'
   | 'DictCascader'
   | 'DictRadio'
   | 'DictCheckbox'
   | 'Divider'
-  | 'UserSelect';
+  | 'DeptSelect'
+  | 'RoleSelect'
+  | 'UserSelect'
+  | 'UserModalSelect';

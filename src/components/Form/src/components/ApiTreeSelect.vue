@@ -26,6 +26,7 @@
   import { LoadingOutlined } from '@ant-design/icons-vue';
   import { useRuleFormItem } from '/@/hooks/component/useFormItem';
   import { findPath } from '/@/utils/helper/treeHelper';
+
   export default defineComponent({
     name: 'ApiTreeSelect',
     components: { ATreeSelect: TreeSelect, LoadingOutlined },
@@ -134,6 +135,10 @@
         // value 有值
         if (isString(props.value) || isNumber(props.value)) {
           pathArray = findPath(treeData.value, (n) => n.value === props.value);
+        } else if (isArray(props.value)) {
+          props.value.forEach((item) => {
+            pathArray = pathArray.concat(findPath(treeData.value, (n) => n.value === item));
+          });
         }
         if (pathArray && pathArray.length > 1) {
           // 去掉最后一级（当前节点不需要展开）
@@ -148,6 +153,7 @@
       function treeExpand(keys) {
         treeExpandedKeys.value = keys;
       }
+
       return { getAttrs, loading, state, treeExpandedKeys, treeExpand, handleChange };
     },
   });

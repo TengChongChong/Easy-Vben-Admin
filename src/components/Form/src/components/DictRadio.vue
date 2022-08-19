@@ -7,19 +7,22 @@
 </template>
 <script lang="ts">
   import { defineComponent, computed, watch, ref, unref } from 'vue';
-  import { dictProps } from '/@/components/Dict/props';
   import { SelectModel } from '/@/api/model/selectModel';
   import { SysDict } from '/@/api/sys/model/sysDictModel';
   import { useDictStore } from '/@/store/modules/dict';
+  import { propTypes } from '/@/utils/propTypes';
 
   export default defineComponent({
     name: 'DictRadio',
-    props: dictProps,
+    props: {
+      dictType: propTypes.string,
+      value: propTypes.string,
+    },
     emits: ['change', 'update:value'],
     setup(props, { emit }) {
       const dictStore = useDictStore();
       const dictArray = ref<SysDict[]>([]);
-      const currentValue = ref<string>(props.value as string);
+      const currentValue = ref<string>(props.value);
 
       const getOptions = computed(() => {
         let options: SelectModel[] = [];

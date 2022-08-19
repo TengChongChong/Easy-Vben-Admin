@@ -1,11 +1,13 @@
 <template>
-  <a-cascader
+  <a-tree-select
     v-model:value="state"
     v-bind="$attrs"
-    :options="tree"
-    change-on-select
-    @change="handleChange"
+    show-search
     style="width: 100%"
+    :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
+    allow-clear
+    :tree-data="tree"
+    @change="handleChange"
   />
 </template>
 <script lang="ts">
@@ -17,10 +19,10 @@
   import { propTypes } from '/@/utils/propTypes';
 
   export default defineComponent({
-    name: 'DictCascader',
+    name: 'DictTreeSelect',
     props: {
       dictType: propTypes.string,
-      value: propTypes.array,
+      value: propTypes.oneOfType([propTypes.string, propTypes.number, propTypes.array]),
     },
     emits: ['options-change', 'change', 'update:value'],
     setup(props, { emit }) {

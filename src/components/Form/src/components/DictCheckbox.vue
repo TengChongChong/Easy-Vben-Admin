@@ -9,14 +9,17 @@
 <script lang="ts">
   import { defineComponent, computed, watch, ref } from 'vue';
   import { useRuleFormItem } from '/@/hooks/component/useFormItem';
-  import { dictProps } from '/@/components/Dict/props';
   import { SelectModel } from '/@/api/model/selectModel';
   import { SysDict } from '/@/api/sys/model/sysDictModel';
   import { useDictStore } from '/@/store/modules/dict';
+  import { propTypes } from '/@/utils/propTypes';
 
   export default defineComponent({
     name: 'DictCheckbox',
-    props: dictProps,
+    props: {
+      dictType: propTypes.string,
+      value: propTypes.oneOfType([propTypes.string, propTypes.number, propTypes.array]),
+    },
     emits: ['change', 'update:value'],
     setup(props, { emit }) {
       const emitData = ref<any[]>([]);
