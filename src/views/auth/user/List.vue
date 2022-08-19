@@ -77,7 +77,7 @@
   import { AButtonAdd, AButtonEdit, AButtonRemove, AButtonRemoveBatch } from '/@/components/Button';
   import SysUserInput from '/@/views/auth/user/Input.vue';
   import { PageWrapper } from '/@/components/Page';
-  import DeptTree from '/@/components/Dept/DeptTree.vue';
+  import { DeptTree } from '/@/components/Dept';
   import { useGlobSetting } from '/@/hooks/setting';
   import { Authority } from '/@/components/Authority';
   import { Icon } from '/@/components/Icon';

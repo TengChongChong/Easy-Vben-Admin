@@ -29,9 +29,12 @@ import ApiTreeSelect from './components/ApiTreeSelect.vue';
 import ApiCascader from './components/ApiCascader.vue';
 import DictCascader from './components/DictCascader.vue';
 import DictSelect from './components/DictSelect.vue';
+import DictTreeSelect from './components/DictTreeSelect.vue';
 import DictRadio from './components/DictRadio.vue';
 import DictCheckbox from './components/DictCheckbox.vue';
-import UserSelect from '/@/components/User/UserSelect.vue';
+import { UserSelect, UserModalSelect } from '/@/components/UserSelect';
+import { DeptSelect } from '/@/components/Dept';
+import { RoleSelect } from '/@/components/Role';
 import { BasicUpload } from '/@/components/Upload';
 import { StrengthMeter } from '/@/components/StrengthMeter';
 import { IconPicker } from '/@/components/Icon';
@@ -73,14 +76,20 @@ componentMap.set('IconPicker', IconPicker);
 componentMap.set('InputCountDown', CountdownInput);
 
 componentMap.set('Divider', Divider);
-
+// 字典
 componentMap.set('DictCascader', DictCascader);
 componentMap.set('DictSelect', DictSelect);
+componentMap.set('DictTreeSelect', DictTreeSelect);
 componentMap.set('DictRadio', DictRadio);
 componentMap.set('DictCheckbox', DictCheckbox);
-
+// 部门选择器
+componentMap.set('DeptSelect', DeptSelect);
+// 角色选择器
+componentMap.set('RoleSelect', RoleSelect);
+// 用户选择器
 componentMap.set('UserSelect', UserSelect);
-
+componentMap.set('UserModalSelect', UserModalSelect);
+// 文件上传
 componentMap.set('Upload', BasicUpload);
 
 export function add(compName: ComponentType, component: Component) {

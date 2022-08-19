@@ -1,5 +1,4 @@
 import { defHttp } from '/@/utils/http/axios';
-import { TreeNodeModel } from '/@/api/model/treeModel';
 import { SysRole } from '/@/api/auth/model/sysRoleModel';
 import { Page } from '/@/api/model/pageModel';
 
@@ -23,7 +22,7 @@ export function select(params: SysRole, pager: Page<SysRole>) {
  * 查询所有
  */
 export function selectAll() {
-  return defHttp.get<TreeNodeModel[]>({
+  return defHttp.get<SysRole[]>({
     url: `${BASE_URL}/all`,
   });
 }

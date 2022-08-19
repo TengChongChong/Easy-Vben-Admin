@@ -7,20 +7,7 @@
     width="30%"
     @ok="handleSave"
   >
-    <BasicForm @register="registerForm">
-      <template #role="{ model, field }">
-        <BasicTree
-          class="tree-sm"
-          v-model:value="model[field]"
-          :treeData="treeData"
-          ref="treeRef"
-          @check="onTreeSelectChange"
-          checkable
-          toolbar
-          title="选择工具"
-        />
-      </template>
-    </BasicForm>
+    <BasicForm @register="registerForm" />
 
     <template #appendFooter>
       <a-button type="primary" @click="handleSaveAndAdd">
@@ -31,28 +18,22 @@
   </BasicDrawer>
 </template>
 <script lang="ts">
-  import { defineComponent, nextTick, ref, unref } from 'vue';
+  import { defineComponent, nextTick } from 'vue';
   import { BasicForm, useForm } from '/@/components/Form';
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
 
-  import { selectAll as selectAllRole } from '/@/api/auth/sysRole';
   import { add, save, selectAll } from '/@/api/auth/sysDeptType';
 
   import { Icon } from '/@/components/Icon';
   import { SysDeptType } from '/@/api/auth/model/sysDeptTypeModel';
-  import { convertCheckedKeys, listToTree } from '/@/utils/helper/treeHelper';
+  import { listToTree } from '/@/utils/helper/treeHelper';
   import { TreeNode } from '/@/api/model/treeModel';
-  import { BasicTree } from '/@/components/Tree';
-  import { TreeActionType, TreeItem } from '/@/components/Tree/src/tree';
 
   export default defineComponent({
     name: 'AuthDeptTypeInput',
-    components: { BasicTree, Icon, BasicForm, BasicDrawer },
+    components: { Icon, BasicForm, BasicDrawer },
     emits: ['success', 'register'],
     setup(_, { emit }) {
-      const treeData = ref<TreeItem[]>([]);
-      const treeRef = ref<Nullable<TreeActionType>>(null);
-      const allSelectedNodes = ref<String[]>([]);
       const [
         registerForm,
         { resetFields, setFieldsValue, validate, updateSchema, getFieldsValue },
@@ -120,8 +101,10 @@
             label: '角色',
             field: 'roleIdList',
             helpMessage: '新增此部门类型用户时可选择的角色',
-            slot: 'role',
-            component: 'Input',
+            component: 'RoleSelect',
+            componentProps: {
+              multiple: true,
+            },
           },
           {
             field: 'remarks',
@@ -140,12 +123,6 @@
         await resetFields();
         await updateParent();
 
-        await selectAllRole().then((res) => {
-          treeData.value = listToTree(res);
-        });
-        allSelectedNodes.value = data.roleIdList;
-        data.roleIdList = convertCheckedKeys(unref(treeData), data.roleIdList);
-
         await setFieldsValue(data);
         changeLoading(false);
       });
@@ -159,18 +136,11 @@
         });
       }
 
-      function onTreeSelectChange(selectedKeys, info) {
-        allSelectedNodes.value = selectedKeys.concat(info.halfCheckedKeys);
-      }
       async function handleSubmit(callback: (_: SysDeptType) => any) {
         try {
           changeLoading(true);
           await validate();
           const values = getFieldsValue();
-          // 设置选中节点
-          if (unref(allSelectedNodes)?.length) {
-            values.roleIdList = unref(allSelectedNodes);
-          }
           await save(values).then((res) => {
             emit('success');
             callback(res);
@@ -202,13 +172,10 @@
       }
 
       return {
-        treeRef,
-        treeData,
         registerDrawer,
         registerForm,
         handleSave,
         handleSaveAndAdd,
-        onTreeSelectChange,
       };
     },
   });

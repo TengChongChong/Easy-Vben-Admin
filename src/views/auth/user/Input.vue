@@ -7,20 +7,7 @@
     width="30%"
     @ok="handleSave"
   >
-    <BasicForm @register="registerForm">
-      <template #role="{ model, field }">
-        <BasicTree
-          class="tree-sm"
-          v-model:value="model[field]"
-          :treeData="treeData"
-          ref="treeRef"
-          @check="onTreeSelectChange"
-          checkable
-          toolbar
-          title="选择工具"
-        />
-      </template>
-    </BasicForm>
+    <BasicForm @register="registerForm" />
 
     <template #appendFooter>
       <a-button-save @click="handleSaveAndAdd" text="保存并新增" />
@@ -31,23 +18,16 @@
   import { defineComponent, ref, unref } from 'vue';
   import { BasicForm, useForm } from '/@/components/Form';
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
-  import { BasicTree } from '/@/components/Tree';
   import { add, save } from '/@/api/auth/sysUser';
   import { SysUser } from '/@/api/auth/model/sysUserModel';
-  import { TreeActionType, TreeItem } from '/@/components/Tree/src/tree';
-  import { convertCheckedKeys, listToTree } from '/@/utils/helper/treeHelper';
-  import { selectAll as selectAllRole } from '/@/api/auth/sysRole';
   import { AButtonSave } from '/@/components/Button';
 
   export default defineComponent({
     name: 'SysUserInput',
-    components: { AButtonSave, BasicForm, BasicDrawer, BasicTree },
+    components: { AButtonSave, BasicForm, BasicDrawer },
     emits: ['success', 'register'],
     setup(_, { emit }) {
       const deptId = ref();
-      const treeData = ref<TreeItem[]>([]);
-      const treeRef = ref<Nullable<TreeActionType>>(null);
-      const allSelectedNodes = ref<String[]>([]);
 
       const [
         registerForm,
@@ -83,9 +63,11 @@
           {
             field: 'roleIdList',
             label: '角色',
-            slot: 'role',
             required: true,
-            component: 'Input',
+            component: 'RoleSelect',
+            componentProps: {
+              multiple: true,
+            },
           },
           {
             field: 'sex',
@@ -137,16 +119,10 @@
 
       const [registerDrawer, { changeLoading, closeDrawer }] = useDrawerInner(async (data) => {
         changeLoading(true);
-        unref(treeRef)?.expandAll(false);
+
         // 重置表单
         await resetFields();
         deptId.value = data?.deptId;
-        await selectAllRole().then((res) => {
-          treeData.value = listToTree(res);
-        });
-
-        allSelectedNodes.value = data.roleIdList;
-        data.roleIdList = convertCheckedKeys(unref(treeData), data.roleIdList);
 
         if (data.value) {
           // 不允许在此页面修改密码
@@ -165,19 +141,12 @@
         changeLoading(false);
       });
 
-      function onTreeSelectChange(selectedKeys, info) {
-        allSelectedNodes.value = selectedKeys.concat(info.halfCheckedKeys);
-      }
-
       async function handleSubmit(callback: (_: SysUser) => any) {
         try {
           changeLoading(true);
           await validate();
           const values = getFieldsValue();
-          // 设置选中节点
-          if (unref(allSelectedNodes)?.length) {
-            values.roleIdList = unref(allSelectedNodes);
-          }
+
           await save({
             ...values,
             deptId: unref(deptId),
@@ -210,13 +179,10 @@
       }
 
       return {
-        treeRef,
-        treeData,
         registerDrawer,
         registerForm,
         handleSave,
         handleSaveAndAdd,
-        onTreeSelectChange,
       };
     },
   });
