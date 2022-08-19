@@ -21,6 +21,7 @@ export function useRowSelection(
 
     return {
       selectedRowKeys: unref(selectedRowKeysRef),
+      preserveSelectedRowKeys: true,
       onChange: (selectedRowKeys: string[]) => {
         setSelectedRowKeys(selectedRowKeys);
       },

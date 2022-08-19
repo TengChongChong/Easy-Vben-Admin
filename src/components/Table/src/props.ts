@@ -99,6 +99,7 @@ export const basicProps = {
   ellipsis: { type: Boolean, default: true },
   isCanResizeParent: { type: Boolean, default: false },
   canResize: { type: Boolean, default: false },
+  // 分页改变时清空选中项，如果需要使用跨页勾选，请设置为false
   clearSelectOnPageChange: propTypes.bool.def(true),
   resizeHeightOffset: propTypes.number.def(0),
   rowSelection: {
