@@ -110,7 +110,7 @@
       }
 
       async function setModalHeight() {
-        // 解决在弹窗关闭的时候监听还存在,导致再次打开弹窗没有高度
+        // 解决在对话框关闭的时候监听还存在,导致再次打开对话框没有高度
         // 加上这个,就必须在使用的时候传递父级的visible
         if (!props.visible) return;
         const wrapperRefDom = unref(wrapperRef);

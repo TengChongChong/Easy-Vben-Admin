@@ -1,7 +1,7 @@
 import type { ButtonProps } from 'ant-design-vue/lib/button/buttonTypes';
 import type { CSSProperties, VNodeChild, ComputedRef } from 'vue';
 /**
- * @description: 弹窗对外暴露的方法
+ * @description: 对话框对外暴露的方法
  */
 export interface ModalMethods {
   setModalProps: (props: Partial<ModalProps>) => void;

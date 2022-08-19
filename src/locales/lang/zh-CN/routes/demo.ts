@@ -24,7 +24,7 @@ export default {
     editTree: '可搜索/工具栏',
     actionTree: '函数操作示例',
 
-    modal: '弹窗扩展',
+    modal: '对话框扩展',
     drawer: '抽屉扩展',
     desc: '详情组件',
 

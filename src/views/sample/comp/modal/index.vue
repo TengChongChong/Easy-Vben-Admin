@@ -2,28 +2,28 @@
   <PageWrapper>
     <a-card title="Modal组件使用示例" :bordered="false">
       <a-alert
-        message="使用 useModal 进行弹窗操作，默认可以拖动，可以通过 draggable
+        message="使用 useModal 进行对话框操作，默认可以拖动，可以通过 draggable
     参数进行控制是否可以拖动/全屏，并演示了在Modal内动态加载内容并自动调整高度"
         show-icon
       />
       <a-button type="primary" class="my-4" @click="openModalLoading">
-        打开弹窗,加载动态数据并自动调整高度(默认可以拖动/全屏)
+        打开对话框,加载动态数据并自动调整高度(默认可以拖动/全屏)
       </a-button>
 
       <a-alert message="内外同时同时显示隐藏" show-icon />
-      <a-button type="primary" class="my-4" @click="openModal2"> 打开弹窗 </a-button>
+      <a-button type="primary" class="my-4" @click="openModal2"> 打开对话框 </a-button>
       <a-alert message="自适应高度" show-icon />
-      <a-button type="primary" class="my-4" @click="openModal3"> 打开弹窗 </a-button>
+      <a-button type="primary" class="my-4" @click="openModal3"> 打开对话框 </a-button>
 
       <a-alert message="内外数据交互" show-icon />
-      <a-button type="primary" class="my-4" @click="send"> 打开弹窗并传递数据 </a-button>
+      <a-button type="primary" class="my-4" @click="send"> 打开对话框并传递数据 </a-button>
 
-      <a-alert message="使用动态组件的方式在页面内使用多个弹窗" show-icon />
+      <a-alert message="使用动态组件的方式在页面内使用多个对话框" show-icon />
       <a-space>
-        <a-button type="primary" class="my-4" @click="openTargetModal(1)"> 打开弹窗1 </a-button>
-        <a-button type="primary" class="my-4" @click="openTargetModal(2)"> 打开弹窗2 </a-button>
-        <a-button type="primary" class="my-4" @click="openTargetModal(3)"> 打开弹窗3 </a-button>
-        <a-button type="primary" class="my-4" @click="openTargetModal(4)"> 打开弹窗4 </a-button>
+        <a-button type="primary" class="my-4" @click="openTargetModal(1)"> 打开对话框1 </a-button>
+        <a-button type="primary" class="my-4" @click="openTargetModal(2)"> 打开对话框2 </a-button>
+        <a-button type="primary" class="my-4" @click="openTargetModal(3)"> 打开对话框3 </a-button>
+        <a-button type="primary" class="my-4" @click="openTargetModal(4)"> 打开对话框4 </a-button>
       </a-space>
 
       <component :is="currentModal" v-model:visible="modalVisible" :userData="userData" />
