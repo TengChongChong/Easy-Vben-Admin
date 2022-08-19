@@ -53,14 +53,38 @@
               <a-descriptions-item label="性别">
                 <dict-select dictType="sex" v-model:value="sexValue" />
               </a-descriptions-item>
-              <a-descriptions-item label="用户状态">
-                <dict-select dictType="userStatus" v-model:value="userStatusValue" />
+              <a-descriptions-item label="用户状态 - 多选">
+                <dict-select
+                  mode="multiple"
+                  dictType="userStatus"
+                  v-model:value="userStatusArrayValue"
+                />
               </a-descriptions-item>
             </a-descriptions>
             <h3>Cascader - 级联选择</h3>
             <a-descriptions :column="1" bordered>
               <a-descriptions-item label="级联选择">
-                <dict-cascader dictType="levelSample" v-model:value="levelSampleValue" />
+                <dict-cascader dictType="levelSample" v-model:value="cascaderValue" />
+              </a-descriptions-item>
+              <a-descriptions-item label="级联选择 - 多选">
+                <dict-cascader
+                  multiple
+                  dictType="levelSample"
+                  v-model:value="multipleCascaderValue"
+                />
+              </a-descriptions-item>
+            </a-descriptions>
+            <h3>TreeSelect - 树选择</h3>
+            <a-descriptions :column="1" bordered>
+              <a-descriptions-item label="树选择">
+                <dict-tree-select dictType="levelSample" v-model:value="treeSelectValue" />
+              </a-descriptions-item>
+              <a-descriptions-item label="树选择 - 多选">
+                <dict-tree-select
+                  multiple
+                  dictType="levelSample"
+                  v-model:value="multipleTreeSelectValue"
+                />
               </a-descriptions-item>
             </a-descriptions>
           </a-card>
@@ -78,17 +102,20 @@
 <script lang="ts">
   import { defineComponent, onMounted, ref } from 'vue';
   import { PageWrapper } from '/@/components/Page';
-  import DictTag from '/@/components/Dict/DictTag.vue';
-  import DictName from '/@/components/Dict/DictName.vue';
-  import DictRadio from '/@/components/Form/src/components/DictRadio.vue';
-  import DictCheckbox from '/@/components/Form/src/components/DictCheckbox.vue';
-  import DictSelect from '/@/components/Form/src/components/DictSelect.vue';
-  import DictCascader from '/@/components/Form/src/components/DictCascader.vue';
+  import { DictTag, DictName } from '/@/components/Dict';
+  import {
+    DictRadio,
+    DictCheckbox,
+    DictSelect,
+    DictCascader,
+    DictTreeSelect,
+  } from '/@/components/Form';
   import { BasicForm, FormSchema, useForm } from '/@/components/Form';
   import { BasicTable, useTable } from '/@/components/Table';
   import { select } from '/@/api/sample/sampleGeneral';
   export default defineComponent({
     components: {
+      DictTreeSelect,
       DictCascader,
       DictSelect,
       DictCheckbox,
@@ -103,8 +130,12 @@
       const sexValue = ref<string>('1');
       const userStatusValue = ref<string>('2');
       const sexArrayValue = ref<string[]>(['1']);
-      const userStatusArrayValue = ref<string[]>(['2']);
-      const levelSampleValue = ref<string[]>(['1', '1-1', '1-1-1']);
+      const userStatusArrayValue = ref<string[]>(['1', '2']);
+      const cascaderValue = ref<string[]>(['1', '1-1', '1-1-1']);
+      const multipleCascaderValue = ref([['1', '1-1', '1-1-2'], ['2']]);
+
+      const treeSelectValue = ref<string>('1');
+      const multipleTreeSelectValue = ref<string[]>(['1-2', '1-3']);
 
       const schemas: FormSchema[] = [
         {
@@ -159,6 +190,14 @@
           field: 'levelSampleCascader',
           label: '级联选择',
           component: 'DictCascader',
+          componentProps: {
+            dictType: 'levelSample',
+          },
+        },
+        {
+          field: 'treeSelect',
+          label: '树选择',
+          component: 'DictTreeSelect',
           componentProps: {
             dictType: 'levelSample',
           },
@@ -228,7 +267,10 @@
         userStatusValue,
         sexArrayValue,
         userStatusArrayValue,
-        levelSampleValue,
+        cascaderValue,
+        multipleCascaderValue,
+        treeSelectValue,
+        multipleTreeSelectValue,
         register,
         registerTable,
       };
@@ -240,9 +282,10 @@
     h3 {
       margin-top: 0.5rem;
     }
+
     .ant-descriptions-bordered {
       .ant-descriptions-item-label {
-        width: 120px;
+        width: 160px;
       }
     }
   }

@@ -9,7 +9,7 @@
 </template>
 <script lang="ts" setup>
   import { useDictStore } from '/@/store/modules/dict';
-  import { dictProps } from '/@/components/Dict/props';
+  import { dictProps } from '../props';
   import { defineComponent, onMounted, ref, watch } from 'vue';
   import { Icon } from '/@/components/Icon';
   import { isNumber } from '/@/utils/is';

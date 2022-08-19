@@ -35,7 +35,7 @@
   import { columns } from '/@/views/activiti/history/task-instance/all/list.data';
   import { PageWrapper } from '/@/components/Page';
   import { selectParticipate } from '/@/api/activiti/activitiHistoryTaskInstance';
-  import DictTag from '/@/components/Dict/DictTag.vue';
+  import { DictTag } from '/@/components/Dict';
   import { TaskStatus } from '/@/views/activiti/history/task-instance/participate/list.data';
   import { AButtonProgress } from '/@/components/Button';
   export default defineComponent({

@@ -17,7 +17,7 @@
   import { get } from '/@/api/sample/work/sampleWorkFlow';
   import { SampleWorkFlow } from '/@/api/sample/model/sampleWorkFlowModel';
   import { propTypes } from '/@/utils/propTypes';
-  import DictTag from '/@/components/Dict/DictTag.vue';
+  import { DictTag } from '/@/components/Dict';
   import { formatToDate } from '/@/utils/dateUtil';
   export default defineComponent({
     name: 'SamplePageWorkFlowInput',

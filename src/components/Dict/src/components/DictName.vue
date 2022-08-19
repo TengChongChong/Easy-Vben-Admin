@@ -3,7 +3,7 @@
 </template>
 <script lang="ts" setup>
   import { useDictStore } from '/@/store/modules/dict';
-  import { dictProps } from '/@/components/Dict/props';
+  import { dictProps } from '../props';
   import { onMounted, ref, watch } from 'vue';
   import { isNumber } from '/@/utils/is';
 

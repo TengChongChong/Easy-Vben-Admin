@@ -36,7 +36,7 @@
   import { computed, defineComponent, PropType, ref } from 'vue';
   import { SysMessage } from '/@/api/sys/model/sysMessageModel';
   import { useGlobSetting } from '/@/hooks/setting';
-  import DictTag from '/@/components/Dict/DictTag.vue';
+  import { DictTag } from '/@/components/Dict';
   import { formatToNow } from '/@/utils/dateUtil';
   import { info } from '/@/api/sys/sysMessage';
   import { useModal } from '/@/components/Modal';

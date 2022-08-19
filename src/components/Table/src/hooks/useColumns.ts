@@ -9,7 +9,7 @@ import { isArray, isBoolean, isFunction, isMap, isString } from '/@/utils/is';
 import { cloneDeep, isEqual } from 'lodash-es';
 import { formatToDate } from '/@/utils/dateUtil';
 import { ACTION_COLUMN_FLAG, DEFAULT_ALIGN, INDEX_COLUMN_FLAG, PAGE_SIZE } from '../const';
-import DictTag from '/@/components/Dict/DictTag.vue';
+import { DictTag } from '/@/components/Dict';
 import { useDictStoreWithOut } from '/@/store/modules/dict';
 
 // 字典

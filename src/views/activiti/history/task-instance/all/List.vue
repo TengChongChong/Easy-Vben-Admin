@@ -36,7 +36,7 @@
   import { PageWrapper } from '/@/components/Page';
   import { selectAll } from '/@/api/activiti/activitiHistoryTaskInstance';
   import { AButtonProgress } from '/@/components/Button';
-  import DictTag from '/@/components/Dict/DictTag.vue';
+  import { DictTag } from '/@/components/Dict';
   import { TaskStatus } from '/@/views/activiti/history/task-instance/participate/list.data';
   export default defineComponent({
     name: 'ActivitiHistoryTaskInstanceAllList',
