@@ -58,6 +58,7 @@
 
       function handleChange(value) {
         currentValue.value = value;
+        emit('change', value);
         emit('update:value', value);
       }
 
