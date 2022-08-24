@@ -5,7 +5,7 @@ import { SysDict, SysDictTree } from '/@/api/sys/model/sysDictModel';
 import { selectAll } from '/@/api/sys/sysDict';
 import { Nullable } from '/@/utils/types';
 import { listToTree } from '/@/utils/helper/treeHelper';
-import { isBlank, isNullOrUnDef } from '/@/utils/is';
+import { isBlank } from '/@/utils/is';
 import { TableFilterModel, TempSelectModel, TreeSelectModel } from '/@/api/model/selectModel';
 
 interface DictState {
@@ -30,11 +30,7 @@ export const useDictStore = defineStore({
         if (isBlank(dictType)) {
           return [];
         }
-        const dictArray = this.dict[dictType];
-        if (isNullOrUnDef(dictArray)) {
-          console.warn(`获取字典失败，字典类型不存在${dictArray}`);
-        }
-        return dictArray || [];
+        return this.dict[dictType] || [];
       };
     },
     /**
@@ -45,10 +41,7 @@ export const useDictStore = defineStore({
         if (isBlank(dictType)) {
           return [];
         }
-        const dictArray = this.dict[dictType];
-        if (isNullOrUnDef(dictArray)) {
-          console.warn(`获取字典失败，字典类型不存在${dictArray}`);
-        }
+        const dictArray = this.dict[dictType] || [];
         const dictFilters: TableFilterModel[] = [] as TableFilterModel[];
         dictArray.map((item) => {
           dictFilters.push({
