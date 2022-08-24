@@ -7,7 +7,7 @@
             <a-row>
               <a-col :span="10">
                 <div class="user-avatar">
-                  <a-avatar v-if="sysUser.avatar" :src="sysUser.avatar" :size="100" />
+                  <a-avatar v-if="sysUser.avatar" :src="apiUrl + sysUser.avatar" :size="100" />
                   <a-avatar v-if="!sysUser.avatar" :size="100">
                     {{ sysUser.nickname?.substring(0, 1) }}
                   </a-avatar>
@@ -75,6 +75,7 @@
   import { useUserStore } from '/@/store/modules/user';
   import { DictTag } from '/@/components/Dict';
   import dayjs from 'dayjs';
+  import { useGlobSetting } from '/@/hooks/setting';
   export default defineComponent({
     name: 'AuthPersonalCenterView',
     components: {
@@ -87,6 +88,8 @@
     },
     setup() {
       const userStore = useUserStore();
+      const globSetting = useGlobSetting();
+      const apiUrl = ref(globSetting.apiUrl);
 
       const sysUser = computed(() => userStore.getCurrentUser);
 
@@ -100,7 +103,7 @@
         }
       });
 
-      return { selectedKeys, sysUser, getAge, dayjs };
+      return { apiUrl, selectedKeys, sysUser, getAge, dayjs };
     },
   });
 </script>

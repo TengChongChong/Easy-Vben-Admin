@@ -9,7 +9,7 @@
           color="#d6d6d6"
         />
       </div>
-      <img :src="sourceValue" v-if="sourceValue" alt="avatar" />
+      <img :src="apiUrl + sourceValue" v-if="sourceValue" alt="avatar" />
     </div>
     <a-button
       :class="`${prefixCls}-upload-btn`"
@@ -96,7 +96,7 @@
       );
 
       function handleUploadSuccess({ data }) {
-        sourceValue.value = apiUrl.value + data.url;
+        sourceValue.value = data.url;
         emit('change', data);
         createMessage.success(t('component.cropper.uploadSuccess'));
       }
@@ -105,6 +105,7 @@
 
       return {
         t,
+        apiUrl,
         prefixCls,
         register,
         openModal: openModal as any,

@@ -4,7 +4,7 @@
       <img
         v-if="getCurrentUser.avatar"
         :class="`${prefixCls}__header`"
-        :src="getCurrentUser.avatar"
+        :src="apiUrl + getCurrentUser.avatar"
       />
       <a-avatar size="small" :class="`${prefixCls}__header`" v-if="!getCurrentUser.avatar">{{
         getCurrentUser.nickname?.substring(0, 1)
@@ -49,7 +49,7 @@
   // components
   import { Dropdown, Menu, MenuProps } from 'ant-design-vue';
 
-  import { defineComponent, computed } from 'vue';
+  import { defineComponent, computed, ref } from 'vue';
 
   import { DOC_URL } from '/@/settings/siteSetting';
 
@@ -64,6 +64,7 @@
 
   import { createAsyncComponent } from '/@/utils/factory/createAsyncComponent';
   import { useGo } from '/@/hooks/web/usePage';
+  import { useGlobSetting } from '/@/hooks/setting';
 
   export default defineComponent({
     name: 'UserDropdown',
@@ -83,6 +84,9 @@
       const { getShowDoc, getUseLockPage } = useHeaderSetting();
       const userStore = useUserStore();
       const go = useGo();
+
+      const globSetting = useGlobSetting();
+      const apiUrl = ref(globSetting.apiUrl);
 
       const getCurrentUser = computed(() => {
         const { nickname = '', avatar } = userStore.getCurrentUser || {};
@@ -127,6 +131,7 @@
 
       return {
         prefixCls,
+        apiUrl,
         t,
         getCurrentUser,
         handleMenuClick,
