@@ -67,6 +67,7 @@
             component: 'RoleSelect',
             componentProps: {
               multiple: true,
+              type: 'current',
             },
           },
           {
