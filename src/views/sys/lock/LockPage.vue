@@ -28,9 +28,22 @@
       <div :class="`${prefixCls}-entry`" v-show="!showDate">
         <div :class="`${prefixCls}-entry-content`">
           <div :class="`${prefixCls}-entry__header enter-x`">
-            <img :src="userinfo.avatar || headerImg" :class="`${prefixCls}-entry__header-img`" />
+            <img
+              alt="头像"
+              v-if="currentUser.avatar"
+              :class="`${prefixCls}-entry__header-img`"
+              :src="globSetting.apiUrl + currentUser.avatar"
+            />
+            <a-avatar
+              size="small"
+              :class="`${prefixCls}-entry__header-img`"
+              v-if="!currentUser.avatar"
+            >
+              {{ currentUser.nickname?.substring(0, 1) }}
+            </a-avatar>
+
             <p :class="`${prefixCls}-entry__header-name`">
-              {{ userinfo.nickname }}
+              {{ currentUser.nickname }}
             </p>
           </div>
           <InputPassword
@@ -85,7 +98,7 @@
   import { useNow } from './useNow';
   import { useDesign } from '/@/hooks/web/useDesign';
   import { LockOutlined } from '@ant-design/icons-vue';
-  import headerImg from '/@/assets/images/header.jpg';
+  import { useGlobSetting } from '/@/hooks/setting';
 
   const InputPassword = Input.Password;
 
@@ -102,9 +115,11 @@
 
   const { t } = useI18n();
 
-  const userinfo = computed(() => {
+  const currentUser = computed(() => {
     return userStore.getCurrentUser || {};
   });
+
+  const globSetting = useGlobSetting();
 
   /**
    * @description: unLock
@@ -208,6 +223,9 @@
 
         &-img {
           width: 70px;
+          height: 70px;
+          line-height: 70px;
+          font-size: 26px;
           margin: 0 auto;
           border-radius: 50%;
         }
