@@ -66,8 +66,8 @@
       width: 20px;
       height: 20px;
       cursor: pointer;
-      border: 1px solid #ddd;
       border-radius: 2px;
+      box-shadow: 0 1px 2px rgb(0 21 41 / 20%);
 
       svg {
         display: none;

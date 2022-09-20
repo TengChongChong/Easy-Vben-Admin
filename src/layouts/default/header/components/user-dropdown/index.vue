@@ -6,9 +6,9 @@
         :class="`${prefixCls}__header`"
         :src="apiUrl + getCurrentUser.avatar"
       />
-      <a-avatar size="small" :class="`${prefixCls}__header`" v-if="!getCurrentUser.avatar">{{
-        getCurrentUser.nickname?.substring(0, 1)
-      }}</a-avatar>
+      <a-avatar size="small" :class="`${prefixCls}__header`" v-if="!getCurrentUser.avatar">
+        {{ getCurrentUser.nickname?.substring(0, 1) }}
+      </a-avatar>
 
       <span :class="`${prefixCls}__info hidden md:block`">
         <span :class="`${prefixCls}__name  `" class="truncate">
@@ -90,7 +90,7 @@
 
       const getCurrentUser = computed(() => {
         const { nickname = '', avatar } = userStore.getCurrentUser || {};
-        return { nickname, avatar: avatar };
+        return { nickname, avatar };
       });
 
       const [register, { openModal }] = useModal();

@@ -8,9 +8,17 @@
   >
     <div :class="`${prefixCls}__entry`">
       <div :class="`${prefixCls}__header`">
-        <img :src="avatar" :class="`${prefixCls}__header-img`" />
+        <img
+          alt="头像"
+          v-if="currentUser.avatar"
+          :class="`${prefixCls}__header-img`"
+          :src="apiUrl + currentUser.avatar"
+        />
+        <a-avatar size="small" :class="`${prefixCls}__header-img`" v-if="!currentUser.avatar">
+          {{ currentUser.nickname?.substring(0, 1) }}
+        </a-avatar>
         <p :class="`${prefixCls}__header-name`">
-          {{ getRealName }}
+          {{ currentUser.nickname }}
         </p>
       </div>
 
@@ -25,7 +33,7 @@
   </BasicModal>
 </template>
 <script lang="ts">
-  import { defineComponent, computed } from 'vue';
+  import { defineComponent } from 'vue';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { useDesign } from '/@/hooks/web/useDesign';
   import { BasicModal, useModalInner } from '/@/components/Modal';
@@ -33,7 +41,8 @@
 
   import { useUserStore } from '/@/store/modules/user';
   import { useLockStore } from '/@/store/modules/lock';
-  import headerImg from '/@/assets/images/header.jpg';
+  import { useGlobSetting } from '/@/hooks/setting';
+
   export default defineComponent({
     name: 'LockModal',
     components: { BasicModal, BasicForm },
@@ -44,7 +53,8 @@
       const userStore = useUserStore();
       const lockStore = useLockStore();
 
-      const getRealName = computed(() => userStore.getCurrentUser?.nickname);
+      const globSetting = useGlobSetting();
+
       const [register, { closeModal }] = useModalInner();
 
       const [registerForm, { validateFields, resetFields }] = useForm({
@@ -71,19 +81,14 @@
         await resetFields();
       }
 
-      const avatar = computed(() => {
-        const { avatar } = userStore.getCurrentUser;
-        return avatar || headerImg;
-      });
-
       return {
         t,
+        apiUrl: globSetting.apiUrl,
         prefixCls,
-        getRealName,
         register,
         registerForm,
         handleLock,
-        avatar,
+        currentUser: userStore.getCurrentUser,
       };
     },
   });
@@ -108,6 +113,9 @@
 
       &-img {
         width: 70px;
+        height: 70px;
+        line-height: 70px;
+        font-size: 26px;
         border-radius: 50%;
       }
 
