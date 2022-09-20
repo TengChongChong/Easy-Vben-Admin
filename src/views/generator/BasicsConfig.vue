@@ -2,7 +2,7 @@
   <div class="generator-form">
     <a-alert
       v-if="tableInfo && !tableInfo?.havePrimaryKey"
-      :message="`注：${tableInfo?.name}表无主键`"
+      :message="`注意：${tableInfo?.name}表无主键`"
       banner
     />
 
@@ -363,13 +363,17 @@
             tableInfo.value = info;
             setTreeField(values.generatorTemplate);
             const { comment, entityName } = info;
+            let packagePath = table;
+            if (table.indexOf('_') > -1) {
+              packagePath = table.substring(0, table.indexOf('_'));
+            }
             // 设置一些默认值
             setFieldsValue({
               businessName: comment,
               menuName: comment,
               modelName: entityName,
               permissionCode: getPermissionCode(table),
-              packagePath: `com.easy.admin.${table.substring(0, table.indexOf('_'))}`,
+              packagePath: `com.easy.admin.${packagePath}`,
               controllerMapping: `/auth/${getControllerMapping(table)}`,
               viewPath: `/src/views/${getControllerMapping(table)}`,
               apiPath: `/src/api/${getFrontEndApiPath(table)}/${firstLowerCase(entityName)}.ts`,

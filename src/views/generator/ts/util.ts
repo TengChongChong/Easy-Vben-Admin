@@ -119,7 +119,7 @@ function getTableCellConfig(
   field: TableField,
   dictTypeArray: string[],
 ): Nullable<TableCellConfig> {
-  const { name, comment, type, propertyName, propertyType, keyFlag } = field;
+  const { name, comment, type, propertyName, propertyType, keyFlag, metaInfo } = field;
 
   // 是否在偏好设置中排除此字段
   const isExclude = PREFERENCE_SETTING.list.table.excludeTable.indexOf(propertyName) > -1;
@@ -135,6 +135,7 @@ function getTableCellConfig(
     propertyName,
     propertyType,
     keyFlag,
+    metaInfo,
     title: comment,
     sorter: true,
   };
@@ -219,7 +220,7 @@ function getFieldConfig(
   dictTypeArray: string[],
   formType: FormType,
 ): Nullable<FieldConfig> {
-  const { name, comment, type, propertyName, propertyType, keyFlag } = field;
+  const { name, comment, type, propertyName, propertyType, keyFlag, metaInfo } = field;
 
   // 是否在偏好设置中排除此字段
   let isExclude = false;
@@ -240,11 +241,17 @@ function getFieldConfig(
     propertyName,
     propertyType,
     keyFlag,
+    metaInfo,
     label: comment,
   };
   // 如果字段名是xx_id一般也不作为查询条件使用
   if (field.name.indexOf('_id') > -1) {
     config.isEnable = false;
+  }
+
+  if (FORM_TYPE.INPUT === formType && !metaInfo.nullable && config.isEnable) {
+    // 表单 & 必填 & 启用
+    config.required = true;
   }
 
   // 查找字段字典
@@ -405,7 +412,7 @@ function getExportConfig(
   field: TableField,
   dictTypeArray: string[],
 ): Nullable<TableCellConfig> {
-  const { name, comment, type, propertyName, propertyType, keyFlag } = field;
+  const { name, comment, type, propertyName, propertyType, keyFlag, metaInfo } = field;
 
   // 是否在偏好设置中排除此字段
   const isExclude = PREFERENCE_SETTING.export.exclude.indexOf(propertyName) > -1;
@@ -422,6 +429,7 @@ function getExportConfig(
     propertyType,
     keyFlag,
     title: comment,
+    metaInfo,
   };
   // 查找字段字典
   const dictType = getDictType(tableInfo, field, dictTypeArray);
@@ -494,7 +502,7 @@ function getImportConfig(
   field: TableField,
   dictTypeArray: string[],
 ): Nullable<ImportCellConfig> {
-  const { name, comment, type, propertyName, propertyType, keyFlag } = field;
+  const { name, comment, type, propertyName, propertyType, keyFlag, metaInfo } = field;
 
   // 是否在偏好设置中排除此字段
   const isExclude = PREFERENCE_SETTING.export.exclude.indexOf(propertyName) > -1;
@@ -510,6 +518,7 @@ function getImportConfig(
     propertyName,
     propertyType,
     keyFlag,
+    metaInfo,
     title: comment,
     required: false,
   };
