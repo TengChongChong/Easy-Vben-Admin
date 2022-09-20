@@ -112,6 +112,7 @@
 
       function handleChange(value) {
         emitData.value = value;
+        emit('change', value);
         emit('update:value', value);
       }
 
