@@ -27,4 +27,20 @@ export interface TableField {
   propertyType: string;
   // 是否是主键
   keyFlag: boolean;
+  // metaInfo
+  metaInfo: MetaInfo;
+}
+
+export interface MetaInfo {
+  // 默认值
+  defaultValue: any;
+  // 字段类型
+  jdbcType: string;
+  // 字段长度
+  length: number;
+  // 是否可为空
+  nullable: boolean;
+  // 注释
+  remarks: string;
+  scale: number;
 }
