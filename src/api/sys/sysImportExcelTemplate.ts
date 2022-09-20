@@ -9,12 +9,12 @@ const BASE_URL = '/api/auth/sys/import/excel/template';
  * 查询
  *
  * @param params 查询条件
- * @param pager 分页
+ * @param page 分页
  */
-export function select(params: SysImportExcelTemplate, pager: Page<SysImportExcelTemplate>) {
+export function select(params: SysImportExcelTemplate, page: Page<SysImportExcelTemplate>) {
   return defHttp.get<Page<SysImportExcelTemplate>>({
     url: BASE_URL,
-    params: Object.assign(params, pager),
+    params: Object.assign(params, page),
   });
 }
 

@@ -10,12 +10,12 @@ const BASE_URL = '/api/auth/activiti/task';
  * 查询
  *
  * @param params 查询条件
- * @param pager 分页
+ * @param page 分页
  */
-export function select(params: ActivitiTask, pager: Page<ActivitiTask>) {
+export function select(params: ActivitiTask, page: Page<ActivitiTask>) {
   return defHttp.get<Page<ActivitiTask>>({
     url: `${BASE_URL}/status/${params.status}`,
-    params: Object.assign(params, pager),
+    params: Object.assign(params, page),
   });
 }
 

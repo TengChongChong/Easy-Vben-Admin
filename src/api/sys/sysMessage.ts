@@ -9,12 +9,12 @@ const BASE_URL = '/api/auth/sys/message';
  * 查询
  *
  * @param params 查询条件
- * @param pager 分页
+ * @param page 分页
  */
-export function select(params: SysMessage, pager: Page<SysMessage>) {
+export function select(params: SysMessage, page: Page<SysMessage>) {
   return defHttp.get<Page<SysMessage>>({
     url: BASE_URL,
-    params: Object.assign(params, pager),
+    params: Object.assign(params, page),
   });
 }
 
@@ -22,12 +22,12 @@ export function select(params: SysMessage, pager: Page<SysMessage>) {
  * 收信列表
  *
  * @param params 查询条件
- * @param pager 分页
+ * @param page 分页
  */
-export function selectReceive(params: SysMessage, pager: Page<SysMessage>) {
+export function selectReceive(params: SysMessage, page: Page<SysMessage>) {
   return defHttp.get<Page<SysMessage>>({
     url: `${BASE_URL}/receive`,
-    params: Object.assign(params, pager),
+    params: Object.assign(params, page),
   });
 }
 

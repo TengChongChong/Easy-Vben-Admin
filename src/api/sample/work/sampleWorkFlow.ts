@@ -9,12 +9,12 @@ const BASE_URL = '/api/auth/sample/work/flow';
  * 查询
  *
  * @param params 查询条件
- * @param pager 分页
+ * @param page 分页
  */
-export function select(params: SampleWorkFlow, pager: Page<SampleWorkFlow>) {
+export function select(params: SampleWorkFlow, page: Page<SampleWorkFlow>) {
   return defHttp.get<Page<SampleWorkFlow>>({
     url: BASE_URL,
-    params: Object.assign(params, pager),
+    params: Object.assign(params, page),
   });
 }
 

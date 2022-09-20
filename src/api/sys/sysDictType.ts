@@ -10,12 +10,12 @@ const BASE_URL = '/api/auth/sys/dict/type';
  * 查询
  *
  * @param params 查询条件
- * @param pager 分页
+ * @param page 分页
  */
-export function select(params: SysDictType, pager: Page<SysDictType>) {
+export function select(params: SysDictType, page: Page<SysDictType>) {
   return defHttp.get<Page<SysDictType>>({
     url: BASE_URL,
-    params: Object.assign(params, pager),
+    params: Object.assign(params, page),
   });
 }
 

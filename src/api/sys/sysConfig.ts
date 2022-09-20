@@ -9,12 +9,12 @@ const BASE_URL = '/api/auth/sys/config';
  * 查询
  *
  * @param params 查询条件
- * @param pager 分页
+ * @param page 分页
  */
-export function select(params: SysConfig, pager: Page<SysConfig>) {
+export function select(params: SysConfig, page: Page<SysConfig>) {
   return defHttp.get<Page<SysConfig>>({
     url: BASE_URL,
-    params: Object.assign(params, pager),
+    params: Object.assign(params, page),
   });
 }
 

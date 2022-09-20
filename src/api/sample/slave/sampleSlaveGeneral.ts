@@ -9,12 +9,12 @@ const BASE_URL = '/api/auth/sample/slave/general';
  * 查询
  *
  * @param params 查询条件
- * @param pager 分页
+ * @param page 分页
  */
-export function select(params: SampleSlaveGeneral, pager: Page<SampleSlaveGeneral>) {
+export function select(params: SampleSlaveGeneral, page: Page<SampleSlaveGeneral>) {
   return defHttp.get<Page<SampleSlaveGeneral>>({
     url: BASE_URL,
-    params: Object.assign(params, pager),
+    params: Object.assign(params, page),
   });
 }
 

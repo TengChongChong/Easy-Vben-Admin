@@ -9,12 +9,12 @@ const BASE_URL = '/api/auth/activiti/model';
  * 查询
  *
  * @param params 查询条件
- * @param pager 分页
+ * @param page 分页
  */
-export function select(params: ActivitiModel, pager: Page<ActivitiModel>) {
+export function select(params: ActivitiModel, page: Page<ActivitiModel>) {
   return defHttp.get<Page<ActivitiModel>>({
     url: BASE_URL,
-    params: Object.assign(params, pager),
+    params: Object.assign(params, page),
   });
 }
 

@@ -9,12 +9,12 @@ const BASE_URL = '/api/auth/sys/role';
  * 查询
  *
  * @param params 查询条件
- * @param pager 分页
+ * @param page 分页
  */
-export function select(params: SysRole, pager: Page<SysRole>) {
+export function select(params: SysRole, page: Page<SysRole>) {
   return defHttp.get<Page<SysRole>>({
     url: BASE_URL,
-    params: Object.assign(params, pager),
+    params: Object.assign(params, page),
   });
 }
 
@@ -79,5 +79,20 @@ export function save(params: SysRole) {
 export function setStatus(ids: string, status: string) {
   return defHttp.post<boolean>({
     url: `${BASE_URL}/${ids}/status/${status}`,
+  });
+}
+
+/**
+ * 根据部门类型获取可分配的角色数据
+ *
+ * @param deptId 部门id
+ * @return List<SysRole>
+ */
+export function selectRoleByDept(deptId: string) {
+  return defHttp.get<SysRole[]>({
+    url: `${BASE_URL}/select/role/by/dept`,
+    params: {
+      deptId,
+    },
   });
 }

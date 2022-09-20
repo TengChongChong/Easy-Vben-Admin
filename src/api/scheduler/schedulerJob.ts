@@ -9,12 +9,12 @@ const BASE_URL = '/api/auth/scheduler/job';
  * 查询
  *
  * @param params 查询条件
- * @param pager 分页
+ * @param page 分页
  */
-export function select(params: SchedulerJob, pager: Page<SchedulerJob>) {
+export function select(params: SchedulerJob, page: Page<SchedulerJob>) {
   return defHttp.get<Page<SchedulerJob>>({
     url: BASE_URL,
-    params: Object.assign(params, pager),
+    params: Object.assign(params, page),
   });
 }
 

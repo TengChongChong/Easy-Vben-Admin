@@ -9,12 +9,12 @@ const BASE_URL = '/api/auth/sys/import/excel/temporary';
  * 查询
  *
  * @param params 查询条件
- * @param pager 分页
+ * @param page 分页
  */
-export function select(params: SysImportExcelTemporary, pager: Page<SysImportExcelTemporary>) {
+export function select(params: SysImportExcelTemporary, page: Page<SysImportExcelTemporary>) {
   return defHttp.get<Page<SysImportExcelTemporary>>({
     url: BASE_URL,
-    params: Object.assign(params, pager),
+    params: Object.assign(params, page),
   });
 }
 
