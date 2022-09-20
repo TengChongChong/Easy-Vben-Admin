@@ -131,6 +131,7 @@
       let isLoad = false;
 
       const [registerDrawer, { changeLoading, closeDrawer }] = useDrawerInner(async (data) => {
+        isLoad = false;
         sysImportExcelTemplate.value = data;
         sysImportExcelTemplateDetailList.value = [];
         await initCommonData();
