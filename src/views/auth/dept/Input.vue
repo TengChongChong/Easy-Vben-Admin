@@ -86,6 +86,7 @@
                 return listToTree(treeNodes);
               },
             },
+            itemProps: { validateTrigger: 'blur' },
           },
           {
             field: 'name',

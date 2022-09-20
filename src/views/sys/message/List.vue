@@ -133,14 +133,12 @@
               component: 'RangePicker',
               componentProps: {
                 allowEmpty: [true, true],
-                showTime: true,
                 ranges: {
                   今天: [dayjs().startOf('day'), dayjs().endOf('day')],
                   本周: [dayjs().startOf('week'), dayjs().endOf('week')],
                   本月: [dayjs().startOf('month'), dayjs().endOf('month')],
                 },
               },
-              colProps: { xxl: 12, xl: 16, md: 24 },
               ifShow: () => SysMessageStatus.HAS_BEEN_SENT === props.status,
             },
           ],

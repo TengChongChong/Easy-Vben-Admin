@@ -54,7 +54,7 @@ export interface PaginationProps {
   pageSize?: number;
 
   /**
-   * Whether to hide pager on single page
+   * Whether to hide page on single page
    * @default false
    * @type boolean
    */
