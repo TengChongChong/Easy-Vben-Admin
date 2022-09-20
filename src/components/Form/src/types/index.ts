@@ -122,4 +122,5 @@ export type ComponentType =
   | 'DeptSelect'
   | 'RoleSelect'
   | 'UserSelect'
-  | 'UserModalSelect';
+  | 'UserModalSelect'
+  | 'AreaCascader';

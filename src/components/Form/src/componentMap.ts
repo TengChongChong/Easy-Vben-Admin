@@ -39,6 +39,7 @@ import { BasicUpload } from '/@/components/Upload';
 import { StrengthMeter } from '/@/components/StrengthMeter';
 import { IconPicker } from '/@/components/Icon';
 import { CountdownInput } from '/@/components/CountDown';
+import { AreaCascader } from '/@/components/AreaCascader';
 
 const componentMap = new Map<ComponentType, Component>();
 
@@ -91,6 +92,8 @@ componentMap.set('UserSelect', UserSelect);
 componentMap.set('UserModalSelect', UserModalSelect);
 // 文件上传
 componentMap.set('Upload', BasicUpload);
+// 行政区划
+componentMap.set('AreaCascader', AreaCascader);
 
 export function add(compName: ComponentType, component: Component) {
   componentMap.set(compName, component);
