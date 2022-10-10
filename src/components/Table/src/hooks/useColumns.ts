@@ -11,6 +11,7 @@ import { formatToDate } from '/@/utils/dateUtil';
 import { ACTION_COLUMN_FLAG, DEFAULT_ALIGN, INDEX_COLUMN_FLAG, PAGE_SIZE } from '../const';
 import { DictTag } from '/@/components/Dict';
 import { useDictStoreWithOut } from '/@/store/modules/dict';
+import { TableFilterModel } from '/@/api/model/selectModel';
 
 // 字典
 const dictStore = useDictStoreWithOut();
@@ -123,7 +124,16 @@ function handleActionColumn(propsRef: ComputedRef<BasicTableProps>, columns: Bas
 function handleDictFilters(columns) {
   columns.map((item) => {
     if (item.filters && isString(item.filters) && item.filters.startsWith(DICT_FORMAT_PREFIX)) {
-      item.filters = dictStore.selectDictFilters(item.filters.replace(DICT_FORMAT_PREFIX, ''));
+      const filters: TableFilterModel[] = dictStore.selectDictFilters(
+        item.filters.replace(DICT_FORMAT_PREFIX, ''),
+      );
+      if (filters.length >= 2) {
+        item.filters = filters;
+      }
+      if (filters.length == 2) {
+        // 如果字典只有2项，使用单选
+        item.filterMultiple = false;
+      }
     }
   });
 }
