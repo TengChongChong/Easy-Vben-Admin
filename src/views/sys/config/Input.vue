@@ -107,20 +107,7 @@
             await updateSchema({
               field: 'value',
               component: 'InputNumber',
-              rules: [
-                {
-                  type: 'number',
-                  max: 99999999,
-                  message: 'value不能大于99999999',
-                  trigger: 'blur',
-                },
-                {
-                  type: 'number',
-                  min: -99999999,
-                  message: 'value不能小于-99999999',
-                  trigger: 'blur',
-                },
-              ],
+              rules: [],
             });
             break;
           case 'boolean':
@@ -129,7 +116,7 @@
               component: 'DictRadio',
               componentProps: {
                 dictType: 'boolean',
-                rules: [{ max: 255, message: 'value不能超过255个字符', trigger: 'blur' }],
+                rules: [],
               },
             });
         }

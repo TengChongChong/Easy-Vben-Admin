@@ -99,7 +99,6 @@
     },
     setup() {
       const globSetting = useGlobSetting();
-      const apiUrl = ref(globSetting.apiUrl);
       // 表格选中数据
       const checkedKeys = ref<Array<string>>([]);
       const searchInfo = reactive<Recordable>({});
@@ -156,7 +155,7 @@
       }
 
       return {
-        apiUrl,
+        apiUrl: globSetting.apiUrl,
         checkedKeys,
         onSelectChange(selectedRowKeys: string[]) {
           checkedKeys.value = selectedRowKeys;

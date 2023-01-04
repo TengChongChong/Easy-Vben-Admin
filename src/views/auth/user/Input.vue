@@ -67,7 +67,7 @@
             component: 'RoleSelect',
             componentProps: {
               multiple: true,
-              type: 'current',
+              type: 'deptId',
             },
           },
           {
@@ -124,6 +124,13 @@
         // 重置表单
         await resetFields();
         deptId.value = data?.deptId;
+        await updateSchema({
+          field: 'roleIdList',
+          componentProps: {
+            type: 'deptId',
+            deptId: deptId.value,
+          },
+        });
 
         if (data.value) {
           // 不允许在此页面修改密码

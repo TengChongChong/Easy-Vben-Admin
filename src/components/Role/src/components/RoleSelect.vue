@@ -14,7 +14,7 @@
   </a-select>
 </template>
 <script lang="ts">
-  import { defineComponent, ref } from 'vue';
+  import { defineComponent, ref, watch } from 'vue';
   import { useRuleFormItem } from '/@/hooks/component/useFormItem';
   import { selectAll, selectRoleByDept } from '/@/api/auth/sysRole';
   import { SysRole } from '/@/api/auth/model/sysRoleModel';
@@ -25,8 +25,10 @@
     name: 'RoleSelect',
     props: {
       value: [Array, String],
-      // 类型 all | current
+      // 类型 all | current | deptId
       type: propTypes.string.def('all'),
+      // 部门id type = deptId 时必须
+      deptId: propTypes.string,
       // 是否为多选
       multiple: propTypes.bool.def(false),
     },
@@ -39,13 +41,19 @@
 
       const [state] = useRuleFormItem(props, 'value', 'change', emitData);
 
+      watch([() => props.type, () => props.deptId], () => loadOptions());
+
       function loadOptions() {
         if (props.type === 'all') {
           selectAll().then((res) => {
             roleList.value = res;
           });
-        } else {
+        } else if (props.type === 'current') {
           selectRoleByDept(userStore.getCurrentUser.deptId!).then((res) => {
+            roleList.value = res;
+          });
+        } else {
+          selectRoleByDept(props.deptId).then((res) => {
             roleList.value = res;
           });
         }

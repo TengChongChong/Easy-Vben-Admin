@@ -128,8 +128,8 @@
       left: 0;
       width: 100%;
       height: 100%;
-      margin-left: -48%;
-      background-image: url(/@/assets/svg/login-bg.svg);
+      margin-left: -55%;
+      background-color: #194fab;
       background-position: 100%;
       background-repeat: no-repeat;
       background-size: auto 100%;

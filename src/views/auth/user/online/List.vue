@@ -8,7 +8,7 @@
     >
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'avatar'">
-          <a-avatar v-if="record.avatar" :src="record.avatar" />
+          <a-avatar v-if="record.avatar" :src="apiUrl + record.avatar" />
           <a-avatar v-if="!record.avatar">{{ record.nickname?.substring(0, 1) }}</a-avatar>
         </template>
 
@@ -46,6 +46,7 @@
   import { Authority } from '/@/components/Authority';
   import { Icon } from '/@/components/Icon';
   import { SysUserOnline } from '/@/api/auth/model/sysUserOnlineModel';
+  import { useGlobSetting } from '/@/hooks/setting';
 
   export default defineComponent({
     name: 'AuthUserOnlineList',
@@ -56,6 +57,8 @@
       Icon,
     },
     setup() {
+      const globSetting = useGlobSetting();
+
       // 表格选中数据
       const checkedKeys = ref<Array<string>>([]);
       onMounted(() => {
@@ -103,6 +106,7 @@
       }
 
       return {
+        apiUrl: globSetting.apiUrl,
         checkedKeys,
         onSelectChange(selectedRowKeys: string[]) {
           checkedKeys.value = selectedRowKeys;
