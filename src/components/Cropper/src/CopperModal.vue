@@ -15,6 +15,7 @@
             v-if="src"
             :src="src"
             height="300px"
+            :options="{ aspectRatio: aspectRatio }"
             :circled="circled"
             @cropend="handleCropend"
             @ready="handleReady"
@@ -120,15 +121,28 @@
         </div>
       </div>
       <div :class="`${prefixCls}-right`">
-        <div :class="`${prefixCls}-preview`">
+        <div
+          :class="`${prefixCls}-preview ${prefixCls}-preview--${circled ? 'circled' : 'square'} `"
+        >
           <img :src="previewSource" v-if="previewSource" :alt="t('component.cropper.preview')" />
         </div>
         <template v-if="previewSource">
           <div :class="`${prefixCls}-group`">
-            <a-avatar :src="previewSource" size="large" />
-            <a-avatar :src="previewSource" :size="48" />
-            <a-avatar :src="previewSource" :size="64" />
-            <a-avatar :src="previewSource" :size="80" />
+            <a-avatar
+              :shape="circled ? 'circle' : 'square'"
+              :src="previewSource"
+              :style="{ width: '48px', height: `${48 / aspectRatio}px` }"
+            />
+            <a-avatar
+              :shape="circled ? 'circle' : 'square'"
+              :src="previewSource"
+              :style="{ width: '64px', height: `${64 / aspectRatio}px` }"
+            />
+            <a-avatar
+              :shape="circled ? 'circle' : 'square'"
+              :src="previewSource"
+              :style="{ width: '80px', height: `${80 / aspectRatio}px` }"
+            />
           </div>
         </template>
       </div>
@@ -152,7 +166,8 @@
   type apiFunParams = { file: Blob; name: string; filename: string };
 
   const props = {
-    circled: { type: Boolean, default: true },
+    circled: { type: Boolean, default: false },
+    aspectRatio: { type: Number, default: 1 },
     uploadApi: {
       type: Function as PropType<(params: apiFunParams) => Promise<any>>,
     },
@@ -290,16 +305,24 @@
     }
 
     &-preview {
-      width: 220px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
       height: 220px;
       margin: 0 auto;
+      padding: 10px;
       overflow: hidden;
-      border: 1px solid @border-color-base;
-      border-radius: 50%;
+
+      &--circled {
+        img {
+          border-radius: 50%;
+        }
+      }
 
       img {
-        width: 100%;
-        height: 100%;
+        max-width: 100%;
+        max-height: 100%;
       }
     }
 

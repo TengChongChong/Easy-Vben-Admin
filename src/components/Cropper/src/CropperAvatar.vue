@@ -24,6 +24,8 @@
       @register="register"
       @upload-success="handleUploadSuccess"
       :uploadApi="uploadApi"
+      :aspectRatio="aspectRatio"
+      :circled="circled"
       :src="sourceValue"
     />
   </div>
@@ -50,6 +52,9 @@
 
   const props = {
     width: { type: [String, Number], default: '200px' },
+    aspectRatio: { type: Number, default: 1 },
+    // 是否圆形
+    circled: { type: Boolean, default: false },
     value: { type: String },
     showBtn: { type: Boolean, default: true },
     btnProps: { type: Object as PropType<ButtonProps> },

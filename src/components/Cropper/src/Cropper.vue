@@ -22,6 +22,7 @@
 
   const defaultOptions: Options = {
     aspectRatio: 1,
+    viewMode: 1,
     zoomable: true,
     zoomOnTouch: true,
     zoomOnWheel: true,
@@ -133,7 +134,7 @@
           return;
         }
         let imgInfo = cropper.value.getData();
-        const canvas = props.circled ? getRoundedCanvas() : cropper.value.getCroppedCanvas();
+        const canvas = cropper.value.getCroppedCanvas();
         canvas.toBlob((blob) => {
           if (!blob) {
             return;
@@ -150,24 +151,6 @@
             emit('cropendError');
           };
         }, 'image/png');
-      }
-
-      // Get a circular picture canvas
-      function getRoundedCanvas() {
-        const sourceCanvas = cropper.value!.getCroppedCanvas();
-        const canvas = document.createElement('canvas');
-        const context = canvas.getContext('2d')!;
-        const width = sourceCanvas.width;
-        const height = sourceCanvas.height;
-        canvas.width = width;
-        canvas.height = height;
-        context.imageSmoothingEnabled = true;
-        context.drawImage(sourceCanvas, 0, 0, width, height);
-        context.globalCompositeOperation = 'destination-in';
-        context.beginPath();
-        context.arc(width / 2, height / 2, Math.min(width, height) / 2, 0, 2 * Math.PI, true);
-        context.fill();
-        return canvas;
       }
 
       return { getClass, imgElRef, getWrapperStyle, getImageStyle, isReady, croppered };
