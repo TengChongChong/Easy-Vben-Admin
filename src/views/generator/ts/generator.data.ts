@@ -7,14 +7,11 @@ import { ComponentType } from '/@/components/Form/src/types';
 export enum GenFile {
   MODEL = 'model',
   MAPPER = 'mapper',
-  MAPPING = 'mapping',
   SERVICE = 'service',
-  SERVICE_IMPL = 'serviceImpl',
   CONTROLLER = 'controller',
   LIST_VUE = 'list.vue',
   INPUT_VUE = 'input.vue',
   API_TS = 'api.ts',
-  MODEL_TS = 'model.ts',
 }
 
 /**
@@ -33,14 +30,11 @@ export enum GenMethod {
 const allFile = [
   GenFile.MODEL,
   GenFile.MAPPER,
-  GenFile.MAPPING,
   GenFile.SERVICE,
-  GenFile.SERVICE_IMPL,
   GenFile.CONTROLLER,
   GenFile.LIST_VUE,
   GenFile.INPUT_VUE,
   GenFile.API_TS,
-  GenFile.MODEL_TS,
 ];
 
 // 所有方法
@@ -54,30 +48,30 @@ const allMethod = [
 ];
 
 /**
- * 生成模板
+ * 生成模板 - 列表
  */
-export enum GeneratorTemplate {
-  TABLE_DRAWER = 'table+drawer',
-  TREE_TABLE_DRAWER = 'tree-table+drawer',
-  TABLE_INPUT = 'table+input',
-  TREE_TABLE_INPUT = 'tree-table+input',
-  BIZ_AND_MAPPER = 'biz+mapper',
-  MAPPER = 'mapper',
+export enum ListGeneratorTemplate {
+  TABLE = 'table',
+  TREE_TABLE = 'tree-table',
+  TREE = 'tree',
+}
+
+/**
+ * 生成模板 - 表单
+ */
+export enum FormGeneratorTemplate {
+  MODAL = 'modal',
+  DRAWER = 'drawer',
+  PAGE = 'page',
 }
 
 /**
  * 模板详情
  */
 export const TEMPLATE = {
-  'table+drawer': { file: allFile, method: allMethod },
-  'tree-table+drawer': { file: allFile, method: allMethod },
-  'table+input': { file: allFile, method: allMethod },
-  'tree-table+input': { file: allFile, method: allMethod },
-  'biz+mapper': {
-    file: [GenFile.MODEL, GenFile.MAPPER, GenFile.MAPPING, GenFile.SERVICE, GenFile.SERVICE_IMPL],
-    method: allMethod,
-  },
-  mapper: { file: [GenFile.MODEL, GenFile.MAPPER, GenFile.MAPPING], method: allMethod },
+  table: { file: allFile, method: allMethod },
+  'tree-table': { file: allFile, method: allMethod },
+  tree: { file: allFile, method: allMethod },
 };
 // 表单类型
 export type FormType = 'query' | 'input';
@@ -176,7 +170,8 @@ export interface FieldConfig extends TableField {
 export interface BasicsConfigModel {
   dataSource: string;
   table?: string;
-  generatorTemplate: string;
+  listGeneratorTemplate: string;
+  formGeneratorTemplate: string;
   genMethod: string[];
   genFile: string[];
   backEndPath?: string;

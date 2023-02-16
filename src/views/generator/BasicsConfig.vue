@@ -7,6 +7,40 @@
     />
 
     <BasicForm @register="registerForm">
+      <template #listGeneratorTemplate="{ model, field }">
+        <chose-button-group
+          :options="[
+            { name: '表格 - Table', label: '展示行列数据', value: 'table' },
+            {
+              name: '树表格 - TreeTable',
+              label: '树形数据展示，可拖动调整排序或结构',
+              value: 'tree-table',
+              tips: '默认使用id作为主键，parent_id作为父id，order_no作为排序值，如需修改请生成后调整',
+            },
+            {
+              name: '树形控件 - Tree',
+              label: '多层次的结构列表',
+              value: 'tree',
+              tips: '默认使用id作为主键，parent_id作为父id，order_no作为排序值，如需修改请生成后调整',
+            },
+          ]"
+          v-model:value="model[field]"
+        />
+      </template>
+      <template #formGeneratorTemplate="{ model, field }">
+        <chose-button-group
+          :options="[
+            { name: '对话框 - Modal', label: '适用于简单表单，1 ~ 8 个字段', value: 'modal' },
+            {
+              name: '抽屉 - Drawer',
+              label: '适用于常规表单，6个及以上字段',
+              value: 'drawer',
+            },
+            { name: '页面 - Page', label: '适用于复杂表单', value: 'page' },
+          ]"
+          v-model:value="model[field]"
+        />
+      </template>
       <template #backEndPath="{ model, field }">
         <a-input v-model:value="model[field]">
           <template #addonBefore>
@@ -29,16 +63,6 @@
         下一步
       </a-button>
     </div>
-
-    <a-divider />
-    <h3>说明</h3>
-    <h4>生成模板</h4>
-    <p>
-      Drawer（抽屉）一般用于表单页不复杂的功能，如表单页面复杂或内容较多，建议使用Input（新建标签页方式打开页面）
-    </p>
-    <p>
-      TreeTable一般用于以树结构方式显示数据且数据量&lt;1000的功能，如数据量较大建议使用普通Table
-    </p>
   </div>
 </template>
 
@@ -46,8 +70,9 @@
   import { defineComponent, onMounted, ref, unref } from 'vue';
   import {
     BasicsConfigModel,
-    GeneratorTemplate,
     GenFile,
+    FormGeneratorTemplate,
+    ListGeneratorTemplate,
     TEMPLATE,
   } from '/@/views/generator/ts/generator.data';
   import { Icon } from '/@/components/Icon';
@@ -65,9 +90,10 @@
     getPermissionCode,
   } from '/@/views/generator/ts/util';
   import { TableInfo } from '/@/api/generator/model/generatorModel';
+  import ChoseButtonGroup from '/@/views/generator/components/ChoseButtonGroup.vue';
 
   export default defineComponent({
-    components: { BasicForm, Icon },
+    components: { ChoseButtonGroup, BasicForm, Icon },
     emits: ['next', 'prev', 'update-config'],
     setup(_, { emit }) {
       const globSetting = useGlobSetting();
@@ -77,7 +103,8 @@
       const tableInfo = ref<TableInfo>();
       // 默认设置
       const defaultConfig: BasicsConfigModel = {
-        generatorTemplate: GeneratorTemplate.TABLE_DRAWER,
+        listGeneratorTemplate: ListGeneratorTemplate.TABLE,
+        formGeneratorTemplate: FormGeneratorTemplate.DRAWER,
         dataSource: 'master',
         author: userStore.getCurrentUser?.nickname,
         frontEndPath: globSetting.projectPath,
@@ -96,7 +123,7 @@
         });
 
         setFieldsValue({ ...defaultConfig });
-        handleGeneratorTemplateChange(defaultConfig.generatorTemplate);
+        handleGeneratorTemplateChange(defaultConfig.listGeneratorTemplate);
         handleDataSourceChange(defaultConfig.dataSource);
       });
 
@@ -107,20 +134,6 @@
             field: 'divider-template',
             component: 'Divider',
             label: '模板',
-            colProps: { xxl: 24, xl: 24, lg: 24 },
-          },
-          {
-            field: 'generatorTemplate',
-            label: '模板',
-            component: 'DictRadio',
-            required: true,
-            componentProps: {
-              dictType: 'generatorTemplate',
-              onChange: (value) => {
-                handleGeneratorTemplateChange(value);
-              },
-            },
-            itemProps: { validateTrigger: 'blur' },
             colProps: { xxl: 24, xl: 24, lg: 24 },
           },
           {
@@ -143,6 +156,25 @@
             componentProps: {
               dictType: 'genFile',
             },
+            colProps: { xxl: 24, xl: 24, lg: 24 },
+          },
+          {
+            field: 'listGeneratorTemplate',
+            label: '列表模板',
+            component: 'InputGroup',
+            slot: 'listGeneratorTemplate',
+            required: true,
+            ifShow: ({ values }) => needShow(values.genFile, [GenFile.LIST_VUE]),
+            colProps: { xxl: 24, xl: 24, lg: 24 },
+          },
+          {
+            field: 'formGeneratorTemplate',
+            label: '表单模板',
+            component: 'InputGroup',
+            slot: 'formGeneratorTemplate',
+            required: true,
+            ifShow: ({ values }) => needShow(values.genFile, [GenFile.INPUT_VUE]),
+            itemProps: { validateTrigger: 'blur' },
             colProps: { xxl: 24, xl: 24, lg: 24 },
           },
           {
@@ -191,26 +223,6 @@
             required: true,
           },
           {
-            field: 'idField',
-            label: 'ID字段',
-            component: 'Input',
-            helpMessage: '用于将后端返回的数组转树状结构',
-            required: true,
-            ifShow: ({ values }) =>
-              values.generatorTemplate === GeneratorTemplate.TREE_TABLE_DRAWER ||
-              values.generatorTemplate === GeneratorTemplate.TREE_TABLE_INPUT,
-          },
-          {
-            field: 'parentIdField',
-            label: '父ID字段',
-            component: 'Input',
-            helpMessage: '用于将后端返回的数组转树状结构',
-            required: true,
-            ifShow: ({ values }) =>
-              values.generatorTemplate === GeneratorTemplate.TREE_TABLE_DRAWER ||
-              values.generatorTemplate === GeneratorTemplate.TREE_TABLE_INPUT,
-          },
-          {
             field: 'businessName',
             label: '业务名称',
             component: 'Input',
@@ -234,8 +246,6 @@
                 GenFile.MODEL,
                 GenFile.MAPPER,
                 GenFile.SERVICE,
-                GenFile.SERVICE_IMPL,
-                GenFile.MAPPING,
                 GenFile.CONTROLLER,
               ]),
           },
@@ -252,8 +262,6 @@
                 GenFile.MODEL,
                 GenFile.MAPPER,
                 GenFile.SERVICE,
-                GenFile.SERVICE_IMPL,
-                GenFile.MAPPING,
                 GenFile.CONTROLLER,
               ]),
           },
@@ -268,8 +276,6 @@
                 GenFile.MODEL,
                 GenFile.MAPPER,
                 GenFile.SERVICE,
-                GenFile.SERVICE_IMPL,
-                GenFile.MAPPING,
                 GenFile.CONTROLLER,
               ]),
           },
@@ -298,8 +304,6 @@
                 GenFile.MODEL,
                 GenFile.MAPPER,
                 GenFile.SERVICE,
-                GenFile.SERVICE_IMPL,
-                GenFile.MAPPING,
                 GenFile.CONTROLLER,
               ]),
           },
@@ -307,7 +311,7 @@
             field: 'divider-front-end',
             component: 'Divider',
             label: '前端',
-            colProps: { xl: 24 },
+            colProps: { xxl: 24, xl: 24, lg: 24 },
             ifShow: ({ values }) =>
               needShow(values.genFile, [GenFile.LIST_VUE, GenFile.INPUT_VUE, GenFile.API_TS]),
           },
@@ -327,7 +331,7 @@
             helpMessage: '*.vue存放路径',
             component: 'Input',
             componentProps: {
-              prefix: '前端项目路径',
+              prefix: '前端项目路径+',
             },
             required: true,
             colProps: { xxl: 12, xl: 12, md: 24 },
@@ -336,14 +340,14 @@
           {
             field: 'apiPath',
             label: 'api路径',
-            helpMessage: 'api ts存放路径',
+            helpMessage: 'api.ts存放路径',
             component: 'Input',
             componentProps: {
-              prefix: '前端项目路径',
+              prefix: '前端项目路径+',
             },
             required: true,
             colProps: { xxl: 12, xl: 12, md: 24 },
-            ifShow: ({ values }) => needShow(values.genFile, [GenFile.API_TS, GenFile.MODEL_TS]),
+            ifShow: ({ values }) => needShow(values.genFile, [GenFile.API_TS]),
           },
         ],
         showActionButtonGroup: false,
@@ -361,7 +365,6 @@
         if (values.dataSource && table) {
           getTableInfo(values.dataSource, table).then((info) => {
             tableInfo.value = info;
-            setTreeField(values.generatorTemplate);
             const { comment, entityName } = info;
             let packagePath = table;
             if (table.indexOf('_') > -1) {
@@ -414,7 +417,6 @@
             genMethod: config.method,
           });
         }
-        setTreeField(generatorTemplate);
       }
 
       function handleDataSourceChange(dataSource) {
@@ -427,45 +429,6 @@
             },
           },
         });
-      }
-
-      function setTreeField(generatorTemplate) {
-        if (
-          generatorTemplate === GeneratorTemplate.TREE_TABLE_INPUT ||
-          generatorTemplate === GeneratorTemplate.TREE_TABLE_DRAWER
-        ) {
-          // 如果是树表，查找id与父id
-          if (unref(tableInfo) && unref(tableInfo)?.fields) {
-            let idField: Nullable<string> = null;
-            // 设置id
-            setFieldsValue({
-              idField: null,
-            });
-            unref(tableInfo)?.fields.map((field) => {
-              if (field.keyFlag) {
-                idField = field.name;
-                setFieldsValue({
-                  idField,
-                });
-              }
-            });
-            // 设置父id
-            setFieldsValue({
-              parentIdField: null,
-            });
-            unref(tableInfo)?.fields.map((field) => {
-              if (
-                field.name === `parent_${idField}` ||
-                field.name === `parent${idField}` ||
-                field.name === `p_${idField}`
-              ) {
-                setFieldsValue({
-                  parentIdField: field.name,
-                });
-              }
-            });
-          }
-        }
       }
 
       /**
