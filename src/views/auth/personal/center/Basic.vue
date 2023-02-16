@@ -1,7 +1,7 @@
 <template>
   <BasicForm @register="registerForm">
     <template #avatar="{ model, field }">
-      <CropperAvatar v-model:value="model[field]" :width="100" />
+      <CropperAvatar :circled="true" v-model:value="model[field]" :width="100" />
     </template>
     <template #formFooter>
       <div class="w-full text-center">
