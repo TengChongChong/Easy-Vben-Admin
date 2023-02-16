@@ -144,6 +144,7 @@
       function handleOpenInfoModel(id: string, messageId: string) {
         info(id, messageId).then((res) => {
           openInfoModal(true, res);
+          reload();
         });
       }
 
