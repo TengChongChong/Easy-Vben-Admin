@@ -17,12 +17,6 @@
               value: 'tree-table',
               tips: '默认使用id作为主键，parent_id作为父id，order_no作为排序值，如需修改请生成后调整',
             },
-            {
-              name: '树形控件 - Tree',
-              label: '多层次的结构列表',
-              value: 'tree',
-              tips: '默认使用id作为主键，parent_id作为父id，order_no作为排序值，如需修改请生成后调整',
-            },
           ]"
           v-model:value="model[field]"
         />
@@ -36,7 +30,6 @@
               label: '适用于常规表单，6个及以上字段',
               value: 'drawer',
             },
-            { name: '页面 - Page', label: '适用于复杂表单', value: 'page' },
           ]"
           v-model:value="model[field]"
         />
