@@ -6,43 +6,54 @@
       :multiple="multiple"
       :headers="headers"
       :file-list="displayFileList"
+      list-type="picture-card"
       :before-upload="beforeUpload"
       @change="handleChange"
+      @preview="handlePreview"
     >
-      <slot>
-        <a-button-upload />
-      </slot>
-      <br />
-      <a-typography-text type="secondary" v-if="showHelpText">
-        {{ getHelpText }}
-      </a-typography-text>
+      <template v-if="maxNumber > displayFileList.length">
+        <Icon icon="ant-design:upload-outlined" />
+        上传
+      </template>
     </a-upload>
+
+    <a-modal :visible="previewVisible" title="预览" :footer="null" @cancel="handleCancel">
+      <div class="preview-wrapper">
+        <video
+          loop
+          controls
+          playsinline
+          webkit-playsinline
+          x5-video-player-type="h5-page"
+          v-if="previewVisible && previewUrl.endsWith('.mp4')"
+          :src="previewUrl"
+        ></video>
+        <img v-if="!previewUrl.endsWith('.mp4')" alt="" :src="previewUrl" />
+      </div>
+    </a-modal>
   </div>
 </template>
 <script lang="ts">
-  import { defineComponent, PropType, ref, toRefs, watch } from 'vue';
-  import AButtonUpload from '/@/components/Button/src/ButtonUpload.vue';
+  import { defineComponent, ref, toRefs, watch } from 'vue';
   import type { UploadChangeParam } from 'ant-design-vue';
   import { getToken } from '/@/utils/auth';
   import { useGlobSetting } from '/@/hooks/setting';
   import { basicProps } from '/@/components/Upload/props';
   import { UploadFileModel } from '/@/components/Upload/type';
   import { SysFile } from '/@/api/sys/model/sysFileModel';
-  import { isArray } from '/@/utils/is';
+  import { isArray, isString } from '/@/utils/is';
   import { convertToSysFile, convertToUploadFileModelArray } from '/@/components/Upload/helper';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { useUploadType } from '/@/components/Upload/useUpload';
   import { propTypes } from '/@/utils/propTypes';
+  import Icon from '/@/components/Icon/src/Icon.vue';
 
   export default defineComponent({
     name: 'BasicUpload',
-    components: { AButtonUpload },
+    components: { Icon },
     props: {
-      value: {
-        type: Array as PropType<SysFile[]>,
-        default: () => [],
-      },
+      value: propTypes.any,
       showHelpText: propTypes.bool.def(true),
       ...basicProps,
     },
@@ -60,10 +71,22 @@
       // 用于显示的文件列表 已上传 + 未上传
       const displayFileList = ref<UploadFileModel[]>([]);
 
+      const previewVisible = ref(false);
+      const previewUrl = ref('');
+
       watch(
         () => props.value,
         (value = []) => {
-          uploadedFileList = initValue(value);
+          if (props.value == null || props.value === '' || isString(props.value)) {
+            uploadedFileList = [];
+            refreshDisplayFileList();
+            return;
+          }
+          if (isArray(props.value)) {
+            uploadedFileList = initValue(value);
+          } else {
+            uploadedFileList = initValue([value]);
+          }
           refreshDisplayFileList();
         },
         { deep: true },
@@ -76,11 +99,16 @@
         maxSizeRef: maxSize,
       });
 
+      const { apiUrl } = useGlobSetting();
+
       function initValue(value: SysFile[]): SysFile[] {
         if (!isArray(value)) {
           return [];
         }
         value.map((item) => {
+          if (!item.url?.startsWith(apiUrl)) {
+            item.url = apiUrl + item.url;
+          }
           item.status = 'done';
         });
         return value;
@@ -138,8 +166,18 @@
        * 已上传文件值改变
        */
       function handleValueChange() {
-        emit('change', uploadedFileList);
-        emit('update:value', uploadedFileList);
+        if (props.multiple) {
+          emit('change', uploadedFileList);
+          emit('update:value', uploadedFileList);
+        } else {
+          if (uploadedFileList.length > 0) {
+            emit('change', uploadedFileList[0]);
+            emit('update:value', uploadedFileList[0]);
+          } else {
+            emit('change', null);
+            emit('update:value', null);
+          }
+        }
       }
 
       /**
@@ -150,6 +188,22 @@
           convertToUploadFileModelArray(uploadedFileList).concat(uploadingFileList);
       }
 
+      const handleCancel = () => {
+        previewVisible.value = false;
+      };
+      const handlePreview = async (file) => {
+        previewVisible.value = true;
+        if (!file.url?.startsWith(apiUrl)) {
+          previewUrl.value = apiUrl + file.url;
+        } else {
+          previewUrl.value = file.url;
+        }
+      };
+
+      function previewFile(file) {
+        console.log(file);
+      }
+
       return {
         headers: {
           Authorization: token,
@@ -158,9 +212,27 @@
         getHelpText,
         uploadUrl,
         displayFileList,
+        previewVisible,
+        previewUrl,
         beforeUpload,
         handleChange,
+        handlePreview,
+        handleCancel,
+        previewFile,
       };
     },
   });
 </script>
+<style lang="less">
+  .preview-wrapper {
+    padding: 15px;
+
+    img,
+    video {
+      display: block;
+      max-width: 100%;
+      max-height: 300px;
+      margin: 0 auto;
+    }
+  }
+</style>
