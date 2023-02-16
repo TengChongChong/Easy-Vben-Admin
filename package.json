@@ -66,8 +66,7 @@
     "vue-i18n": "^9.1.9",
     "vue-json-pretty": "^2.0.6",
     "vue-router": "^4.0.14",
-    "vue-types": "^4.1.1",
-    "xlsx": "^0.18.5"
+    "vue-types": "^4.1.1"
   },
   "devDependencies": {
     "@commitlint/cli": "^16.2.3",
