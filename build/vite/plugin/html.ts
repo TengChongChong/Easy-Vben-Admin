@@ -3,7 +3,7 @@
  * https://github.com/anncwb/vite-plugin-html
  */
 import type { PluginOption } from 'vite';
-import { createHtmlPlugin } from 'vite-plugin-html';
+import { createHtmlPlugin } from 'vite-plugin-html-easy';
 import pkg from '../../../package.json';
 import { GLOB_CONFIG_FILE_NAME } from '../../constant';
 

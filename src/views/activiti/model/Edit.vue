@@ -1,5 +1,5 @@
 <template>
-  <e-iframe :frame-src="`/activiti-editor/modeler.html?modelId=${id}&token=${token}`" />
+  <e-iframe :frame-src="`/static/activiti-editor/modeler.html?modelId=${id}&token=${token}`" />
 </template>
 
 <script lang="ts">
