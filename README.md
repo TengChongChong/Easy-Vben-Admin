@@ -77,6 +77,21 @@ pnpm build
 - [Easy-Vben](https://github.com/TengChongChong/Easy-Vben) - 后端
 - [Easy-Vben-Admin](https://github.com/TengChongChong/Easy-Vben-Admin) - 前端
 
+## 预览
+![预览](https://github.com/TengChongChong/easy-vben-doc/blob/main/docs/.vuepress/public/assets/preview/preive-13.png)
+![预览](https://github.com/TengChongChong/easy-vben-doc/blob/main/docs/.vuepress/public/assets/preview/preive-12.png)
+![预览](https://github.com/TengChongChong/easy-vben-doc/blob/main/docs/.vuepress/public/assets/preview/preive-11.png)
+![预览](https://github.com/TengChongChong/easy-vben-doc/blob/main/docs/.vuepress/public/assets/preview/preive-10.png)
+![预览](https://github.com/TengChongChong/easy-vben-doc/blob/main/docs/.vuepress/public/assets/preview/preive-9.png)
+![预览](https://github.com/TengChongChong/easy-vben-doc/blob/main/docs/.vuepress/public/assets/preview/preive-8.png)
+![预览](https://github.com/TengChongChong/easy-vben-doc/blob/main/docs/.vuepress/public/assets/preview/preive-7.png)
+![预览](https://github.com/TengChongChong/easy-vben-doc/blob/main/docs/.vuepress/public/assets/preview/preive-6.png)
+![预览](https://github.com/TengChongChong/easy-vben-doc/blob/main/docs/.vuepress/public/assets/preview/preive-5.png)
+![预览](https://github.com/TengChongChong/easy-vben-doc/blob/main/docs/.vuepress/public/assets/preview/preive-4.png)
+![预览](https://github.com/TengChongChong/easy-vben-doc/blob/main/docs/.vuepress/public/assets/preview/preive-3.png)
+![预览](https://github.com/TengChongChong/easy-vben-doc/blob/main/docs/.vuepress/public/assets/preview/preive-2.png)
+![预览](https://github.com/TengChongChong/easy-vben-doc/blob/main/docs/.vuepress/public/assets/preview/preive-1.png)
+
 ## 如何贡献
 
 非常欢迎你的加入！[提一个 Issue](https://github.com/TengChongChong/Easy-Vben-Admin/issues) 或者提交一个 Pull Request。
