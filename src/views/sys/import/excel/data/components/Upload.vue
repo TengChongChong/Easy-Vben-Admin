@@ -71,7 +71,7 @@
     setup(props, { emit }) {
       const downloadBtnLoading = ref<boolean>(false);
       const nextBtnLoading = ref<boolean>(false);
-      const file = ref<SysFile[]>([]);
+      const file = ref<Nullable<SysFile>>();
 
       async function handleDownload() {
         downloadBtnLoading.value = true;
@@ -82,7 +82,7 @@
       }
 
       async function handleStepNext() {
-        if (!file.value || file.value.length === 0) {
+        if (!file.value) {
           message.warn('请上传文件后重试');
           return;
         }
@@ -90,13 +90,14 @@
         try {
           await analysis(
             props.sysImportExcelTemplate?.id as string,
-            file.value[0].path as string,
+            file.value.path as string,
           ).then((res) => {
             if (res) {
               emit('next');
             }
           });
         } catch (e) {
+          console.error(e);
         } finally {
           nextBtnLoading.value = false;
         }
