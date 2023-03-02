@@ -20,7 +20,7 @@
           </a-form-item-rest>
           <div class="!w-2/3">
             <a-input
-              class="my-input"
+              class="!min-w-full"
               v-model:value="formData.mobile"
               size="large"
               :placeholder="formData.type === 'mobile' ? '手机号码' : '邮箱'"
@@ -137,23 +137,3 @@
     } catch (e) {}
   }
 </script>
-<style lang="less" scoped>
-  .my-input {
-    min-width: auto !important;
-    @media (max-width: @screen-xl) {
-      min-width: auto !important;
-    }
-
-    @media (max-width: @screen-lg) {
-      min-width: auto !important;
-    }
-
-    @media (max-width: @screen-md) {
-      min-width: auto !important;
-    }
-
-    @media (max-width: @screen-sm) {
-      min-width: auto !important;
-    }
-  }
-</style>
