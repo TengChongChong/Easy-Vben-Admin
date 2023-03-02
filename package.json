@@ -29,6 +29,7 @@
     "test:br": "npx http-server dist --cors --brotli -c-1",
     "reinstall": "rimraf pnpm-lock.yaml && rimraf package.lock.json && rimraf node_modules && npm run bootstrap",
     "prepare": "husky install",
+    "commit": "cz-customizable",
     "gen:icon": "esno ./build/generate/icon/index.ts"
   },
   "dependencies": {
@@ -76,7 +77,6 @@
   },
   "devDependencies": {
     "@commitlint/cli": "^16.2.3",
-    "@commitlint/config-conventional": "^16.2.1",
     "@iconify/json": "^2.1.30",
     "@purge-icons/generated": "^0.8.1",
     "@types/codemirror": "^5.60.5",
@@ -101,9 +101,12 @@
     "@vue/compiler-sfc": "^3.2.33",
     "@vue/test-utils": "^2.0.0-rc.21",
     "autoprefixer": "^10.4.4",
-    "commitizen": "^4.2.4",
+    "commitlint-config-cz": "^0.13.3",
+    "commitlint-config-git-commit-emoji": "^1.0.0",
     "conventional-changelog-cli": "^2.2.2",
+    "conventional-changelog-gitmoji-config": "^1.4.7",
     "cross-env": "^7.0.3",
+    "cz-customizable": "^7.0.0",
     "dotenv": "^16.0.0",
     "eslint": "^8.13.0",
     "eslint-config-prettier": "^8.5.0",
