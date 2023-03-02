@@ -22,25 +22,25 @@ export function wrapperEnv(envConf: Recordable): ViteEnv {
   const ret: any = {};
 
   for (const envName of Object.keys(envConf)) {
-    let nickname = envConf[envName].replace(/\\n/g, '\n');
-    nickname = nickname === 'true' ? true : nickname === 'false' ? false : nickname;
+    let realName = envConf[envName].replace(/\\n/g, '\n');
+    realName = realName === 'true' ? true : realName === 'false' ? false : realName;
 
     if (envName === 'VITE_PORT') {
-      nickname = Number(nickname);
+      realName = Number(realName);
     }
-    if (envName === 'VITE_PROXY' && nickname) {
+    if (envName === 'VITE_PROXY' && realName) {
       try {
-        nickname = JSON.parse(nickname.replace(/'/g, '"'));
+        realName = JSON.parse(realName.replace(/'/g, '"'));
       } catch (error) {
-        nickname = '';
+        realName = '';
       }
     }
-    ret[envName] = nickname;
-    if (typeof nickname === 'string') {
-      process.env[envName] = nickname;
-    } else if (typeof nickname === 'object') {
-      process.env[envName] = JSON.stringify(nickname);
-    }
+    ret[envName] = realName;
+    // if (typeof realName === 'string') {
+    //   process.env[envName] = realName;
+    // } else if (typeof realName === 'object') {
+    //   process.env[envName] = JSON.stringify(realName);
+    // }
   }
   return ret;
 }
