@@ -13,17 +13,19 @@
       <a-form-item name="mobile" class="enter-x">
         <a-input-group compact>
           <a-form-item-rest>
-            <a-select size="large" v-model:value="formData.type" style="width: 100px">
+            <a-select size="large" v-model:value="formData.type" class="!w-1/3">
               <a-select-option value="mobile">手机号</a-select-option>
               <a-select-option value="mail">邮箱</a-select-option>
             </a-select>
           </a-form-item-rest>
-          <a-input
-            v-model:value="formData.mobile"
-            size="large"
-            style="width: 50%"
-            :placeholder="formData.type === 'mobile' ? '手机号码' : '邮箱'"
-          />
+          <div class="!w-2/3">
+            <a-input
+              class="my-input"
+              v-model:value="formData.mobile"
+              size="large"
+              :placeholder="formData.type === 'mobile' ? '手机号码' : '邮箱'"
+            />
+          </div>
         </a-input-group>
       </a-form-item>
 
@@ -135,3 +137,23 @@
     } catch (e) {}
   }
 </script>
+<style lang="less" scoped>
+  .my-input {
+    min-width: auto !important;
+    @media (max-width: @screen-xl) {
+      min-width: auto !important;
+    }
+
+    @media (max-width: @screen-lg) {
+      min-width: auto !important;
+    }
+
+    @media (max-width: @screen-md) {
+      min-width: auto !important;
+    }
+
+    @media (max-width: @screen-sm) {
+      min-width: auto !important;
+    }
+  }
+</style>
