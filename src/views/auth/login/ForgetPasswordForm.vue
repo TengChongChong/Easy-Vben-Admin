@@ -13,7 +13,7 @@
       <a-form-item name="mobile" class="enter-x">
         <a-input-group compact>
           <a-form-item-rest>
-            <a-select size="large" v-model:value="formData.type" class="!w-1/3 overflow-hidden">
+            <a-select size="large" v-model:value="formData.type" class="!w-1/3">
               <a-select-option value="mobile">手机号</a-select-option>
               <a-select-option value="mail">邮箱</a-select-option>
             </a-select>

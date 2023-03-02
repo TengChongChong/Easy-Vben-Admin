@@ -183,7 +183,7 @@
       }
     }
 
-    input:not([type='checkbox']) {
+    input:not([type='checkbox'], [type='search']) {
       min-width: 360px;
 
       @media (max-width: @screen-xl) {
