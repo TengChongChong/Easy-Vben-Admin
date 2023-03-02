@@ -134,6 +134,7 @@
             showTitle={!unref(getCollapsed)}
             class={unref(getLogoClass)}
             theme={unref(getComputedMenuTheme)}
+            showLogo={unref(getCollapsed)}
           />
         );
       }
