@@ -41,6 +41,7 @@
   import { getByKey } from '/@/api/sys/sysConfig';
   import { select as selectTask } from '/@/api/activiti/activitiTask';
   import { ActivitiTask } from '/@/api/activiti/model/activitiTaskModel';
+  import { useUserStore } from '/@/store/modules/user';
 
   export default defineComponent({
     components: { BellOutlined, MessageList, ToDoList },
@@ -49,6 +50,8 @@
       let timeStamp: Nullable<number> = null;
 
       const visible = ref<boolean>(false);
+
+      const userStore = useUserStore();
 
       const hidePopover = () => {
         visible.value = false;
@@ -88,8 +91,10 @@
       function refreshData() {
         if (timeStamp) {
           messageCheckTimeout = setTimeout(() => {
-            refreshMessage();
-            refreshTask();
+            if (checkAuth()) {
+              refreshMessage();
+              refreshTask();
+            }
           }, timeStamp);
         }
       }
@@ -114,6 +119,20 @@
         selectTask({ status: 'claimed' }, { pageSize: 20 }).then((res) => {
           toDoList.value = res.records!;
         });
+      }
+
+      /**
+       * 检查是否已登录
+       */
+      function checkAuth() {
+        if (userStore.getToken) {
+          return true;
+        } else {
+          if (messageCheckTimeout) {
+            clearTimeout(messageCheckTimeout);
+          }
+          return false;
+        }
       }
 
       return {
