@@ -88,9 +88,10 @@ export function saveOrder(params: SysPermission[]) {
  *
  * @param ids ids
  * @param status 状态
+ * @param type 类型
  */
-export function setStatus(ids: string, status: string) {
+export function setStatus(ids: string, status: string, type: string) {
   return defHttp.post<boolean>({
-    url: `${BASE_URL}/${ids}/status/${status}`,
+    url: `${BASE_URL}/${ids}/status/${status}/type/${type}`,
   });
 }

@@ -87,10 +87,18 @@ export const columns: BasicColumn[] = [
           record.pendingStatus = true;
           const newStatus = checked ? '1' : '2';
           const { createMessage } = useMessage();
-          setStatus(record.id, newStatus)
+          setStatus(record.id, newStatus, record.type)
             .then(() => {
               record.status = newStatus;
               createMessage.success(`操作成功`);
+              if ('menu' === record.type) {
+                // 同时更新子级数据
+                if (record.children) {
+                  record.children.map((item) => {
+                    item.status = newStatus;
+                  });
+                }
+              }
             })
             .finally(() => {
               record.pendingStatus = false;
