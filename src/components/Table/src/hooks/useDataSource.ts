@@ -317,7 +317,6 @@ export function useDataSource(
           current: opt.page || 1,
         });
       }
-      // clearSelectedRowKeys();
       emit('fetch-success', {
         items: unref(resultItems),
         total: resultTotal,
@@ -335,6 +334,7 @@ export function useDataSource(
   }
 
   function setTableData<T = Recordable>(values: T[]) {
+    // @ts-ignore
     dataSourceRef.value = values;
   }
 
@@ -347,6 +347,7 @@ export function useDataSource(
   }
 
   async function reload(opt?: FetchParams) {
+    clearSelectedRowKeys();
     return await fetch(opt);
   }
 

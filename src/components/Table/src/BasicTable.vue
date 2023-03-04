@@ -7,7 +7,7 @@
       v-if="getBindValues.useSearchForm"
       :tableAction="tableAction"
       @register="registerForm"
-      @submit="handleSearchInfoChange"
+      @submit="handleSearch"
       @advanced-change="redoHeight"
     >
       <template #[replaceFormSlotKey(item)]="data" v-for="item in getFormSlotKeys">
@@ -282,6 +282,11 @@
         innerPropsRef.value = { ...unref(innerPropsRef), ...props };
       }
 
+      function handleSearch(info: Recordable) {
+        clearSelectedRowKeys();
+        handleSearchInfoChange(info);
+      }
+
       const tableAction: TableActionType = {
         reload,
         getSelectRows,
@@ -334,7 +339,7 @@
         getBindValues,
         getLoading,
         registerForm,
-        handleSearchInfoChange,
+        handleSearch,
         getEmptyDataIsShowTable,
         handleTableChange,
         handleResizeColumn,
