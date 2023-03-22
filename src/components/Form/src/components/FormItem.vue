@@ -126,7 +126,8 @@
         if (isFunction(ifShow)) {
           isIfShow = ifShow(unref(getValues));
         }
-        isShow = isShow && itemIsAdvanced && hasPermission(auth);
+        isIfShow = isIfShow && hasPermission(auth);
+        isShow = isShow && itemIsAdvanced;
         return { isShow, isIfShow };
       }
 
@@ -256,7 +257,7 @@
             props.setFormModel(field, value);
           },
         };
-        const Comp = componentMap.get(component) as ReturnType<typeof defineComponent>;
+        // const Comp = componentMap.get(component) as ReturnType<typeof defineComponent>;
 
         const { autoSetPlaceHolder, size } = props.formProps;
         const propsData: Recordable = {
