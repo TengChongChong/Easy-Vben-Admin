@@ -257,7 +257,7 @@
             props.setFormModel(field, value);
           },
         };
-        // const Comp = componentMap.get(component) as ReturnType<typeof defineComponent>;
+        const Comp = componentMap.get(component) as ReturnType<typeof defineComponent>;
 
         const { autoSetPlaceHolder, size } = props.formProps;
         const propsData: Recordable = {
