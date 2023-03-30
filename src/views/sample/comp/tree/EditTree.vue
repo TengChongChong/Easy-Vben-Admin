@@ -57,7 +57,7 @@
   import { treeData, treeData2, treeData3 } from './data';
   import { PlusOutlined, DeleteOutlined } from '@ant-design/icons-vue';
   import { PageWrapper } from '/@/components/Page';
-  import { TreeActionItem } from '/@/components/Tree/src/tree';
+  import { TreeActionItem } from '/@/components/Tree/src/type/tree';
 
   export default defineComponent({
     name: 'SampleCompTreeEditTree',

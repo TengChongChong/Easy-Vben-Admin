@@ -7,7 +7,7 @@
     KeyType,
     CheckKeys,
     TreeActionType,
-  } from '/@/components/Tree/src/tree';
+  } from '/@/components/Tree/src/type/tree';
 
   import {
     defineComponent,
@@ -32,7 +32,7 @@
   import { useContextMenu } from '/@/hooks/web/useContextMenu';
   import { CreateContextOptions } from '/@/components/ContextMenu';
   import { createBEM } from '/@/utils/bem';
-  import { treeProps, treeEmits } from '/@/components/Tree/src/tree';
+  import { treeProps, treeEmits } from '/@/components/Tree/src/type/tree';
 
   export default defineComponent({
     name: 'BasicTree',

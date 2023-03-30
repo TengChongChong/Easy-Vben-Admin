@@ -1,5 +1,5 @@
 import { isArray } from '/@/utils/is';
-import { TreeItem } from '/@/components/Tree/src/tree';
+import { TreeItem } from '/@/components/Tree/src/type/tree';
 
 interface TreeHelperConfig {
   id: string;

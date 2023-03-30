@@ -33,7 +33,7 @@
   import { treeData } from './data';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { PageWrapper } from '/@/components/Page';
-  import { TreeActionType } from '/@/components/Tree/src/tree';
+  import { TreeActionType } from '/@/components/Tree/src/type/tree';
 
   export default defineComponent({
     name: 'SampleCompTreeActionTree',

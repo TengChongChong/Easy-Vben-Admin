@@ -59,7 +59,7 @@
   import { treeData } from './data';
   import { PageWrapper } from '/@/components/Page';
   import { cloneDeep } from 'lodash-es';
-  import { TreeActionType, TreeItem } from '/@/components/Tree/src/tree';
+  import { TreeActionType, TreeItem } from '/@/components/Tree/src/type/tree';
 
   export default defineComponent({
     name: 'SampleCompTreeIndex',

@@ -13,9 +13,9 @@
 
   import { BasicTree } from '/@/components/Tree';
   import { selectAll } from '/@/api/auth/sysDept';
-  import { TreeItem } from '/@/components/Tree/src/tree';
   import { TreeNode } from '/@/api/model/treeModel';
   import { listToTree } from '/@/utils/helper/treeHelper';
+  import { TreeItem } from '/@/components/Tree/src/type/tree';
 
   export default defineComponent({
     name: 'DeptTree',

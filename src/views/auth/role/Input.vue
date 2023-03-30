@@ -39,7 +39,7 @@
   import { Icon } from '/@/components/Icon';
   import { SysRole } from '/@/api/auth/model/sysRoleModel';
   import { BasicTree } from '/@/components/Tree';
-  import { TreeActionType, TreeItem } from '/@/components/Tree/src/tree';
+  import { TreeActionType, TreeItem } from '/@/components/Tree/src/type/tree';
   import { selectAll } from '/@/api/auth/sysPermission';
   import { convertCheckedKeys, listToTree } from '/@/utils/helper/treeHelper';
   import { RoleEnum } from '/@/enums/roleEnum';
