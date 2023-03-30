@@ -15,6 +15,7 @@ import {
   Divider,
   Dropdown,
   Menu,
+  Modal,
   Table,
   Tabs,
   Tag,
@@ -55,6 +56,7 @@ export function registerGlobComp(app: App) {
     .use(Divider)
     .use(Dropdown)
     .use(Menu)
+    .use(Modal)
     .use(Table)
     .use(Tabs)
     .use(Tag)
