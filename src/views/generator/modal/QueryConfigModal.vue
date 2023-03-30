@@ -9,7 +9,10 @@
           <a-popover>
             <template #content>
               <div>列名：{{ record.name }}</div>
-              <div>类型：{{ record.type }}</div>
+              <div>
+                类型：{{ record.metaInfo.jdbcType?.toLowerCase() }}
+                {{ record.metaInfo.length ? `(${record.metaInfo.length})` : '' }}
+              </div>
               <div>属性：{{ record.propertyName }}</div>
               <div>注释：{{ record.comment ? record.comment : '-' }}</div>
             </template>

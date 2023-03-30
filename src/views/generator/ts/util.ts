@@ -167,10 +167,12 @@ function getTableCellConfig(
           delete config.sorter;
         }
         // 计算单元格显示宽度
-        const length = getFieldLength(field.type);
-        if (length) {
+        if (field.metaInfo.length) {
           // 计算大致宽度，如字段长度32：32 * 5 = 160，切最大宽度不超过偏好设置中设置的最大值
-          config.width = Math.min(length * 5, PREFERENCE_SETTING.list.table.cellMaxWidth);
+          config.width = Math.min(
+            field.metaInfo.length * 5,
+            PREFERENCE_SETTING.list.table.cellMaxWidth,
+          );
           // 宽度最小为100px
           config.width = Math.max(config.width, 100);
         }
@@ -314,7 +316,7 @@ function getFieldConfig(
             // 查询表单统一使用Input
             config.componentType = 'Input';
           } else {
-            const length = getFieldLength(field.type);
+            const length = field.metaInfo.length;
             if (length && length > PREFERENCE_SETTING.input.inputMaxLength) {
               config.componentType = 'InputTextArea';
             } else {
@@ -346,22 +348,6 @@ function isPassword(field: TableField): boolean {
 }
 
 /**
- * 获取字段长度
- *
- * @param type 字段类型
- */
-export function getFieldLength(type: string): Nullable<number> {
-  if (type) {
-    try {
-      return Number(type.match(/\d+/g));
-    } catch (e) {
-      console.error('获取字段长度失败', e);
-    }
-  }
-  return null;
-}
-
-/**
  * 是否较长字段，
  *
  * @param field 字段
@@ -369,13 +355,12 @@ export function getFieldLength(type: string): Nullable<number> {
 function isLongField(field: TableField): boolean {
   // 长字段类型
   const textFieldType: string[] = ['text', 'mediumtext', 'longtext'];
-  if (textFieldType.indexOf(field.type) > -1) {
+  if (textFieldType.indexOf(field.metaInfo.jdbcType.toLowerCase()) > -1) {
     return true;
   }
   if (field.propertyType === 'String') {
-    const length = getFieldLength(field.type);
-    if (length) {
-      return length >= PREFERENCE_SETTING.list.table.autoHideFieldLength;
+    if (field.metaInfo.length) {
+      return field.metaInfo.length >= PREFERENCE_SETTING.list.table.autoHideFieldLength;
     }
   }
   return false;
@@ -452,11 +437,10 @@ function getExportConfig(
         break;
       case 'String':
         // 计算单元格显示宽度
-        const length = getFieldLength(field.type);
-        if (length) {
+        if (field.metaInfo.length) {
           // 按字段长度 * 16px / 2，省略个位数，计算大致宽度，如字段长度32：32 * 16 / 2 = 256取250为宽度，切最大宽度不超过偏好设置中设置的最大值
           config.width = Math.min(
-            Math.floor(length * 0.8) * 10,
+            Math.floor(field.metaInfo.length * 0.8) * 10,
             PREFERENCE_SETTING.export.cellMaxWidth,
           );
         }
@@ -543,11 +527,10 @@ function getImportConfig(
         break;
       case 'String':
         // 计算单元格显示宽度
-        const length = getFieldLength(field.type);
-        if (length) {
+        if (field.metaInfo.length) {
           // 按字段长度 * 16px / 2，省略个位数，计算大致宽度，如字段长度32：32 * 16 / 2 = 256取250为宽度，切最大宽度不超过偏好设置中设置的最大值
           config.width = Math.min(
-            Math.floor(length * 0.8) * 10,
+            Math.floor(field.metaInfo.length * 0.8) * 10,
             PREFERENCE_SETTING.export.cellMaxWidth,
           );
         }

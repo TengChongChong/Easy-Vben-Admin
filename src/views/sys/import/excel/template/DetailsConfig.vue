@@ -107,7 +107,7 @@
   import { getTableInfo, selectTable } from '/@/api/generator/generator';
   import { SysImportExcelTemplateDetail } from '/@/api/sys/model/sysImportExcelTemplateDetailModel';
   import { saveData, selectDetails } from '/@/api/sys/sysImportExcelTemplateDetail';
-  import { getDictType, getFieldLength, toDictTypeArray } from '/@/views/generator/ts/util';
+  import { getDictType, toDictTypeArray } from '/@/views/generator/ts/util';
   import { selectAll as selectAllDictType } from '/@/api/sys/sysDictType';
   import { SelectModel } from '/@/api/model/selectModel';
   import TableFieldSelect from '/@/views/sys/import/excel/template/components/TableFieldSelect.vue';
@@ -182,16 +182,15 @@
 
         // 未设置
         tableInfo?.fields.map((item) => {
-          const { name, comment, type } = item;
-          const length = getFieldLength(type);
+          const { name, comment, metaInfo } = item;
 
           if (!inSet(setDetailList, name)) {
             const dictType = getDictType(tableInfo!, item, dictTypeList);
             noSetDetailList.push({
               fieldName: name,
               title: comment,
-              fieldType: type.indexOf('(') > -1 ? type.substring(0, type.indexOf('(')) : type,
-              fieldLength: length ? length : undefined,
+              fieldType: metaInfo.jdbcType,
+              fieldLength: metaInfo.length,
               needImport: false,
               needReplace: false,
               replaceTable: dictType ? 'sys_dict' : undefined,

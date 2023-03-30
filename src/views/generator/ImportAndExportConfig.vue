@@ -23,7 +23,10 @@
                 <a-popover>
                   <template #content>
                     <div>列名：{{ item.name }}</div>
-                    <div>类型：{{ item.type }}</div>
+                    <div>
+                      类型：{{ item.metaInfo.jdbcType?.toLowerCase() }}
+                      {{ item.metaInfo.length ? `(${item.metaInfo.length})` : '' }}
+                    </div>
                     <div>属性：{{ item.propertyName }}</div>
                     <div>注释：{{ item.comment ? item.comment : '-' }}</div>
                   </template>
@@ -85,7 +88,10 @@
                 <a-popover>
                   <template #content>
                     <div>列名：{{ item.name }}</div>
-                    <div>类型：{{ item.type }}</div>
+                    <div>
+                      类型：{{ item.metaInfo.jdbcType?.toLowerCase() }}
+                      {{ item.metaInfo.length ? `(${item.metaInfo.length})` : '' }}
+                    </div>
                     <div>属性：{{ item.propertyName }}</div>
                     <div>注释：{{ item.comment ? item.comment : '-' }}</div>
                     <div>宽度：{{ item.width ? item.width : '-' }}</div>
@@ -179,7 +185,7 @@
       onMounted(() => {
         initData();
         Sortable.create(document.querySelectorAll('.config-items-import')?.[0] as HTMLElement, {
-          animation: 500,
+          animation: 200,
           delay: 400,
           delayOnTouchOnly: true,
           onEnd: (evt) => {
@@ -194,7 +200,7 @@
           },
         });
         Sortable.create(document.querySelectorAll('.config-items-export')?.[0] as HTMLElement, {
-          animation: 500,
+          animation: 200,
           delay: 400,
           delayOnTouchOnly: true,
           onEnd: (evt) => {
