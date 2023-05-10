@@ -1,4 +1,4 @@
-import type { InsertNodeParams, KeyType, FieldNames, TreeItem } from './tree';
+import type { InsertNodeParams, KeyType, FieldNames, TreeItem } from './type/tree';
 import type { Ref, ComputedRef } from 'vue';
 import type { TreeDataItem } from 'ant-design-vue/es/tree/Tree';
 
@@ -141,6 +141,8 @@ export function useTree(treeDataRef: Ref<TreeDataItem[]>, getFieldNames: Compute
       for (let i = 0; i < list.length; i++) {
         treeData[push](list[i]);
       }
+      treeDataRef.value = treeData;
+      return;
     } else {
       const { key: keyField, children: childrenField } = unref(getFieldNames);
       if (!childrenField || !keyField) return;
