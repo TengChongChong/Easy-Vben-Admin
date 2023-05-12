@@ -95,10 +95,10 @@
         const { labelField, valueField, numberToString, childrenField, isLeaf } = props;
         return options.reduce((prev, next: Recordable) => {
           if (next) {
-            const value = get[valueField];
+            const value = get(next, valueField);
             const item = {
               ...omit(next, [labelField, valueField]),
-              label: get[labelField],
+              label: get(next, labelField),
               value: numberToString ? `${value}` : value,
               isLeaf: isLeaf && typeof isLeaf === 'function' ? isLeaf(next) : false,
             };

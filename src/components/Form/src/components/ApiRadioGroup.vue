@@ -61,9 +61,9 @@
 
         return unref(options).reduce((prev, next: Recordable) => {
           if (next) {
-            const value = get[valueField];
+            const value = get(next, valueField);
             prev.push({
-              label: get[labelField],
+              label: get(next, labelField),
               value: numberToString ? `${value}` : value,
               ...omit(next, [labelField, valueField]),
             });
