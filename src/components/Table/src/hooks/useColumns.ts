@@ -129,6 +129,8 @@ function handleDictFilters(columns) {
       );
       if (filters.length >= 2) {
         item.filters = filters;
+      } else {
+        item.filters = [];
       }
       if (filters.length == 2) {
         // 如果字典只有2项，使用单选
