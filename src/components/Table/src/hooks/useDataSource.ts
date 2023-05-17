@@ -271,22 +271,20 @@ export function useDataSource(
 
       const { sortInfo = {}, filterInfo } = searchState;
 
-      let params: Recordable = merge(
-        pageParams,
+      const params: Recordable = merge(pageParams, defSort, sortInfo, opt?.sortInfo ?? {});
+      let query: Recordable = merge(
         useSearchForm ? getFieldsValue() : {},
         searchInfo,
         opt?.searchInfo ?? {},
-        defSort,
-        sortInfo,
         filterInfo,
-        opt?.sortInfo ?? {},
         opt?.filterInfo ?? {},
       );
+
       if (beforeFetch && isFunction(beforeFetch)) {
-        params = (await beforeFetch(params)) || params;
+        query = (await beforeFetch(query)) || query;
       }
 
-      const res = await api(params);
+      const res = await api(query, params);
       rawDataSourceRef.value = res;
 
       const isArrayResult = Array.isArray(res);
