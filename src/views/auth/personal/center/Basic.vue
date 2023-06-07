@@ -32,7 +32,7 @@
     setup(props) {
       const userStore = useUserStore();
       const { createMessage } = useMessage();
-      const [registerForm, { validate, setFieldsValue }] = useForm({
+      const [registerForm, { validate, getFieldsValue, setFieldsValue }] = useForm({
         schemas: [
           {
             field: 'avatar',
@@ -87,7 +87,8 @@
 
       async function handleSave() {
         try {
-          const values = await validate();
+          await validate();
+          const values = getFieldsValue();
           await saveUserInfo(values).then(() => {
             createMessage.success('保存成功');
             userStore.refreshCurrentUserAction();

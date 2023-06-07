@@ -1,41 +1,20 @@
 <template>
   <BasicModal @register="register" @ok="handleSave" title="修改密码">
-    <a-alert
-      :type="passwordScore < passwordSecurityLevel ? 'warning' : 'success'"
-      :message="
-        passwordScore < passwordSecurityLevel
-          ? `密码强度不能低于${passwordSecurityLevel}级`
-          : '密码符合要求'
-      "
-      banner
-    />
     <BasicForm @register="registerForm" :model="model" />
   </BasicModal>
 </template>
 <script lang="ts">
-  import { defineComponent, onMounted, ref } from 'vue';
+  import { defineComponent, ref } from 'vue';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicForm, useForm } from '/@/components/Form';
   import { changePassword } from '/@/api/auth/sysUserPersonal';
   import { encryptByMd5 } from '/@/utils/cipher';
   import { useMessage } from '/@/hooks/web/useMessage';
-  import { getByKey } from '/@/api/sys/sysConfig';
+  import { checkPassword } from '/@/utils/validator';
   export default defineComponent({
     components: { BasicModal, BasicForm },
     setup() {
       const model = ref({});
-      // 后台配置的密码等级
-      const passwordSecurityLevel = ref<number>(3);
-
-      const passwordScore = ref<number>(-1);
-
-      onMounted(() => {
-        getByKey('passwordSecurityLevel').then((res) => {
-          if (res && res.value) {
-            passwordSecurityLevel.value = Number(res.value);
-          }
-        });
-      });
 
       const { createMessage } = useMessage();
       const [registerForm, { validate, resetFields }] = useForm({
@@ -50,19 +29,11 @@
           {
             field: 'passwordNew',
             label: '新密码',
-            component: 'StrengthMeter',
+            component: 'InputPassword',
             componentProps: {
-              placeholder: '新密码',
-              onScoreChange: (score) => {
-                passwordScore.value = score + 1;
-              },
+              autocomplete: 'new-password',
             },
-            rules: [
-              {
-                required: true,
-                message: '请输入新密码',
-              },
-            ],
+            rules: [{ required: true, validator: checkPassword, trigger: 'change' }],
           },
         ],
         showActionButtonGroup: false,
@@ -74,10 +45,6 @@
       });
 
       async function handleSave() {
-        if (passwordScore.value < passwordSecurityLevel.value) {
-          createMessage.warn(`密码强度不能低于${passwordSecurityLevel.value}级`);
-          return;
-        }
         try {
           changeOkLoading(true);
           const values = await validate();
@@ -94,7 +61,7 @@
         }
       }
 
-      return { model, passwordScore, passwordSecurityLevel, register, registerForm, handleSave };
+      return { model, register, registerForm, handleSave };
     },
   });
 </script>

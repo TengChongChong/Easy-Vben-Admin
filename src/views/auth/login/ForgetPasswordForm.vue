@@ -38,11 +38,14 @@
         />
       </a-form-item>
 
-      <a-form-item name="password" class="enter-x">
-        <StrengthMeter
+      <a-form-item
+        name="password"
+        class="enter-x"
+        :rules="[{ validator: checkPassword, trigger: 'change' }]"
+      >
+        <a-input-password
           size="large"
           autocomplete="new-password"
-          @score-change="onScoreChange"
           v-model:value="formData.password"
           :placeholder="t('sys.login.password')"
         />
@@ -59,24 +62,19 @@
   </template>
 </template>
 <script lang="ts" setup>
-  import { reactive, ref, computed, unref, onMounted } from 'vue';
+  import { reactive, ref, computed, unref } from 'vue';
   import LoginFormTitle from './LoginFormTitle.vue';
   import { CountdownInput } from '/@/components/CountDown';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { useLoginState, useFormRules, LoginStateEnum } from './useLogin';
-  import { StrengthMeter } from '/@/components/StrengthMeter';
   import { resetPassword, sendEmail, sendSms } from '/@/api/auth/sysUserRetrievePassword';
   import { message } from 'ant-design-vue';
   import { encryptByMd5 } from '/@/utils/cipher';
-  import { getByKey } from '/@/api/sys/sysConfig';
+  import { checkPassword } from '/@/utils/validator';
 
   const { t } = useI18n();
   const { handleBackLogin, getLoginState } = useLoginState();
   const { getFormRules } = useFormRules();
-
-  // 后台配置的密码等级
-  const passwordSecurityLevel = ref<number>(3);
-  const passwordScore = ref<number>(-1);
 
   const formRef = ref();
   const loading = ref(false);
@@ -90,14 +88,6 @@
   });
 
   const getShow = computed(() => unref(getLoginState) === LoginStateEnum.RESET_PASSWORD);
-
-  onMounted(() => {
-    getByKey('passwordSecurityLevel').then((res) => {
-      if (res && res.value) {
-        passwordSecurityLevel.value = Number(res.value);
-      }
-    });
-  });
 
   async function sendCode() {
     try {
@@ -116,19 +106,11 @@
     }
   }
 
-  function onScoreChange(score) {
-    passwordScore.value = score + 1;
-  }
-
   async function handleReset() {
     const form = unref(formRef);
     if (!form) return;
     try {
       await form.validateFields();
-      if (passwordScore.value < passwordSecurityLevel.value) {
-        message.warn(`密码强度不能低于${passwordSecurityLevel.value}级`);
-        return;
-      }
       const { username, password, code } = formData;
       resetPassword(username, code, encryptByMd5(password.trim())).then(() => {
         message.success('重置成功');

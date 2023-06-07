@@ -144,7 +144,7 @@
         resetPassword(id).then((password) => {
           Modal.success({
             title: '重置成功',
-            content: `密码已重置为 ${password}`,
+            content: `密码已重置为 ${password}，请告知用户使用新密码登录`,
           });
         });
       };

@@ -21,6 +21,7 @@
   import { add, save } from '/@/api/auth/sysUser';
   import { SysUser } from '/@/api/auth/model/sysUserModel';
   import { AButtonSave } from '/@/components/Button';
+  import { checkPassword } from '/@/utils/validator';
 
   export default defineComponent({
     name: 'SysUserInput',
@@ -54,11 +55,11 @@
             field: 'password',
             label: '密码',
             component: 'InputPassword',
-            helpMessage: '如不填写将使用平台默认密码',
-            rules: [{ max: 32, message: '密码不能超过32个字符', trigger: 'blur' }],
+            rules: [],
             componentProps: {
               autocomplete: 'new-password',
             },
+            show: ({ values }) => !values.id,
           },
           {
             field: 'roleIdList',
@@ -119,6 +120,10 @@
       });
 
       const [registerDrawer, { changeLoading, closeDrawer }] = useDrawerInner(async (data) => {
+        await setForm(data);
+      });
+
+      async function setForm(data) {
         changeLoading(true);
 
         // 重置表单
@@ -132,22 +137,22 @@
           },
         });
 
-        if (data.value) {
+        if (data.id) {
           // 不允许在此页面修改密码
           await updateSchema({
             field: 'password',
-            ifShow: false,
+            rules: [],
           });
         } else {
           await updateSchema({
             field: 'password',
-            ifShow: true,
+            rules: [{ required: true, validator: checkPassword, trigger: 'change' }],
           });
         }
 
         await setFieldsValue(data);
         changeLoading(false);
-      });
+      }
 
       async function handleSubmit(callback: (_: SysUser) => any) {
         try {
@@ -178,10 +183,7 @@
       async function handleSaveAndAdd() {
         await handleSubmit((res) => {
           add(res.deptId!).then(async (data) => {
-            // 重置表单
-            await resetFields();
-            await setFieldsValue(data);
-            changeLoading(false);
+            await setForm(data);
           });
         });
       }
