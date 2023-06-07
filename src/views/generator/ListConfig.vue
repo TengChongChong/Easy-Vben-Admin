@@ -179,6 +179,7 @@
     props: {
       generatorConfig: {
         type: Object as PropType<GeneratorConfig>,
+        a: [Array as PropType<string[]>, Array as PropType<number[]>, Array as PropType<Date[]>],
       },
     },
     emits: ['next', 'prev', 'update-config'],

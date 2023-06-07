@@ -21,6 +21,7 @@ export const PREFERENCE_SETTING = {
         'deptId',
         'orderNo',
         'icon',
+        'url',
       ],
     },
     table: {

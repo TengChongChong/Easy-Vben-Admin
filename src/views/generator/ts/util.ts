@@ -228,11 +228,18 @@ function getFieldConfig(
   let isExclude = false;
   if (FORM_TYPE.QUERY === formType) {
     isExclude = PREFERENCE_SETTING.list.query.exclude.indexOf(propertyName) > -1;
+    if (
+      comment.indexOf('头像') > -1 ||
+      comment.indexOf('封面') > -1 ||
+      comment.indexOf('url') > -1
+    ) {
+      isExclude = true;
+    }
   } else if (FORM_TYPE.INPUT === formType) {
     isExclude = PREFERENCE_SETTING.input.exclude.indexOf(propertyName) > -1;
   }
   // 是否需要显示
-  const isEnable = !keyFlag && !isExclude;
+  const isEnable = !keyFlag && !isExclude && comment.indexOf('保留字段') === -1;
 
   // 公共参数
   const config: FieldConfig = {
