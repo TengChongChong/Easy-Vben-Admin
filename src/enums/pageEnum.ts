@@ -8,3 +8,5 @@ export enum PageEnum {
   // 错误日志
   ERROR_LOG_PAGE = '/error-log/list',
 }
+
+export const PageWrapperFixedHeightKey = 'PageWrapperFixedHeight';
