@@ -26,7 +26,7 @@
       resultField: propTypes.string.def(''),
       afterFetch: { type: Function as PropType<Fn> },
     },
-    emits: ['options-change', 'change', 'update:value'],
+    emits: ['options-change', 'change'],
     setup(props, { attrs, emit }) {
       const treeData = ref<Recordable[]>([]);
       const isFirstLoaded = ref<Boolean>(false);
@@ -39,6 +39,7 @@
       });
 
       function handleChange(...args) {
+        console.log('change', args);
         emit('change', ...args);
       }
 

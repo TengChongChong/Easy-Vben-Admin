@@ -37,7 +37,7 @@
     setup() {
       const { setTitle } = useTabs();
       const { currentRoute } = useRouter();
-      const id = ref<string>(unref(currentRoute).params?.id as string);
+      const { id } = unref(currentRoute).params;
       const exceptionInfo = ref<SysException>();
 
       const trace = ref<string[]>([]);
@@ -47,7 +47,7 @@
       });
 
       const getInfo = () => {
-        get(unref(id)).then((res) => {
+        get(id as string).then((res) => {
           // 设置标题
           setTitle(`详情 > ${res.url}`);
 

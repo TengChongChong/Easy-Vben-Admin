@@ -9,9 +9,26 @@
     >
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'verificationResults'">
-          <a-tag :color="record.verificationStatus === '1' ? 'green' : 'red'">
-            {{ record.verificationStatus === '1' ? '验证通过' : record.verificationResults }}
-          </a-tag>
+          <template v-if="record.verificationStatus === '1'">
+            <a-typography-text type="success">验证通过</a-typography-text>
+          </template>
+          <template v-else>
+            <a-tooltip color="red">
+              <template #title>
+                <template
+                  v-for="(item, index) in record.verificationResults.split(';')"
+                  :key="index"
+                >
+                  <div>{{ item }}</div>
+                </template>
+              </template>
+              <div class="truncate">
+                <a-typography-text type="danger">
+                  {{ record.verificationResults }}
+                </a-typography-text>
+              </div>
+            </a-tooltip>
+          </template>
         </template>
         <template v-if="column.key === 'action'">
           <div class="basic-table-action center">
@@ -135,6 +152,7 @@
           dataIndex: 'verificationResults',
           sorter: true,
           width: 160,
+          fixed: 'right',
         },
       ];
 

@@ -28,7 +28,7 @@
 </template>
 <script lang="ts" setup>
   import { useDictStore } from '/@/store/modules/dict';
-  import { defineComponent, onMounted, ref, watch } from 'vue';
+  import { onMounted, ref, watch } from 'vue';
   import { Icon } from '/@/components/Icon';
   import { isArray, isNumber, isString } from '/@/utils/is';
   import { SysDict } from '/@/api/sys/model/sysDictModel';
@@ -44,9 +44,6 @@
     // 当有多个字典时，字典与字典直接的分隔符
     separator: propTypes.string.def(' /'),
   });
-
-  // @ts-ignore
-  defineComponent(Icon);
 
   /**
    * 设置字典
