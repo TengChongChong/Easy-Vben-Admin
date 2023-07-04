@@ -17,6 +17,7 @@
   import { add, save } from '/@/api/sys/sysDictType';
   import { SysDictType } from '/@/api/sys/model/sysDictTypeModel';
   import { AButtonCancel, AButtonSave } from '/@/components/Button';
+  import { message } from 'ant-design-vue';
 
   export default defineComponent({
     name: 'SysDictTypeInput',
@@ -45,6 +46,7 @@
           changeLoading(true);
           await validate();
           await save(getFieldsValue() as SysDictType).then((res) => {
+            message.success('保存成功');
             emit('success');
             callback(res);
           });

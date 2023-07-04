@@ -23,6 +23,7 @@
   import { RoleEnum } from '/@/enums/roleEnum';
   import { SchedulerJob } from '/@/api/scheduler/model/SchedulerJobModel';
   import { AButtonSave } from '/@/components/Button';
+  import { message } from 'ant-design-vue';
 
   export default defineComponent({
     name: 'SchedulerJobInput',
@@ -113,6 +114,7 @@
           changeLoading(true);
           await validate();
           await save(getFieldsValue() as SchedulerJob).then((res) => {
+            message.success('保存成功');
             emit('success');
             callback(res);
           });

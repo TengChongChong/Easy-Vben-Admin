@@ -28,6 +28,7 @@
   import { SysDeptType } from '/@/api/auth/model/sysDeptTypeModel';
   import { listToTree } from '/@/utils/helper/treeHelper';
   import { TreeNode } from '/@/api/model/treeModel';
+  import { message } from 'ant-design-vue';
 
   export default defineComponent({
     name: 'AuthDeptTypeInput',
@@ -142,6 +143,7 @@
           await validate();
           const values = getFieldsValue();
           await save(values).then((res) => {
+            message.success('保存成功');
             emit('success');
             callback(res);
           });

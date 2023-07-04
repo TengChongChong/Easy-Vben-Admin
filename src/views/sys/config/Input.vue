@@ -23,6 +23,7 @@
   import { SysConfig } from '/@/api/sys/model/sysConfigModel';
   import { RoleEnum } from '/@/enums/roleEnum';
   import { AButtonSave } from '/@/components/Button';
+  import { message } from 'ant-design-vue';
 
   export default defineComponent({
     name: 'SysConfigInput',
@@ -127,6 +128,7 @@
           changeLoading(true);
           await validate();
           await save(getFieldsValue() as SysConfig).then((res) => {
+            message.success('保存成功');
             emit('success');
             callback(res);
           });

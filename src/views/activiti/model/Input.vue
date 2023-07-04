@@ -16,6 +16,7 @@
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { ActivitiModel } from '/@/api/activiti/model/activitiModelModel';
   import { AButtonCancel, AButtonSave } from '/@/components/Button';
+  import { message } from 'ant-design-vue';
 
   export default defineComponent({
     name: 'ActivitiModelInput',
@@ -83,6 +84,7 @@
           }
           delete values.file;
           await save(values).then((res) => {
+            message.success('保存成功');
             emit('success');
             callback(res);
           });

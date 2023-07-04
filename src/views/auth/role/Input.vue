@@ -43,6 +43,7 @@
   import { selectAll } from '/@/api/auth/sysPermission';
   import { convertCheckedKeys, listToTree } from '/@/utils/helper/treeHelper';
   import { RoleEnum } from '/@/enums/roleEnum';
+  import { message } from 'ant-design-vue';
 
   export default defineComponent({
     name: 'AuthRoleInput',
@@ -148,6 +149,7 @@
             values.permissionIds = unref(allSelectedNodes);
           }
           await save(values as SysRole).then((res) => {
+            message.success('保存成功');
             emit('success');
             callback(res);
           });

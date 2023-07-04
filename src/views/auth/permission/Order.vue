@@ -17,7 +17,7 @@
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
   import { saveOrder, selectAll } from '/@/api/auth/sysPermission';
   import { listToTree, treeToList } from '/@/utils/helper/treeHelper';
-  import { TreeProps } from 'ant-design-vue';
+  import { message, TreeProps } from 'ant-design-vue';
   import { AntTreeNodeDropEvent, TreeDataItem } from 'ant-design-vue/lib/tree';
   import { SysPermission } from '/@/api/auth/model/sysPermissionModel';
 
@@ -65,6 +65,7 @@
 
         await saveOrder(params)
           .then(() => {
+            message.success('保存成功');
             closeDrawer();
             emit('success');
           })

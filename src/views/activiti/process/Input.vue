@@ -13,6 +13,7 @@
   import { convertToModel } from '/@/api/activiti/activitiProcess';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { AButtonCancel, AButtonSave } from '/@/components/Button';
+  import { message } from 'ant-design-vue';
 
   export default defineComponent({
     name: 'ActivitiProcessInput',
@@ -65,6 +66,7 @@
           changeLoading(true);
           const values = await validate();
           await convertToModel(values).then((res) => {
+            message.success('保存成功');
             emit('success');
             callback(res);
           });

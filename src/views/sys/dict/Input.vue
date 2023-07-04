@@ -25,6 +25,7 @@
   import { isArray, isString } from '/@/utils/is';
   import { useDictStore } from '/@/store/modules/dict';
   import { AButtonSave } from '/@/components/Button';
+  import { message } from 'ant-design-vue';
 
   export default defineComponent({
     name: 'SysDictInput',
@@ -164,6 +165,7 @@
             values.parentCode = '';
           }
           await save(values as SysDict).then((res) => {
+            message.success('保存成功');
             emit('success');
             callback(res);
           });

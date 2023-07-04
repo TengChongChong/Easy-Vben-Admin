@@ -25,6 +25,7 @@
   import { listToTree } from '/@/utils/helper/treeHelper';
   import { TreeNode } from '/@/api/model/treeModel';
   import { AButtonSave } from '/@/components/Button';
+  import { message } from 'ant-design-vue';
 
   export default defineComponent({
     name: 'AuthPermissionInput',
@@ -208,6 +209,7 @@
             values.parentCode = '';
           }
           await save(values).then((res) => {
+            message.success('保存成功');
             emit('success');
             callback(res);
           });

@@ -26,6 +26,7 @@
   import { SysImportExcelTemplate } from '/@/api/sys/model/sysImportExcelTemplateModel';
   import { selectTable } from '/@/api/generator/generator';
   import { SelectModel } from '/@/api/model/selectModel';
+  import { message } from 'ant-design-vue';
 
   export default defineComponent({
     name: 'SysImportExcelTemplateInput',
@@ -160,6 +161,7 @@
           changeLoading(true);
           await validate();
           await save(getFieldsValue() as SysImportExcelTemplate).then((res) => {
+            message.success('保存成功');
             emit('success');
             callback(res);
           });

@@ -22,6 +22,7 @@
   import { SysUser } from '/@/api/auth/model/sysUserModel';
   import { AButtonSave } from '/@/components/Button';
   import { checkPassword } from '/@/utils/validator';
+  import { message } from 'ant-design-vue';
 
   export default defineComponent({
     name: 'SysUserInput',
@@ -164,6 +165,7 @@
             ...values,
             deptId: unref(deptId),
           }).then((res) => {
+            message.success('保存成功');
             emit('success');
             callback(res);
           });

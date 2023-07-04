@@ -18,7 +18,7 @@
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
   import { saveOrder, selectAll } from '/@/api/auth/sysDeptType';
   import { listToTree, treeToList } from '/@/utils/helper/treeHelper';
-  import { TreeProps } from 'ant-design-vue';
+  import { message, TreeProps } from 'ant-design-vue';
   import { AntTreeNodeDropEvent, TreeDataItem } from 'ant-design-vue/lib/tree';
   import { SysDeptType } from '/@/api/auth/model/sysDeptTypeModel';
 
@@ -66,6 +66,7 @@
 
         await saveOrder(params)
           .then(() => {
+            message.success('保存成功');
             closeDrawer();
             emit('success');
           })

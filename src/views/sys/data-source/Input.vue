@@ -22,6 +22,7 @@
   import { save, add } from '/@/api/sys/sysDataSource';
   import { SysDataSource } from '/@/api/sys/model/sysDataSourceModel';
   import { AButtonSave } from '/@/components/Button';
+  import { message } from 'ant-design-vue';
 
   export default defineComponent({
     name: 'SysDataSourceInput',
@@ -99,6 +100,7 @@
           changeLoading(true);
           await validate();
           await save(getFieldsValue() as SysDataSource).then((res) => {
+            message.success('保存成功');
             emit('success');
             callback(res);
           });
