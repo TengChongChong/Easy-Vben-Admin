@@ -130,11 +130,11 @@
         if (!unref(getIsShowLogo) && !unref(getIsMobile)) return null;
 
         return (
+          // 如果项名称字数较多，可设置展开状态下logo隐藏，showLogo={unref(getCollapsed)}
           <AppLogo
             showTitle={!unref(getCollapsed)}
             class={unref(getLogoClass)}
             theme={unref(getComputedMenuTheme)}
-            showLogo={unref(getCollapsed)}
           />
         );
       }
