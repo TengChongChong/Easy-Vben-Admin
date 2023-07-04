@@ -30,6 +30,11 @@
               label: '适用于常规表单，6个及以上字段',
               value: 'drawer',
             },
+            {
+              name: '页面 - Page',
+              label: '适用于复杂表单，使用新标签页打开',
+              value: 'page',
+            },
           ]"
           v-model:value="model[field]"
         />
