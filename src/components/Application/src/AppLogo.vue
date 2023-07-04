@@ -24,7 +24,7 @@
      */
     theme: { type: String, validator: (v: string) => ['light', 'dark'].includes(v) },
     /**
-     * ÊÇ·ñÏÔÊ¾ logo
+     * æ˜¯å¦æ˜¾ç¤º logo
      */
     showLogo: { type: Boolean, default: true },
     /**
