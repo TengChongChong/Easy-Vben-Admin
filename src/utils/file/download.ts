@@ -13,6 +13,26 @@ export function downloadFileById(id: string) {
 }
 
 /**
+ * 下载SysFile中文件，当文件有多个时会打包为zip
+ *
+ * @param parentId 业务数据id
+ * @param type 文件类型，为空则下载所有业务相关文件
+ * @param displayName 显示名称，如果不传，当只有一个文件时会显示上传时的文件名称，多个文件使用UUID名称，建议传入此参数（无需文件后缀）
+ */
+export function downloadSysFile(
+  parentId: string,
+  type: string | undefined | null = '',
+  displayName: string | undefined | null = '',
+) {
+  const globSetting = useGlobSetting();
+  downloadByUrl({
+    url: `${globSetting.apiUrl}/download/sys/file?parentId=${parentId}&type=${
+      type || ''
+    }&displayName=${displayName || ''}`,
+  });
+}
+
+/**
  * Download online pictures
  * @param url
  * @param filename
