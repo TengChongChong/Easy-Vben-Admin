@@ -1,28 +1,28 @@
-import { CmsSite } from '/@/api/cms/model/cmsSiteModel';
+import { CmsColumn } from '/@/api/cms/model/cmsColumnModel';
 import { Page } from '/@/api/model/pageModel';
 import { TreeNodeModel } from '/@/api/model/treeModel';
 import { defHttp } from '/@/utils/http/axios';
-import { CmsMedia } from '/@/api/cms/model/cmsMediaModel';
 
 // base url
-const BASE_URL = '/api/auth/cms/site';
+const BASE_URL = '/api/auth/cms/column';
 /**
  * 查询数据（无分页）
  *
  * @param params 查询条件
  */
-export function select(params: CmsSite) {
-  return defHttp.get<Page<CmsSite>>({
+export function select(params: CmsColumn) {
+  return defHttp.get<Page<CmsColumn>>({
     url: BASE_URL,
-    params: params,
+    params,
   });
 }
 /**
  * 查询所有数据（Tree）
  */
-export function selectAll() {
+export function selectAll(params: CmsColumn) {
   return defHttp.get<TreeNodeModel[]>({
     url: `${BASE_URL}/all`,
+    params,
   });
 }
 
@@ -32,7 +32,7 @@ export function selectAll() {
  * @param id id
  */
 export function get(id: string) {
-  return defHttp.get<CmsSite>({
+  return defHttp.get<CmsColumn>({
     url: `${BASE_URL}/${id}`,
   });
 }
@@ -42,7 +42,7 @@ export function get(id: string) {
  * @param parentId 父id
  */
 export function add(parentId: string | undefined) {
-  return defHttp.get<CmsSite>({
+  return defHttp.get<CmsColumn>({
     url: `${BASE_URL}/add/${parentId || ''}`,
   });
 }
@@ -63,8 +63,8 @@ export function remove(ids: string) {
  *
  * @param params 表单数据
  */
-export function save(params: CmsSite) {
-  return defHttp.post<CmsSite>({
+export function save(params: CmsColumn) {
+  return defHttp.post<CmsColumn>({
     url: BASE_URL,
     data: params,
   });
@@ -75,8 +75,8 @@ export function save(params: CmsSite) {
  *
  * @param params 表单数据
  */
-export function saveOrder(params: CmsSite[]) {
-  return defHttp.post<CmsSite>({
+export function saveOrder(params: CmsColumn[]) {
+  return defHttp.post<CmsColumn>({
     url: `${BASE_URL}/order`,
     data: params,
   });
@@ -87,33 +87,9 @@ export function saveOrder(params: CmsSite[]) {
  *
  * @param params 查询条件
  */
-export function exportData(params: CmsSite) {
+export function exportData(params: CmsColumn) {
   return defHttp.get<string>({
     url: `${BASE_URL}/export/data`,
     params,
-  });
-}
-
-/**
- * 设置用户选中站点
- *
- * @param params 站点
- * @return true/false
- */
-export function setUserActiveSite(params: CmsMedia) {
-  return defHttp.post<boolean>({
-    url: `${BASE_URL}/set/user/active/site`,
-    data: params,
-  });
-}
-
-/**
- * 获取用户当前选中站点
- *
- * @return 站点信息
- */
-export function getUserActiveSite() {
-  return defHttp.get<CmsMedia>({
-    url: `${BASE_URL}/get/user/active/site`,
   });
 }

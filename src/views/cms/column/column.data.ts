@@ -10,13 +10,8 @@ export const searchFormSchema: FormSchema[] = [
     component: 'Input',
   },
   {
-    field: 'domainName',
-    label: '域名',
-    component: 'Input',
-  },
-  {
-    field: 'deploymentPath',
-    label: '部署路径',
+    field: 'slug',
+    label: '别名',
     component: 'Input',
   },
 ];
@@ -26,34 +21,36 @@ export const columns: BasicColumn[] = [
   {
     title: '名称',
     dataIndex: 'name',
-    width: 300,
-  },
-  {
-    title: '域名',
-    dataIndex: 'domainName',
     width: 200,
   },
   {
-    title: '部署路径',
-    dataIndex: 'deploymentPath',
-    width: 300,
+    title: '别名',
+    dataIndex: 'slug',
+    width: 200,
   },
   {
-    title: '主题名称',
-    dataIndex: 'theme',
-    width: 160,
+    title: '可发布文章',
+    dataIndex: 'isRelease',
+    width: 150,
+    format: 'dict|whether',
+    filters: 'dict|whether',
   },
+  // {
+  //   title: '封面比例',
+  //   dataIndex: 'coverProportion',
+  //   width: 160,
+  // },
   {
     title: '状态',
     dataIndex: 'status',
-    width: 120,
+    width: 150,
     format: 'dict|commonStatus',
     filters: 'dict|commonStatus',
   },
   {
     title: '更新人',
     dataIndex: 'editUser',
-    width: 120,
+    width: 160,
   },
   {
     title: '更新时间',

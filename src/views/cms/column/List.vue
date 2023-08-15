@@ -7,14 +7,14 @@
       :rowSelection="{ type: 'checkbox', onChange: onSelectChange }"
     >
       <template #toolbar>
-        <a-button-add auth="cms:site:save" @click="handleCreate" />
+        <a-button-add auth="cms:column:save" @click="handleCreate" />
         <a-button-remove-batch
-          auth="cms:site:remove"
+          auth="cms:column:remove"
           :id="checkedKeys"
           :api="remove"
           @success="reload"
         />
-        <Authority value="cms:site:save">
+        <Authority value="cms:column:save">
           <a-button @click="handleOrder">
             <template #icon> <Icon icon="ant-design:ordered-list-outlined" /> </template> 排序
           </a-button>
@@ -26,85 +26,97 @@
         <a-button @click="collapseAll">
           <template #icon> <Icon icon="ant-design:minus-outlined" /> </template>折叠全部
         </a-button>
+        <a-button-import auth="cms:column:import:data" import-code="cms:column" />
         <a-button-export
           :loading="exportBtnLoading"
-          auth="cms:site:select"
+          auth="cms:column:select"
           @click="handelExportData"
         />
       </template>
 
       <template #bodyCell="{ column, record }">
+        <!--        <template v-if="column.key === 'coverProportion'">-->
+        <!--          <template v-if="record.coverProportionWidth && record.coverProportionHeight">-->
+        <!--            {{ record.coverProportionWidth }}:{{ record.coverProportionHeight }}-->
+        <!--          </template>-->
+        <!--          <template v-else>任意比例</template>-->
+        <!--        </template>-->
         <template v-if="column.key === 'action'">
           <div class="basic-table-action center">
-            <a-button-add-sub small auth="cms:site:save" :id="record.id" @click="handleCreate" />
+            <a-button-add-sub small auth="cms:column:save" :id="record.id" @click="handleCreate" />
             <a-divider type="vertical" />
-            <a-button-edit small auth="cms:site:save" :id="record.id" @click="handleEdit" />
+            <a-button-edit small auth="cms:column:save" :id="record.id" @click="handleEdit" />
             <a-divider type="vertical" />
             <a-button-remove
               small
-              auth="cms:site:remove"
+              auth="cms:column:remove"
               :id="record.id"
               :api="remove"
               @success="reload"
             />
-            <template v-if="record.theme">
-              <a-divider type="vertical" />
-              <a-tooltip>
-                <template #title>预览</template>
-                <a target="_blank" :href="`${apiUrl}/cms/route/${record.id}`">
-                  <a-button type="link" size="small">
-                    <template #icon>
-                      <Icon icon="ant-design:eye-outlined" />
-                    </template>
-                  </a-button>
-                </a>
-              </a-tooltip>
-            </template>
+            <a-divider type="vertical" />
+            <a-tooltip>
+              <template #title>预览</template>
+              <a target="_blank" :href="`${apiUrl}/cms/route/${record.siteId}/column/${record.id}`">
+                <a-button type="link" size="small">
+                  <template #icon>
+                    <Icon icon="ant-design:eye-outlined" />
+                  </template>
+                </a-button>
+              </a>
+            </a-tooltip>
           </div>
         </template>
       </template>
     </BasicTable>
     <!-- 表单 -->
-    <CmsSiteInput @register="registerDrawer" @success="reload" />
-    <CmsSiteOrder @register="registerOrderDrawer" @success="reload" />
+    <CmsColumnInput @register="registerDrawer" @success="reload" />
+    <CmsColumnOrder @register="registerOrderDrawer" @success="reload" />
+    <!--  站点切换工具  -->
+    <SiteSelect />
   </PageWrapper>
 </template>
 <script lang="ts">
-  import { defineComponent, ref, reactive } from 'vue';
+  import { defineComponent, ref, reactive, watch } from 'vue';
   import { PageWrapper } from '/@/components/Page';
   import { BasicTable, useTable } from '/@/components/Table';
   import { clearTreeEmptyChildren, listToTree } from '/@/utils/helper/treeHelper';
-  import { searchFormSchema, columns } from '/@/views/cms/site/site.data';
+  import { searchFormSchema, columns } from '/@/views/cms/column/column.data';
   import { Icon } from '/@/components/Icon';
   import { useDrawer } from '/@/components/Drawer';
   import {
     AButtonAdd,
     AButtonEdit,
+    AButtonAddSub,
     AButtonRemove,
     AButtonRemoveBatch,
+    AButtonImport,
     AButtonExport,
-    AButtonAddSub,
   } from '/@/components/Button';
   import { downloadFileById } from '/@/utils/file/download';
   import { Authority } from '/@/components/Authority';
-  import { add, remove, select, get, exportData } from '/@/api/cms/cmsSite';
-  import CmsSiteInput from '/@/views/cms/site/Input.vue';
-  import CmsSiteOrder from '/@/views/cms/site/Order.vue';
+  import { add, remove, select, get, exportData } from '/@/api/cms/cmsColumn';
+  import CmsColumnInput from '/@/views/cms/column/Input.vue';
+  import CmsColumnOrder from '/@/views/cms/column/Order.vue';
+  import SiteSelect from '/@/views/cms/site/components/SiteSelect/index.vue';
+  import { useCmsStore } from '/@/store/modules/cms';
   import { useGlobSetting } from '/@/hooks/setting';
 
   export default defineComponent({
-    name: 'CmsSiteList',
+    name: 'CmsColumnList',
     components: {
-      AButtonAddSub,
+      SiteSelect,
       PageWrapper,
       Authority,
       Icon,
-      CmsSiteInput,
-      CmsSiteOrder,
+      CmsColumnInput,
+      CmsColumnOrder,
       AButtonAdd,
+      AButtonAddSub,
       AButtonRemoveBatch,
       AButtonRemove,
       AButtonEdit,
+      AButtonImport,
       AButtonExport,
       BasicTable,
     },
@@ -121,11 +133,24 @@
       const [registerDrawer, { openDrawer }] = useDrawer();
       // 排序
       const [registerOrderDrawer, { openDrawer: openOrderDrawer }] = useDrawer();
+
+      // 监听切换站点
+      const cmsStore = useCmsStore();
+
+      watch(
+        () => cmsStore.getCurrentSite,
+        () => {
+          if (cmsStore.getCurrentSite) {
+            reload();
+          }
+        },
+      );
+
       /**
        * 初始化表格
        */
       const [registerTable, { reload, getForm, expandAll, collapseAll }] = useTable({
-        title: '站点',
+        title: '栏目',
         api: select,
         afterFetch: (items) => {
           const tree = listToTree(items);
@@ -140,22 +165,15 @@
           schemas: searchFormSchema,
         },
         actionColumn: {
-          width: 160,
+          width: 140,
           title: '操作',
           key: 'action',
         },
       });
 
-      // onActivated()
-
-      /**
-       * 新增
-       *
-       * @param id 上级id
-       */
       const handleCreate = (id: string | undefined) => {
         add(id).then((data) => {
-          openDrawer(true, data);
+          openDrawer(true, { ...data, siteId: cmsStore.getCurrentSite?.id });
         });
       };
 

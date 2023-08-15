@@ -22,6 +22,7 @@
   import { CmsSite } from '/@/api/cms/model/cmsSiteModel';
   import { TreeNode } from '/@/api/model/treeModel';
   import { listToTree } from '/@/utils/helper/treeHelper';
+  import { message } from 'ant-design-vue';
   export default defineComponent({
     name: 'CmsSiteInput',
     components: { BasicDrawer, BasicForm, AButtonSave },
@@ -69,11 +70,13 @@
             label: '关键字',
             component: 'InputTextArea',
             componentProps: {
-              placeholder: 'SEO，用于首页meta[name="keywords"]值，多个关键字使用,隔开',
               autoSize: {
                 minRows: 2,
                 maxRows: 7,
               },
+            },
+            itemProps: {
+              extra: 'SEO，用于首页meta[name="keywords"]值，多个关键字使用,隔开',
             },
             rules: [{ max: 900, message: '关键字不能超过900个字符', trigger: 'blur' }],
           },
@@ -82,11 +85,13 @@
             label: '描述',
             component: 'InputTextArea',
             componentProps: {
-              placeholder: 'SEO，用于首页meta[name="description"]值',
               autoSize: {
                 minRows: 2,
                 maxRows: 7,
               },
+            },
+            itemProps: {
+              extra: 'SEO，用于首页meta[name="description"]值',
             },
             rules: [{ max: 900, message: '描述不能超过900个字符', trigger: 'blur' }],
           },
@@ -95,23 +100,29 @@
             label: '域名',
             required: true,
             component: 'Input',
-            componentProps: { placeholder: '站点域名，例如：http://www.sample.com' },
             rules: [{ max: 255, message: '域名不能超过255个字符', trigger: 'blur' }],
+            itemProps: {
+              extra: '站点域名，例如：http://www.sample.com',
+            },
           },
           {
             field: 'deploymentPath',
             label: '部署路径',
             required: true,
             component: 'Input',
-            componentProps: { placeholder: '站点静态文件存放路径，例如/home/soft/site/xxx' },
             rules: [{ max: 255, message: '部署路径不能超过255个字符', trigger: 'blur' }],
+            itemProps: {
+              extra: '站点静态文件存放路径，例如/home/soft/site/xxx',
+            },
           },
           {
             field: 'theme',
-            label: '主题路径',
+            label: '主题名称',
             component: 'Input',
-            componentProps: { placeholder: '站点模板路径' },
-            rules: [{ max: 32, message: '主题路径不能超过32个字符', trigger: 'blur' }],
+            rules: [{ max: 32, message: '主题名称不能超过32个字符', trigger: 'blur' }],
+            itemProps: {
+              extra: '站点模板路径',
+            },
           },
           {
             field: 'status',
@@ -141,6 +152,7 @@
           changeLoading(true);
           await validate();
           await save(getFieldsValue() as CmsSite).then((res) => {
+            message.success('保存成功');
             emit('success');
             callback(res);
           });

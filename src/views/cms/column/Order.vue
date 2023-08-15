@@ -3,7 +3,7 @@
     v-bind="$attrs"
     @register="registerDrawer"
     showFooter
-    title="站点排序"
+    title="栏目排序"
     width="30%"
     @ok="handleSubmit"
   >
@@ -15,14 +15,14 @@
 <script lang="ts">
   import { defineComponent, ref } from 'vue';
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
-  import { saveOrder, selectAll } from '/@/api/cms/cmsSite';
+  import { saveOrder, selectAll } from '/@/api/cms/cmsColumn';
   import { listToTree, treeToList } from '/@/utils/helper/treeHelper';
   import { message, TreeProps } from 'ant-design-vue';
   import { AntTreeNodeDropEvent, TreeDataItem } from 'ant-design-vue/lib/tree';
-  import { CmsSite } from '/@/api/cms/model/cmsSiteModel';
+  import { CmsColumn } from '/@/api/cms/model/cmsColumnModel';
 
   export default defineComponent({
-    name: 'CmsSiteOrder',
+    name: 'CmsColumnOrder',
     components: { BasicDrawer },
     emits: ['success', 'register'],
     setup(_, { emit }) {
@@ -53,7 +53,7 @@
         changeLoading(true);
         setProps(treeData.value, undefined);
 
-        const params: CmsSite[] = [];
+        const params: CmsColumn[] = [];
         treeToList(treeData.value).map((item) => {
           const { id, parentId, orderNo } = item;
           params.push({

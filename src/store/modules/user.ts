@@ -11,6 +11,7 @@ import { useI18n } from '/@/hooks/web/useI18n';
 import { useMessage } from '/@/hooks/web/useMessage';
 import { router } from '/@/router';
 import { usePermissionStore } from '/@/store/modules/permission';
+import { useCmsStore } from '/@/store/modules/cms';
 import { RouteRecordRaw } from 'vue-router';
 import { PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic';
 import { isArray } from '/@/utils/is';
@@ -172,6 +173,11 @@ export const useUserStore = defineStore({
       this.setToken(undefined);
       this.setSessionTimeout(false);
       this.setUserInfo(null);
+
+      // 清除选中站点
+      const cmsStore = useCmsStore();
+      cmsStore.clearCurrentSite();
+
       goLogin && router.push(PageEnum.BASE_LOGIN);
     },
 
