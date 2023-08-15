@@ -22,7 +22,7 @@ export interface MultipleTabState {
 
 function handleGotoPage(router: Router) {
   const go = useGo(router);
-  go(unref(router.currentRoute).path, true);
+  go(unref(router.currentRoute).fullPath, true);
 }
 
 const getToTarget = (tabItem: RouteLocationNormalized) => {
@@ -47,14 +47,14 @@ export const useMultipleTabStore = defineStore({
     lastDragEndIndex: 0,
   }),
   getters: {
-    getTabList(): RouteLocationNormalized[] {
-      return this.tabList;
+    getTabList(state): RouteLocationNormalized[] {
+      return state.tabList;
     },
-    getCachedTabList(): string[] {
-      return Array.from(this.cacheTabList);
+    getCachedTabList(state): string[] {
+      return Array.from(state.cacheTabList);
     },
-    getLastDragEndIndex(): number {
-      return this.lastDragEndIndex;
+    getLastDragEndIndex(state): number {
+      return state.lastDragEndIndex;
     },
   },
   actions: {
@@ -153,7 +153,7 @@ export const useMultipleTabStore = defineStore({
         if (dynamicLevel > 0) {
           // 如果动态路由层级大于 0 了，那么就要限制该路由的打开数限制了
           // 首先获取到真实的路由，使用配置方式减少计算开销.
-          // const nickname: string = path.match(/(\S*)\//)![1];
+          // const realName: string = path.match(/(\S*)\//)![1];
           const realPath = meta?.realPath ?? '';
           // 获取到已经打开的动态路由数, 判断是否大于某一个值
           if (
@@ -186,6 +186,7 @@ export const useMultipleTabStore = defineStore({
       if (path !== tab.path) {
         // Closed is not the activation tab
         close(tab);
+        this.updateCacheTab();
         return;
       }
 

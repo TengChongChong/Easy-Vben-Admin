@@ -13,6 +13,7 @@
           class="tree-sm"
           v-model:value="model[field]"
           :treeData="treeData"
+          :height="500"
           ref="treeRef"
           @check="onTreeSelectChange"
           checkable

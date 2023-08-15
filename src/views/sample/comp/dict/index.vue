@@ -22,7 +22,7 @@
             <a-descriptions :column="1" bordered>
               <a-descriptions-item label="性别">
                 <dict-tag dictType="sex" value="1" />
-                <dict-tag dictType="sex" value="2" />
+                <dict-tag dictType="sex" :value="2" />
               </a-descriptions-item>
               <a-descriptions-item label="用户状态">
                 <dict-tag dictType="userStatus" value="1" />

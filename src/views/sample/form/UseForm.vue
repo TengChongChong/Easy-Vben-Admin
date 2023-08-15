@@ -93,6 +93,9 @@
       field: 'field3',
       component: 'DatePicker',
       label: '字段3',
+      componentProps: {
+        format: 'YYYY-MM',
+      },
       colProps: {
         span: 8,
       },
@@ -222,7 +225,7 @@
         actionColOptions: {
           span: 24,
         },
-        fieldMapToTime: [['fieldTime', ['startTime', 'endTime'], 'YYYY-MM']],
+        fieldMapToTime: [['fieldTime', ['startTime', 'endTime'], 'YYYY-MM-DD']],
       });
 
       async function handleLoad() {
