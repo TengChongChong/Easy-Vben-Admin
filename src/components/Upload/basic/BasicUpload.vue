@@ -2,7 +2,7 @@
   <div>
     <a-upload
       :accept="getStringAccept"
-      :action="uploadUrl"
+      :action="url || uploadUrl"
       :multiple="multiple"
       :headers="headers"
       :file-list="displayFileList"
@@ -40,14 +40,14 @@
   import { useGlobSetting } from '/@/hooks/setting';
   import { basicProps } from '/@/components/Upload/props';
   import { UploadFileModel } from '/@/components/Upload/type';
-  import { SysFile } from '/@/api/sys/model/sysFileModel';
   import { isArray, isString } from '/@/utils/is';
-  import { convertToSysFile, convertToUploadFileModelArray } from '/@/components/Upload/helper';
+  import { convertToFileInfo, convertToUploadFileModelArray } from '/@/components/Upload/helper';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { useUploadType } from '/@/components/Upload/useUpload';
   import { propTypes } from '/@/utils/propTypes';
   import Icon from '/@/components/Icon/src/Icon.vue';
+  import { FileInfo } from '/@/api/file/model/fileInfoModel';
 
   export default defineComponent({
     name: 'BasicUpload',
@@ -65,7 +65,7 @@
       const token = getToken();
       const { uploadUrl } = useGlobSetting();
       // 已上传文件
-      let uploadedFileList: SysFile[] = [];
+      let uploadedFileList: FileInfo[] = [];
       // 未上传文件
       let uploadingFileList: UploadFileModel[] = [];
       // 用于显示的文件列表 已上传 + 未上传
@@ -76,21 +76,14 @@
 
       watch(
         () => props.value,
-        (value = []) => {
-          if (props.value == null || props.value === '' || isString(props.value)) {
-            uploadedFileList = [];
-            refreshDisplayFileList();
-            return;
-          }
-          if (isArray(props.value)) {
-            uploadedFileList = initValue(value);
-          } else {
-            uploadedFileList = initValue([value]);
-          }
-          refreshDisplayFileList();
+        () => {
+          setValue();
         },
         { deep: true },
       );
+
+      setValue();
+
       const { accept, maxNumber, maxSize } = toRefs(props);
       const { getStringAccept, getHelpText } = useUploadType({
         acceptRef: accept,
@@ -99,16 +92,25 @@
         maxSizeRef: maxSize,
       });
 
-      const { apiUrl } = useGlobSetting();
+      function setValue() {
+        if (props.value == null || props.value === '' || isString(props.value)) {
+          uploadedFileList = [];
+          refreshDisplayFileList();
+          return;
+        }
+        if (isArray(props.value)) {
+          uploadedFileList = initValue(props.value);
+        } else {
+          uploadedFileList = initValue([props.value]);
+        }
+        refreshDisplayFileList();
+      }
 
-      function initValue(value: SysFile[]): SysFile[] {
+      function initValue(value: FileInfo[]): FileInfo[] {
         if (!isArray(value)) {
           return [];
         }
         value.map((item) => {
-          if (!item.url?.startsWith(apiUrl)) {
-            item.url = apiUrl + item.url;
-          }
           item.status = 'done';
         });
         return value;
@@ -150,8 +152,11 @@
         uploadedFileList = [];
         uploadingFileList = [];
         fileList.map((item) => {
+          if (item.status === 'error') {
+            createMessage.error(item.response?.errorMessage);
+          }
           if (item.status === 'success' || item.status === 'done') {
-            uploadedFileList.push(convertToSysFile(item));
+            uploadedFileList.push(convertToFileInfo(item));
           } else {
             uploadingFileList.push(item);
           }
@@ -193,11 +198,7 @@
       };
       const handlePreview = async (file) => {
         previewVisible.value = true;
-        if (!file.url?.startsWith(apiUrl)) {
-          previewUrl.value = apiUrl + file.url;
-        } else {
-          previewUrl.value = file.url;
-        }
+        previewUrl.value = file.url;
       };
 
       function previewFile(file) {

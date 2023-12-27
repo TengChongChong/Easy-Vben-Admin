@@ -82,15 +82,20 @@
             field: 'code',
             label: '权限标识',
             component: 'Input',
-            helpMessage: 'Controller中定义的权限标识',
             rules: [{ max: 64, message: '编码不能超过64个字符', trigger: 'blur' }],
             show: ({ values }) => values.external !== '1',
+            itemProps: {
+              extra: 'Controller中定义的权限标识',
+            },
           },
           {
             field: 'icon',
             label: '图标',
             component: 'IconPicker',
             show: ({ values }) => values.type !== 'button',
+            itemProps: {
+              // extra: '更多图标：https://icones.netlify.app',
+            },
           },
           {
             field: 'path',
@@ -98,6 +103,9 @@
             component: 'Input',
             rules: [{ max: 255, message: '编码不能超过255个字符', trigger: 'blur' }],
             show: ({ values }) => values.type === 'menu',
+            itemProps: {
+              extra: '页面访问地址',
+            },
           },
           {
             field: 'component',
@@ -113,9 +121,11 @@
             field: 'name',
             label: '组件Name',
             component: 'Input',
-            helpMessage: '如不填写将根据组件路径转为首字母大写驼峰规则自动生成',
             rules: [{ max: 64, message: '编码不能超过64个字符', trigger: 'blur' }],
             show: ({ values }) => values.type === 'menu' && values.external !== '1',
+            itemProps: {
+              extra: '如不填写将根据组件路径转为首字母大写驼峰规则自动生成',
+            },
           },
           {
             field: 'orderNo',
@@ -126,6 +136,9 @@
               { type: 'number', max: 999, message: '排序值不能大于999', trigger: 'blur' },
               { type: 'number', min: 0, message: '排序值不能小于0', trigger: 'blur' },
             ],
+            itemProps: {
+              extra: '按照升序排列',
+            },
           },
           {
             field: 'display',
@@ -135,7 +148,7 @@
             componentProps: {
               dictType: 'whether',
             },
-            itemProps: { validateTrigger: 'blur' },
+            itemProps: { validateTrigger: 'blur', extra: '是否需要显示在左侧菜单中' },
           },
           {
             field: 'external',

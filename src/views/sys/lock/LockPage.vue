@@ -32,7 +32,7 @@
               alt="头像"
               v-if="currentUser.avatar"
               :class="`${prefixCls}-entry__header-img`"
-              :src="globSetting.apiUrl + currentUser.avatar"
+              :src="currentUser.avatar"
             />
             <a-avatar
               size="small"
@@ -98,7 +98,6 @@
   import { useNow } from './useNow';
   import { useDesign } from '/@/hooks/web/useDesign';
   import { LockOutlined } from '@ant-design/icons-vue';
-  import { useGlobSetting } from '/@/hooks/setting';
 
   const InputPassword = Input.Password;
 
@@ -118,8 +117,6 @@
   const currentUser = computed(() => {
     return userStore.getCurrentUser || {};
   });
-
-  const globSetting = useGlobSetting();
 
   /**
    * @description: unLock

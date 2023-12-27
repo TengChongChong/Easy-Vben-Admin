@@ -20,7 +20,7 @@
           </span>
         </template>
         <template v-if="column.key === 'nickname'">
-          <a-avatar v-if="record.avatar" :src="apiUrl + record.avatar" />
+          <a-avatar v-if="record.avatar" :src="record.avatar" />
           <a-avatar v-if="!record.avatar">{{ record.nickname?.substring(0, 1) }}</a-avatar>
           {{ record.nickname }}
         </template>

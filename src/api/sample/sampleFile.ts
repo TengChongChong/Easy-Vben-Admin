@@ -1,17 +1,17 @@
-import { SampleGeneral } from '/@/api/sample/model/sampleGeneralModel';
+import { SampleFile } from '/@/api/sample/model/sampleFileModel';
 import { Page } from '/@/api/model/pageModel';
 import { defHttp } from '/@/utils/http/axios';
 
 // base url
-const BASE_URL = '/api/auth/sample/general';
+const BASE_URL = '/api/auth/sample/file';
 /**
  * 查询数据
  *
  * @param params 查询条件
  * @param page 分页
  */
-export function select(params: SampleGeneral, page: Page<SampleGeneral>) {
-  return defHttp.get<Page<SampleGeneral>>({
+export function select(params: SampleFile, page: Page<SampleFile>) {
+  return defHttp.get<Page<SampleFile>>({
     url: BASE_URL,
     params: Object.assign(params, page),
   });
@@ -23,7 +23,7 @@ export function select(params: SampleGeneral, page: Page<SampleGeneral>) {
  * @param id id
  */
 export function get(id: string) {
-  return defHttp.get<SampleGeneral>({
+  return defHttp.get<SampleFile>({
     url: `${BASE_URL}/${id}`,
   });
 }
@@ -31,7 +31,7 @@ export function get(id: string) {
  * 新增
  */
 export function add() {
-  return defHttp.get<SampleGeneral>({
+  return defHttp.get<SampleFile>({
     url: `${BASE_URL}/add`,
   });
 }
@@ -52,22 +52,20 @@ export function remove(ids: string) {
  *
  * @param params 表单数据
  */
-export function save(params: SampleGeneral) {
-  return defHttp.post<SampleGeneral>({
+export function save(params: SampleFile) {
+  return defHttp.post<SampleFile>({
     url: BASE_URL,
     data: params,
   });
 }
 
-
 /**
- * 导出数据
+ * 下载
  *
- * @param params 查询条件
+ * @param id id
  */
-export function exportData(params: SampleGeneral) {
+export function download(id: string) {
   return defHttp.get<string>({
-    url: `${BASE_URL}/export/data`,
-    params,
+    url: `${BASE_URL}/download/${id}`,
   });
 }

@@ -1,5 +1,5 @@
 import { BasicModel } from '/@/api/model/baseModel';
-import { SysFile } from '/@/api/sys/model/sysFileModel';
+import { FileInfo } from '/@/api/file/model/fileInfoModel';
 
 /**
  * 资源
@@ -14,5 +14,5 @@ export interface CmsMedia extends BasicModel {
   // 附件路径
   fileUrl?: string;
   // 文件
-  file?: SysFile;
+  file?: FileInfo;
 }

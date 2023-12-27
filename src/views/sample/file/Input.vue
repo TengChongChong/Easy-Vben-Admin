@@ -1,23 +1,6 @@
 <template>
-  <BasicModal v-bind="$attrs" @register="registerModel" showFooter title="资源" :width="720">
-    <BasicForm @register="registerForm">
-      <template #file="{ model, field }">
-        <basic-upload
-          :max-size="100"
-          :max-number="1"
-          :accept="[
-            ...fileSuffix.image,
-            ...fileSuffix.audio,
-            ...fileSuffix.video,
-            ...fileSuffix.doc,
-            ...fileSuffix.other,
-          ]"
-          :multiple="false"
-          v-model:value="model[field]"
-          @change="handleFileChange"
-        />
-      </template>
-    </BasicForm>
+  <BasicModal v-bind="$attrs" @register="registerModel" showFooter title="文件示例" :width="720">
+    <BasicForm @register="registerForm" />
     <template #footer>
       <a-button-cancel text="关闭" @click="closeModal" />
       <a-button-save :loading="saveBtnLoading" @click="handleSave" />
@@ -30,18 +13,17 @@
   import { BasicForm, useForm } from '/@/components/Form';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { AButtonSave, AButtonCancel } from '/@/components/Button';
-  import { add, save } from '/@/api/cms/cmsMedia';
-  import { CmsMedia } from '/@/api/cms/model/cmsMediaModel';
-  import { BasicUpload } from '/@/components/Upload';
-  import { fileSuffix } from '/@/views/cms/media/media.data';
+  import { add, save } from '/@/api/sample/sampleFile';
+  import { SampleFile } from '/@/api/sample/model/sampleFileModel';
   import { message } from 'ant-design-vue';
-  import { FileInfo } from '/@/api/file/model/fileInfoModel';
+
   export default defineComponent({
-    name: 'CmsMediaInput',
-    components: { BasicUpload, BasicModal, BasicForm, AButtonSave, AButtonCancel },
+    name: 'SampleFileInput',
+    components: { BasicModal, BasicForm, AButtonSave, AButtonCancel },
     emits: ['success', 'register'],
     setup(_, { emit }) {
       const saveBtnLoading = ref<boolean>(false);
+
       const [registerForm, { resetFields, setFieldsValue, validate, getFieldsValue }] = useForm({
         labelWidth: 100,
         schemas: [
@@ -50,13 +32,17 @@
           {
             field: 'file',
             label: '文件',
-            slot: 'file',
-            component: 'Input',
+            component: 'RuleUpload',
+            componentProps: {
+              uploadRuleSlug: 'sample-file',
+              // ruleSlug: 'sample-file',
+              // ruleSlug: 'sample-file',
+            },
             required: true,
           },
           {
-            field: 'name',
-            label: '名称',
+            field: 'remarks',
+            label: '备注',
             component: 'InputTextArea',
             componentProps: {
               autoSize: {
@@ -64,19 +50,7 @@
                 maxRows: 7,
               },
             },
-            required: true,
-            rules: [{ max: 256, message: '名称不能超过256个字符', trigger: 'blur' }],
-          },
-          {
-            field: 'type',
-            label: '类型',
-            component: 'DictRadio',
-            componentProps: {
-              dictType: 'cmsMediaType',
-            },
-            itemProps: { validateTrigger: 'blur' },
-            required: true,
-            show: false,
+            rules: [{ max: 900, message: '备注不能超过900个字符', trigger: 'blur' }],
           },
         ],
         showActionButtonGroup: false,
@@ -91,24 +65,12 @@
         changeLoading(false);
       });
 
-      function handleFileChange(file: Nullable<FileInfo>) {
-        if (file == null) {
-          return null;
-        }
-
-        const type = file.name?.substring(file.name?.lastIndexOf('.')).toLowerCase();
-        setFieldsValue({
-          name: file.displayName?.substring(0, file.displayName?.lastIndexOf('.')),
-          type: getFileType(type as string),
-        });
-      }
-
-      async function handleSubmit(callback: (_: CmsMedia) => any) {
+      async function handleSubmit(callback: (_: SampleFile) => any) {
         try {
           saveBtnLoading.value = true;
           changeLoading(true);
           await validate();
-          await save(getFieldsValue() as CmsMedia).then((res) => {
+          await save(getFieldsValue() as SampleFile).then((res) => {
             message.success('保存成功');
             emit('success');
             callback(res);
@@ -141,27 +103,11 @@
         });
       }
 
-      function getFileType(suffix: string) {
-        if (fileSuffix.image.includes(suffix)) {
-          return 'image';
-        } else if (fileSuffix.audio.includes(suffix)) {
-          return 'audio';
-        } else if (fileSuffix.video.includes(suffix)) {
-          return 'video';
-        } else if (fileSuffix.doc.includes(suffix)) {
-          return 'doc';
-        } else {
-          return 'other';
-        }
-      }
-
       return {
-        fileSuffix,
         saveBtnLoading,
         registerModel,
         closeModal,
         registerForm,
-        handleFileChange,
         handleSave,
         handleSaveAndAdd,
       };

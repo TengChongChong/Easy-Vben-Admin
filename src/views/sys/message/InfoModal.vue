@@ -11,7 +11,7 @@
         <h2>{{ messageInfo?.title }}</h2>
       </div>
       <div class="message-info-property">
-        <a-avatar v-if="messageInfo?.avatar" :src="apiUrl + messageInfo?.avatar" />
+        <a-avatar v-if="messageInfo?.avatar" :src="messageInfo?.avatar" />
         <a-avatar v-if="!messageInfo?.avatar">
           {{ messageInfo?.nickname?.substring(0, 1) }}
         </a-avatar>

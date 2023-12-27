@@ -36,6 +36,7 @@ import { UserSelect, UserModalSelect } from '/@/components/UserSelect';
 import { DeptSelect } from '/@/components/Dept';
 import { RoleSelect } from '/@/components/Role';
 import { BasicUpload } from '/@/components/Upload';
+import { RuleUpload } from '/@/components/Upload';
 import { StrengthMeter } from '/@/components/StrengthMeter';
 import { IconPicker } from '/@/components/Icon';
 import { CountdownInput } from '/@/components/CountDown';
@@ -92,6 +93,7 @@ componentMap.set('UserSelect', UserSelect);
 componentMap.set('UserModalSelect', UserModalSelect);
 // 文件上传
 componentMap.set('Upload', BasicUpload);
+componentMap.set('RuleUpload', RuleUpload);
 // 行政区划
 componentMap.set('AreaCascader', AreaCascader);
 

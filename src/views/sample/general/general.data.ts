@@ -50,20 +50,6 @@ export const columns: BasicColumn[] = [
     width: 160,
   },
   {
-    title: '状态',
-    dataIndex: 'status',
-    sorter: true,
-    width: 150,
-    format: 'dict|commonStatus',
-    filters: 'dict|commonStatus',
-  },
-  {
-    title: '排序值',
-    dataIndex: 'orderNo',
-    sorter: true,
-    width: 160,
-  },
-  {
     title: '编辑人',
     dataIndex: 'editUser',
     sorter: true,

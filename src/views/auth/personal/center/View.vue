@@ -7,8 +7,8 @@
             <a-row>
               <a-col :span="10">
                 <div class="user-avatar">
-                  <a-avatar v-if="sysUser.avatar" :src="apiUrl + sysUser.avatar" :size="100" />
-                  <a-avatar v-if="!sysUser.avatar" :size="100">
+                  <a-avatar v-if="sysUser.avatar?.url" :src="sysUser.avatar?.url" :size="100" />
+                  <a-avatar v-if="!sysUser.avatar?.url" :size="100">
                     {{ sysUser.nickname?.substring(0, 1) }}
                   </a-avatar>
                 </div>

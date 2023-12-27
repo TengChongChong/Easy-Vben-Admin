@@ -28,6 +28,10 @@ export const basicProps = {
     type: Function as PropType<PromiseFn>,
     default: null,
   },
+  url: {
+    type: String as PropType<string>,
+    default: null,
+  },
   name: {
     type: String as PropType<string>,
     default: 'file',

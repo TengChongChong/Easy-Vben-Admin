@@ -50,9 +50,7 @@
           emit(
             'done',
             name,
-            `<img class="editor-media editor-image" alt="${name}" style="max-width: 100%" src="${
-              globSetting.apiUrl + url
-            }"/>`,
+            `<img class="editor-media editor-image" alt="${name}" style="max-width: 100%" src="${url}"/>`,
           );
           uploading = false;
         } else if (status === 'error') {

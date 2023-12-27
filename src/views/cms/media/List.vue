@@ -20,7 +20,7 @@
         <template v-if="column.key === 'preview'">
           <div class="media-preview">
             <template v-if="record.type === 'image'">
-              <ImagePreview :imageList="[apiUrl + record.fileUrl]" />
+              <ImagePreview :imageList="[record.fileUrl]" />
             </template>
             <template v-if="record.type === 'audio'">
               <Icon icon="ph:file-audio-bold" :size="32" />
@@ -53,7 +53,7 @@
               <a-button
                 type="link"
                 size="small"
-                @click="downloadSysFile(record.id, null, record.name)"
+                @click="downloadFileInfo(record.id, null, record.name)"
               >
                 <template #icon>
                   <Icon icon="ant-design:download-outlined" />
@@ -63,7 +63,7 @@
             <a-divider type="vertical" />
             <a-tooltip>
               <template #title>预览</template>
-              <a-button type="link" size="small" @click="handlePreview(apiUrl + record.fileUrl)">
+              <a-button type="link" size="small" @click="handlePreview(record.fileUrl)">
                 <template #icon>
                   <Icon icon="ant-design:eye-outlined" />
                 </template>
@@ -94,7 +94,7 @@
   import { ImagePreview } from '/@/components/Preview';
   import Icon from '/@/components/Icon/src/Icon.vue';
   import { useGlobSetting } from '/@/hooks/setting';
-  import { downloadSysFile } from '/@/utils/file/download';
+  import { downloadFileInfo } from '/@/utils/file/download';
 
   export default defineComponent({
     name: 'CmsMediaList',
@@ -174,7 +174,7 @@
         },
         searchInfo,
         remove,
-        downloadSysFile,
+        downloadFileInfo,
         registerModal,
         registerTable,
         handleCreate,

@@ -43,7 +43,7 @@
   import { fileSuffix } from '/@/views/cms/media/media.data';
   import { message } from 'ant-design-vue';
   import { save } from '/@/api/cms/cmsMedia';
-  import { convertToSysFile } from '/@/components/Upload/helper';
+  import { convertToFileInfo } from '/@/components/Upload/helper';
   import { CmsMedia } from '/@/api/cms/model/cmsMediaModel';
   import { getHtml } from './util';
 
@@ -88,18 +88,14 @@
           try {
             save({
               type: insertType.value,
-              file: convertToSysFile(file),
+              file: convertToFileInfo(file),
               name: file.name,
             }).then((res: CmsMedia) => {
               closeModal();
               emit(
                 'done',
                 res.file?.displayName,
-                getHtml(
-                  insertType.value,
-                  res.file?.displayName as string,
-                  globSetting.apiUrl + res.file?.url,
-                ),
+                getHtml(insertType.value, res.file?.displayName as string, res.file?.url),
               );
               uploading = false;
             });

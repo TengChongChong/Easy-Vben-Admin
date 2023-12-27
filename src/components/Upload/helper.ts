@@ -1,6 +1,5 @@
-import { SysFile } from '/@/api/sys/model/sysFileModel';
 import { UploadFileModel } from '/@/components/Upload/type';
-import { useGlobSetting } from '/@/hooks/setting';
+import { FileInfo } from '/@/api/file/model/fileInfoModel';
 
 export function checkFileType(file: File, accepts: string[]) {
   const newTypes = accepts.join('|');
@@ -46,55 +45,34 @@ export function getBase64WithFile(file: File) {
 }
 
 /**
- * 将UploadFile[]转为SysFile[]
+ * 将UploadFile[]转为FileInfo[]
  *
  * @param fileList 文件[]
  */
-export function convertToSysFileArray(fileList: UploadFileModel[]): SysFile[] {
-  const sysFileList: SysFile[] = [];
+export function convertToFileInfoArray(fileList: UploadFileModel[]): FileInfo[] {
+  const sysFileList: FileInfo[] = [];
   if (fileList && fileList.length) {
     fileList.map((file) => {
-      sysFileList.push(convertToSysFile(file));
+      sysFileList.push(convertToFileInfo(file));
     });
   }
   return sysFileList;
 }
 
-export function convertToSysFile(uploadFileModel: UploadFileModel): SysFile {
-  const { apiUrl } = useGlobSetting();
-
-  const { uid, name, size } = uploadFileModel;
-  let { url, fileName, path } = uploadFileModel;
-  // 获取url
-  if (!url && uploadFileModel.response?.url) {
-    url = uploadFileModel.response?.url;
-    if (!url?.startsWith(apiUrl)) {
-      url = apiUrl + url;
-    }
-  }
-  if (!fileName && uploadFileModel.response?.name) {
-    fileName = uploadFileModel.response?.name;
-  }
-  if (!path && uploadFileModel.response?.path) {
-    path = uploadFileModel.response?.path;
-  }
+export function convertToFileInfo(uploadFileModel: UploadFileModel): FileInfo {
   return {
-    id: uid,
-    displayName: name,
-    name: fileName,
-    url,
-    path,
-    size,
+    id: uploadFileModel.uid,
+    ...uploadFileModel.response,
     status: uploadFileModel.status,
-  } as SysFile;
+  } as FileInfo;
 }
 
 /**
- * 将SysFile[]转为UploadFileModel[]
+ * 将FileInfo[]转为UploadFileModel[]
  *
  * @param fileList 文件[]
  */
-export function convertToUploadFileModelArray(fileList: SysFile[]): UploadFileModel[] {
+export function convertToUploadFileModelArray(fileList: FileInfo[]): UploadFileModel[] {
   const uploadFileList: UploadFileModel[] = [];
   if (fileList && fileList.length) {
     fileList.map((file) => {
@@ -104,14 +82,15 @@ export function convertToUploadFileModelArray(fileList: SysFile[]): UploadFileMo
   return uploadFileList;
 }
 
-export function convertToUploadFile(sysFile: SysFile): UploadFileModel {
-  const { id, displayName, name, url, path, size, status } = sysFile;
+export function convertToUploadFile(sysFile: FileInfo): UploadFileModel {
+  const { id, displayName, name, url, bucketName, objectName, size, status } = sysFile;
   return {
-    uid: id as string,
-    name: displayName as string,
+    uid: id!,
+    name: displayName!,
     fileName: name,
     url,
-    path,
+    bucketName,
+    objectName,
     size,
     status,
   } as UploadFileModel;

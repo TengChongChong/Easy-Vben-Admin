@@ -2,11 +2,11 @@
   <Dropdown placement="bottomLeft" :overlayClassName="`${prefixCls}-dropdown-overlay`">
     <span :class="[prefixCls, `${prefixCls}--${theme}`]" class="flex">
       <img
-        v-if="getCurrentUser.avatar"
+        v-if="getCurrentUser.avatar?.url"
         :class="`${prefixCls}__header`"
-        :src="apiUrl + getCurrentUser.avatar"
+        :src="getCurrentUser.avatar?.url"
       />
-      <a-avatar size="small" :class="`${prefixCls}__header`" v-if="!getCurrentUser.avatar">
+      <a-avatar size="small" :class="`${prefixCls}__header`" v-if="!getCurrentUser.avatar?.url">
         {{ getCurrentUser.nickname?.substring(0, 1) }}
       </a-avatar>
 

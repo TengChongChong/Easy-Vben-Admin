@@ -4,7 +4,7 @@
     @register="registerDrawer"
     showFooter
     title="代码生成示例"
-    width="30%"
+    :width="720"
     @ok="handleSave"
   >
     <BasicForm @register="registerForm" />
@@ -20,6 +20,8 @@
   import { AButtonSave } from '/@/components/Button';
   import { add, save } from '/@/api/sample/sampleGeneral';
   import { SampleGeneral } from '/@/api/sample/model/sampleGeneralModel';
+  import { message } from 'ant-design-vue';
+
   export default defineComponent({
     name: 'SampleGeneralInput',
     components: { BasicDrawer, BasicForm, AButtonSave },
@@ -61,24 +63,6 @@
             rules: [{ max: 32, message: '手机号码不能超过32个字符', trigger: 'blur' }],
           },
           {
-            field: 'status',
-            label: '状态',
-            component: 'DictRadio',
-            componentProps: {
-              dictType: 'commonStatus',
-            },
-            itemProps: { validateTrigger: 'blur' },
-          },
-          {
-            field: 'orderNo',
-            label: '排序值',
-            component: 'InputNumber',
-            rules: [
-              { type: 'number', max: 9999, message: '排序值不能大于9999', trigger: 'blur' },
-              { type: 'number', min: 0, message: '排序值不能小于0', trigger: 'blur' },
-            ],
-          },
-          {
             field: 'address',
             label: '地址',
             component: 'Input',
@@ -102,6 +86,7 @@
           changeLoading(true);
           await validate();
           await save(getFieldsValue() as SampleGeneral).then((res) => {
+            message.success('保存成功');
             emit('success');
             callback(res);
           });

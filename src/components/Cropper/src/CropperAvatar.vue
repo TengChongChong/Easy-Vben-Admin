@@ -9,7 +9,7 @@
           color="#d6d6d6"
         />
       </div>
-      <img :src="apiUrl + sourceValue" v-if="sourceValue" alt="avatar" />
+      <img :src="sourceValue" v-if="sourceValue" alt="avatar" />
     </div>
     <a-button
       :class="`${prefixCls}-upload-btn`"
@@ -23,7 +23,7 @@
     <CopperModal
       @register="register"
       @upload-success="handleUploadSuccess"
-      :uploadApi="uploadApi"
+      :uploadRuleSlug="uploadRuleSlug"
       :aspectRatio="aspectRatio"
       :circled="circled"
       :src="sourceValue"
@@ -48,7 +48,6 @@
   import { useI18n } from '/@/hooks/web/useI18n';
   import type { ButtonProps } from '/@/components/Button';
   import Icon from '/@/components/Icon';
-  import { useGlobSetting } from '/@/hooks/setting';
 
   const props = {
     width: { type: [String, Number], default: '200px' },
@@ -59,7 +58,7 @@
     showBtn: { type: Boolean, default: true },
     btnProps: { type: Object as PropType<ButtonProps> },
     btnText: { type: String, default: '' },
-    uploadApi: { type: Function as PropType<({ file: Blob, name: string }) => Promise<void>> },
+    uploadRuleSlug: { type: String },
   };
 
   export default defineComponent({
@@ -73,9 +72,6 @@
       const [register, { openModal, closeModal }] = useModal();
       const { createMessage } = useMessage();
       const { t } = useI18n();
-
-      const globSetting = useGlobSetting();
-      const apiUrl = ref(globSetting.apiUrl);
 
       const getClass = computed(() => [prefixCls]);
 
@@ -110,7 +106,6 @@
 
       return {
         t,
-        apiUrl,
         prefixCls,
         register,
         openModal: openModal as any,

@@ -158,19 +158,14 @@
   import { useDesign } from '/@/hooks/web/useDesign';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { dataURLtoBlob } from '/@/utils/file/base64Conver';
-  import { isFunction } from '/@/utils/is';
   import { useI18n } from '/@/hooks/web/useI18n';
-  import { upload } from '/@/api/file/upload';
   import { Icon } from '/@/components/Icon';
-
-  type apiFunParams = { file: Blob; name: string; filename: string };
+  import { fileUpload } from '/@/api/file/fileUpload';
 
   const props = {
     circled: { type: Boolean, default: false },
     aspectRatio: { type: Number, default: 1 },
-    uploadApi: {
-      type: Function as PropType<(params: apiFunParams) => Promise<any>>,
-    },
+    uploadRuleSlug: { type: String },
   };
 
   export default defineComponent({
@@ -225,16 +220,13 @@
         const blob = dataURLtoBlob(previewSource.value);
         try {
           setModalProps({ confirmLoading: true });
-          const uploadApi = props.uploadApi;
-          let result;
-          if (uploadApi && isFunction(uploadApi)) {
-            result = await uploadApi({ name: 'file', file: blob, filename });
-            emit('uploadSuccess', { source: previewSource.value, data: result });
-          } else {
-            // @ts-ignore
-            result = await upload({ name: 'file', file: blob, filename });
-            emit('uploadSuccess', { source: previewSource.value, data: result.data });
-          }
+          // @ts-ignore
+          let result = await fileUpload(props.uploadRuleSlug!, {
+            name: 'file',
+            file: blob,
+            filename,
+          });
+          emit('uploadSuccess', { source: previewSource.value, data: result.data });
           closeModal();
         } finally {
           setModalProps({ confirmLoading: false });

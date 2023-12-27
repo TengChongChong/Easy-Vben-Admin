@@ -7,7 +7,7 @@
             :maxSize="20"
             :maxNumber="10"
             @change="handleChange"
-            :api="uploadApi"
+            :api="fileUpload"
             class="my-5"
             :accept="['image/*']"
           />
@@ -27,7 +27,7 @@
   import { BasicForm, FormSchema, useForm } from '/@/components/Form';
   import { PageWrapper } from '/@/components/Page';
   import { Alert } from 'ant-design-vue';
-  import { uploadApi } from '/@/api/sys/upload';
+  import { fileUpload } from '/@/api/file/fileUpload';
 
   const schemas: FormSchema[] = [
     {
@@ -58,7 +58,7 @@
         handleChange: (list) => {
           console.log(list);
         },
-        uploadApi,
+        fileUpload,
         register,
       };
     },

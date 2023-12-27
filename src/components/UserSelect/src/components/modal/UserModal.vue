@@ -49,7 +49,7 @@
             >
               <template #bodyCell="{ column, record }">
                 <template v-if="column.dataIndex === 'username'">
-                  <a-avatar v-if="record.avatar" :src="apiUrl + record.avatar" />
+                  <a-avatar v-if="record.avatar" :src="record.avatar" />
                   <a-avatar v-if="!record.avatar">{{ record.nickname?.substring(0, 1) }}</a-avatar>
                   {{ record.username }}
                 </template>

@@ -7,29 +7,27 @@
       :rowSelection="{ type: 'checkbox', onChange: onSelectChange }"
     >
       <template #toolbar>
-        <a-button-add auth="sample:general:save" @click="handleCreate" />
+        <a-button-add auth="file:upload:rule:save" @click="handleCreate" />
         <a-button-remove-batch
-          auth="sample:general:remove"
+          auth="file:upload:rule:remove"
           :id="checkedKeys"
           :api="remove"
           @success="reload"
         />
-        <a-button-import auth="sample:general:import:data" import-code="sample:general" />
-        <a-button-export
-          :loading="exportBtnLoading"
-          auth="sample:general:select"
-          @click="handelExportData"
-        />
       </template>
 
       <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'fileSizeLimit'">
+          {{ formatSize(record.lowerLimit * 1024, 1) }} ~
+          {{ formatSize(record.upperLimit * 1024, 1) }}
+        </template>
         <template v-if="column.key === 'action'">
           <div class="basic-table-action center">
-            <a-button-edit small auth="sample:general:save" :id="record.id" @click="handleEdit" />
+            <a-button-edit small auth="file:upload:rule:save" :id="record.id" @click="handleEdit" />
             <a-divider type="vertical" />
             <a-button-remove
               small
-              auth="sample:general:remove"
+              auth="file:upload:rule:remove"
               :id="record.id"
               :api="remove"
               @success="reload"
@@ -39,38 +37,29 @@
       </template>
     </BasicTable>
     <!-- 表单 -->
-    <SampleGeneralInput @register="registerDrawer" @success="reload" />
+    <FileUploadRuleInput @register="registerDrawer" @success="reload" />
   </PageWrapper>
 </template>
 <script lang="ts">
   import { defineComponent, ref, reactive } from 'vue';
   import { PageWrapper } from '/@/components/Page';
   import { BasicTable, useTable } from '/@/components/Table';
-  import { searchFormSchema, columns } from '/@/views/sample/general/general.data';
+  import { searchFormSchema, columns } from '/@/views/file/upload/rule/rule.data';
   import { useDrawer } from '/@/components/Drawer';
-  import {
-    AButtonAdd,
-    AButtonEdit,
-    AButtonRemove,
-    AButtonRemoveBatch,
-    AButtonImport,
-    AButtonExport,
-  } from '/@/components/Button';
-  import { downloadFileById } from '/@/utils/file/download';
-  import { add, remove, select, get, exportData } from '/@/api/sample/sampleGeneral';
-  import SampleGeneralInput from '/@/views/sample/general/Input.vue';
+  import { AButtonAdd, AButtonEdit, AButtonRemove, AButtonRemoveBatch } from '/@/components/Button';
+  import { add, remove, select, get } from '/@/api/file/fileUploadRule';
+  import FileUploadRuleInput from '/@/views/file/upload/rule/Input.vue';
+  import { formatSize } from '/@/utils/file/format';
 
   export default defineComponent({
-    name: 'SampleGeneralList',
+    name: 'FileUploadRuleList',
     components: {
       PageWrapper,
-      SampleGeneralInput,
+      FileUploadRuleInput,
       AButtonAdd,
       AButtonRemoveBatch,
       AButtonRemove,
       AButtonEdit,
-      AButtonImport,
-      AButtonExport,
       BasicTable,
     },
     setup() {
@@ -78,15 +67,13 @@
       const checkedKeys = ref<Array<string>>([]);
       // 查询条件
       const searchInfo = reactive<Recordable>({});
-      // 导出按钮状态
-      const exportBtnLoading = ref<boolean>(false);
       const [registerDrawer, { openDrawer }] = useDrawer();
 
       /**
        * 初始化表格
        */
-      const [registerTable, { reload, getForm }] = useTable({
-        title: '代码生成示例',
+      const [registerTable, { reload }] = useTable({
+        title: '文件上传规则',
         api: select,
         columns,
         useSearchForm: true,
@@ -112,33 +99,19 @@
         });
       };
 
-      const handelExportData = async () => {
-        exportBtnLoading.value = true;
-        try {
-          await exportData(Object.assign(searchInfo, getForm().getFieldsValue())).then((id) => {
-            downloadFileById(id);
-          });
-        } catch (e) {
-          console.error('导出数据错误', e);
-        } finally {
-          exportBtnLoading.value = false;
-        }
-      };
-
       return {
         checkedKeys,
         onSelectChange(selectedRowKeys: string[]) {
           checkedKeys.value = selectedRowKeys;
         },
         searchInfo,
-        exportBtnLoading,
-        handelExportData,
         remove,
         registerDrawer,
         registerTable,
         handleCreate,
         handleEdit,
         reload,
+        formatSize,
       };
     },
   });

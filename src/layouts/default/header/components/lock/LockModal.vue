@@ -12,7 +12,7 @@
           alt="头像"
           v-if="currentUser.avatar"
           :class="`${prefixCls}__header-img`"
-          :src="apiUrl + currentUser.avatar"
+          :src="currentUser.avatar"
         />
         <a-avatar size="small" :class="`${prefixCls}__header-img`" v-if="!currentUser.avatar">
           {{ currentUser.nickname?.substring(0, 1) }}

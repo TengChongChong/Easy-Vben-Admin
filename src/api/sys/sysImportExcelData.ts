@@ -39,13 +39,14 @@ export function checkLastData(templateId: string) {
  * 验证并解析文件
  *
  * @param templateId 模板id
- * @param path       文件路径
+ * @param bucketName local - 文件夹名称 / oss - bucket名称
+ * @param objectName local - 文件路径 /  oss - objectName
  * @return true/false
  */
-export function analysis(templateId: string, path: string) {
+export function analysis(templateId: string, bucketName: string, objectName: string) {
   return defHttp.post<boolean>({
     url: `${BASE_URL}/analysis/${templateId}`,
-    data: { path },
+    data: { bucketName, objectName },
   });
 }
 

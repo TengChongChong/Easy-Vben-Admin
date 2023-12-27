@@ -36,7 +36,7 @@
             <template #title>双击可快速插入</template>
             <div class="media-item-preview">
               <template v-if="item.type === 'image'">
-                <img :alt="item.name" :src="apiUrl + item.fileUrl" />
+                <img :alt="item.name" :src="item.fileUrl" />
               </template>
               <template v-if="item.type === 'audio'">
                 <Icon icon="ph:file-audio-bold" :size="48" />
@@ -143,7 +143,7 @@
         }
 
         if (media) {
-          emit('insert', getHtml(media.type!, media.name!, globSetting.apiUrl + media.fileUrl));
+          emit('insert', getHtml(media.type!, media.name!, media.fileUrl));
         } else {
           const htmlArray: string[] = [];
           for (let i = 0; i < activeMediaList.value.length; i++) {
@@ -151,7 +151,7 @@
               getHtml(
                 activeMediaList.value[i].type!,
                 activeMediaList.value[i].name!,
-                globSetting.apiUrl + activeMediaList.value[i].fileUrl,
+                activeMediaList.value[i].fileUrl,
               ),
             );
           }

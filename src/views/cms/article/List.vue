@@ -18,7 +18,7 @@
 
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'cover' && record.coverUrl">
-          <div class="article-cover"><ImagePreview :imageList="[apiUrl + record.coverUrl]" /></div>
+          <div class="article-cover"><ImagePreview :imageList="[record.coverUrl]" /></div>
         </template>
         <template v-if="column.key === 'action'">
           <div class="basic-table-action center">

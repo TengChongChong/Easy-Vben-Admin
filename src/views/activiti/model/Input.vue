@@ -79,8 +79,8 @@
           saveBtnLoading.value = true;
           changeLoading(true);
           const values = await validate();
-          if (values.file && values.file.length) {
-            values.path = values.file[0].path;
+          if (values.file) {
+            values.path = values.file.path;
           }
           delete values.file;
           await save(values).then((res) => {
@@ -120,7 +120,7 @@
        * @param files
        */
       function handleFileChange(files) {
-        if (!files || files.length === 0) {
+        if (!files) {
           return;
         }
         const values = getFieldsValue();
@@ -128,7 +128,7 @@
           return;
         }
         // 请假(leave) v.14.bpmn20.xml
-        const displayName = files[0].displayName;
+        const displayName = files.displayName;
         if (displayName.indexOf('(') > -1 && displayName.indexOf(')') > -1) {
           // 从系统中导出的xml
           setFieldsValue({

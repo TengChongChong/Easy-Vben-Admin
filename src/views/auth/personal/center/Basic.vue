@@ -1,7 +1,13 @@
 <template>
   <BasicForm @register="registerForm">
-    <template #avatar="{ model, field }">
-      <CropperAvatar :circled="true" v-model:value="model[field]" :width="100" />
+    <template #avatar>
+      <CropperAvatar
+        :circled="true"
+        v-model:value="avatarUrl"
+        :width="100"
+        uploadRuleSlug="sys-user-avatar"
+        @change="handleAvatarChange"
+      />
     </template>
     <template #formFooter>
       <div class="w-full text-center">
@@ -12,7 +18,7 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, onMounted, PropType, watch } from 'vue';
+  import { defineComponent, onMounted, PropType, watch, ref, unref } from 'vue';
   import BasicForm from '/@/components/Form/src/BasicForm.vue';
   import { useForm } from '/@/components/Form';
   import { AButtonSave } from '/@/components/Button';
@@ -21,6 +27,7 @@
   import { saveUserInfo } from '/@/api/auth/sysUserPersonal';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { CropperAvatar } from '/@/components/Cropper';
+  import { FileInfo } from '/@/api/file/model/fileInfoModel';
 
   export default defineComponent({
     components: { CropperAvatar, AButtonSave, BasicForm },
@@ -32,6 +39,8 @@
     setup(props) {
       const userStore = useUserStore();
       const { createMessage } = useMessage();
+      const avatar = ref<Nullable<FileInfo>>();
+      const avatarUrl = ref<Nullable<string>>();
       const [registerForm, { validate, getFieldsValue, setFieldsValue }] = useForm({
         schemas: [
           {
@@ -83,13 +92,20 @@
         await setFieldsValue({
           ...props.data,
         });
+
+        avatarUrl.value = props.data?.avatar?.url;
+      }
+
+      function handleAvatarChange(file: FileInfo) {
+        console.log('更改头像', file);
+        avatar.value = file;
       }
 
       async function handleSave() {
         try {
           await validate();
           const values = getFieldsValue();
-          await saveUserInfo(values).then(() => {
+          await saveUserInfo({ ...values, avatar: unref(avatar)! }).then(() => {
             createMessage.success('保存成功');
             userStore.refreshCurrentUserAction();
           });
@@ -98,7 +114,7 @@
         }
       }
 
-      return { registerForm, handleSave };
+      return { avatarUrl, registerForm, handleAvatarChange, handleSave };
     },
   });
 </script>

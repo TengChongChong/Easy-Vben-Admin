@@ -2,6 +2,7 @@ import { SysRole } from './sysRoleModel';
 import { BasicModel } from '/@/api/model/baseModel';
 import { SysDept } from './sysDeptModel';
 import { SysPermission } from './sysPermissionModel';
+import { FileInfo } from '/@/api/file/model/fileInfoModel';
 
 /**
  * 用户
@@ -23,12 +24,6 @@ export interface SysUser extends BasicModel {
   phoneNumber?: string;
   // 生日
   birthday?: Date;
-  // 头像
-  avatar?: string;
-  avatarLg?: string;
-  avatarMd?: string;
-  avatarSm?: string;
-  avatarXs?: string;
   // 来源
   source?: string;
   // 岗位id
@@ -45,6 +40,8 @@ export interface SysUser extends BasicModel {
   roleList?: SysRole[];
   // 权限
   permissionList?: SysPermission[];
+  // 头像
+  avatar?: FileInfo;
 }
 
 /**

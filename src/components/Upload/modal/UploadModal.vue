@@ -60,7 +60,7 @@
   import { buildUUID } from '/@/utils/uuid';
   import FileList from './FileList.vue';
   import { useI18n } from '/@/hooks/web/useI18n';
-  import { upload } from '/@/api/file/upload';
+  import { fileUpload } from '/@/api/file/fileUpload';
   import { Icon } from '/@/components/Icon';
 
   export default defineComponent({
@@ -175,7 +175,7 @@
       async function uploadApiByItem(item: FileItem) {
         let { api } = props;
         if (!api) {
-          api = upload;
+          api = fileUpload;
         }
         try {
           item.status = UploadResultStatus.UPLOADING;

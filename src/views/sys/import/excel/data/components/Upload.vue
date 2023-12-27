@@ -22,16 +22,9 @@
             description="填写完后上传，支持xls,xlsx格式，单个文件不超过20MB，只能上传1个文件"
           >
             <template #title>
-              <basic-upload
-                :max-size="20"
-                :max-number="1"
-                :accept="['xls', 'xlsx']"
-                :multiple="false"
-                :show-help-text="false"
-                v-model:value="file"
-              >
+              <rule-upload upload-rule-slug="sys-import-data-excel" v-model:value="file">
                 <a-button type="link" size="small"> 2、上传 </a-button>
-              </basic-upload>
+              </rule-upload>
             </template>
           </a-list-item-meta>
         </a-list-item>
@@ -55,13 +48,13 @@
   import { SysImportExcelTemplate } from '/@/api/sys/model/sysImportExcelTemplateModel';
   import { downloadTemplate } from '/@/api/sys/sysImportExcelTemplate';
   import { downloadFileById } from '/@/utils/file/download';
-  import BasicUpload from '/@/components/Upload/basic/BasicUpload.vue';
   import { analysis } from '/@/api/sys/sysImportExcelData';
-  import { SysFile } from '/@/api/sys/model/sysFileModel';
   import { message } from 'ant-design-vue';
+  import { FileInfo } from '/@/api/file/model/fileInfoModel';
+  import RuleUpload from '/@/components/Upload/basic/RuleUpload.vue';
 
   export default defineComponent({
-    components: { BasicUpload, Icon },
+    components: { RuleUpload, Icon },
     props: {
       sysImportExcelTemplate: {
         type: Object as PropType<SysImportExcelTemplate>,
@@ -71,7 +64,7 @@
     setup(props, { emit }) {
       const downloadBtnLoading = ref<boolean>(false);
       const nextBtnLoading = ref<boolean>(false);
-      const file = ref<Nullable<SysFile>>();
+      const file = ref<Nullable<FileInfo>>();
 
       async function handleDownload() {
         downloadBtnLoading.value = true;
@@ -90,7 +83,8 @@
         try {
           await analysis(
             props.sysImportExcelTemplate?.id as string,
-            file.value.path as string,
+            file.value?.bucketName as string,
+            file.value?.objectName as string,
           ).then((res) => {
             if (res) {
               emit('next');

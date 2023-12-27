@@ -15,7 +15,7 @@
             </template>
 
             <template #avatar>
-              <a-avatar :size="50" v-if="item.avatar" :src="apiUrl + item.avatar" />
+              <a-avatar :size="50" v-if="item.avatar" :src="item.avatar" />
               <a-avatar :size="50" v-if="!item.avatar">
                 {{ item.nickname?.substring(0, 1) }}
               </a-avatar>
