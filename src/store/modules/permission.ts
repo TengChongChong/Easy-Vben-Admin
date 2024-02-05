@@ -142,7 +142,7 @@ export const usePermissionStore = defineStore({
       }
 
       /**
-       * 将后台返回的菜单转为路由对象
+       * 将后端返回的菜单转为路由对象
        *
        * @param permissionList 后台返回的菜单
        */

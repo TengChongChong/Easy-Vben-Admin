@@ -18,7 +18,7 @@
       <a-upload-dragger
         name="file"
         :headers="headers"
-        :action="uploadUrl"
+        :action="`${uploadUrl}/cms-media-${insertType}`"
         :showUploadList="false"
         :multiple="false"
         :accept="accept"
@@ -40,12 +40,13 @@
   import { useGlobSetting } from '/@/hooks/setting';
   import { Icon } from '/@/components/Icon';
   import { getToken } from '/@/utils/auth';
-  import { fileSuffix } from '/@/views/cms/media/media.data';
   import { message } from 'ant-design-vue';
   import { save } from '/@/api/cms/cmsMedia';
   import { convertToFileInfo } from '/@/components/Upload/helper';
   import { CmsMedia } from '/@/api/cms/model/cmsMediaModel';
   import { getHtml } from './util';
+  import { FileUploadRule } from '/@/api/file/model/fileUploadRuleModel';
+  import { getBySlug } from '/@/api/file/fileUploadRule';
 
   export default defineComponent({
     components: { BasicModal, Icon },
@@ -57,15 +58,32 @@
       let uploading = false;
 
       const insertType = ref<string>('image');
-      const accept = ref<string>(fileSuffix.image.join(','));
+      const accept = ref<string>('');
       // 单文件最大限制
       let maxSize = 1;
 
-      const [register, { closeModal }] = useModalInner(({ type, size }) => {
-        accept.value = fileSuffix[type].join(',');
+      const uploadRule = ref<Nullable<FileUploadRule>>();
+
+      const [register, { closeModal }] = useModalInner(async ({ type }) => {
+        // accept.value = fileSuffix[type].join(',');
         insertType.value = type;
-        maxSize = size;
+
+        uploadRule.value = await getBySlug(`cms-media-${type}`);
+        accept.value = getStringAccept(uploadRule.value.suffixArray!);
+        maxSize = uploadRule.value.upperLimit! / 1024;
       });
+
+      function getStringAccept(suffixArray: string[]) {
+        return suffixArray
+          .map((item) => {
+            if (item.indexOf('/') > 0 || item.startsWith('.')) {
+              return item;
+            } else {
+              return `.${item}`;
+            }
+          })
+          .join(',');
+      }
 
       function beforeUpload(file) {
         if (file.size / 1024 / 1024 > maxSize) {
@@ -95,7 +113,13 @@
               emit(
                 'done',
                 res.file?.displayName,
-                getHtml(insertType.value, res.file?.displayName as string, res.file?.url),
+                getHtml(
+                  insertType.value,
+                  res.file?.displayName as string,
+                  res.file?.bucketName as string,
+                  res.file?.objectName as string,
+                  res.file?.url as string,
+                ),
               );
               uploading = false;
             });

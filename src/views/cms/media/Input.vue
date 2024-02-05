@@ -1,23 +1,6 @@
 <template>
   <BasicModal v-bind="$attrs" @register="registerModel" showFooter title="资源" :width="720">
-    <BasicForm @register="registerForm">
-      <template #file="{ model, field }">
-        <basic-upload
-          :max-size="100"
-          :max-number="1"
-          :accept="[
-            ...fileSuffix.image,
-            ...fileSuffix.audio,
-            ...fileSuffix.video,
-            ...fileSuffix.doc,
-            ...fileSuffix.other,
-          ]"
-          :multiple="false"
-          v-model:value="model[field]"
-          @change="handleFileChange"
-        />
-      </template>
-    </BasicForm>
+    <BasicForm @register="registerForm" />
     <template #footer>
       <a-button-cancel text="关闭" @click="closeModal" />
       <a-button-save :loading="saveBtnLoading" @click="handleSave" />
@@ -32,13 +15,12 @@
   import { AButtonSave, AButtonCancel } from '/@/components/Button';
   import { add, save } from '/@/api/cms/cmsMedia';
   import { CmsMedia } from '/@/api/cms/model/cmsMediaModel';
-  import { BasicUpload } from '/@/components/Upload';
   import { fileSuffix } from '/@/views/cms/media/media.data';
   import { message } from 'ant-design-vue';
   import { FileInfo } from '/@/api/file/model/fileInfoModel';
   export default defineComponent({
     name: 'CmsMediaInput',
-    components: { BasicUpload, BasicModal, BasicForm, AButtonSave, AButtonCancel },
+    components: { BasicModal, BasicForm, AButtonSave, AButtonCancel },
     emits: ['success', 'register'],
     setup(_, { emit }) {
       const saveBtnLoading = ref<boolean>(false);
@@ -50,8 +32,11 @@
           {
             field: 'file',
             label: '文件',
-            slot: 'file',
-            component: 'Input',
+            component: 'RuleUpload',
+            componentProps: {
+              uploadRuleSlug: 'cms-media',
+              onChange: handleFileChange,
+            },
             required: true,
           },
           {

@@ -143,7 +143,16 @@
         }
 
         if (media) {
-          emit('insert', getHtml(media.type!, media.name!, media.fileUrl));
+          emit(
+            'insert',
+            getHtml(
+              media.type!,
+              media.name!,
+              media.fileBucketName!,
+              media.fileObjectName!,
+              media.fileUrl!,
+            ),
+          );
         } else {
           const htmlArray: string[] = [];
           for (let i = 0; i < activeMediaList.value.length; i++) {
@@ -151,7 +160,9 @@
               getHtml(
                 activeMediaList.value[i].type!,
                 activeMediaList.value[i].name!,
-                activeMediaList.value[i].fileUrl,
+                activeMediaList.value[i].fileBucketName!,
+                activeMediaList.value[i].fileObjectName!,
+                activeMediaList.value[i].fileUrl!,
               ),
             );
           }

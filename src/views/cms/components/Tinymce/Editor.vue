@@ -166,7 +166,7 @@
           icon: 'image',
           tooltip: '添加图片',
           onAction: function () {
-            openInsertFileModal(true, { type: 'image', size: 2, sId: props.siteId });
+            openInsertFileModal(true, { type: 'image', sId: props.siteId });
           },
         });
       });
@@ -177,7 +177,7 @@
           icon: 'audio',
           tooltip: '添加音频',
           onAction: function () {
-            openInsertFileModal(true, { type: 'audio', size: 10, sId: props.siteId });
+            openInsertFileModal(true, { type: 'audio', sId: props.siteId });
           },
         });
       });
@@ -188,7 +188,7 @@
           icon: 'video',
           tooltip: '添加视频',
           onAction: function () {
-            openInsertFileModal(true, { type: 'video', size: 100, sId: props.siteId });
+            openInsertFileModal(true, { type: 'video', sId: props.siteId });
           },
         });
       });
@@ -199,7 +199,7 @@
           icon: 'doc',
           tooltip: '添加文档',
           onAction: function () {
-            openInsertFileModal(true, { type: 'doc', size: 10, sId: props.siteId });
+            openInsertFileModal(true, { type: 'doc', sId: props.siteId });
           },
         });
       });
@@ -210,7 +210,7 @@
           icon: 'annex',
           tooltip: '添加附件',
           onAction: function () {
-            openInsertFileModal(true, { type: 'other', size: 20, sId: props.siteId });
+            openInsertFileModal(true, { type: 'other', sId: props.siteId });
           },
         });
       });

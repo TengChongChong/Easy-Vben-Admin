@@ -13,6 +13,10 @@ export interface CmsMedia extends BasicModel {
   type?: string;
   // 附件路径
   fileUrl?: string;
+  // local - 文件夹名称 / oss - bucket名称
+  fileBucketName?: string;
+  // local - 文件路径 /  oss - objectName
+  fileObjectName?: string;
   // 文件
   file?: FileInfo;
 }

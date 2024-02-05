@@ -19,7 +19,7 @@
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'preview'">
           <div class="media-preview">
-            <template v-if="record.type === 'image'">
+            <template v-if="record.type === 'image' && record.fileUrl">
               <ImagePreview :imageList="[record.fileUrl]" />
             </template>
             <template v-if="record.type === 'audio'">
